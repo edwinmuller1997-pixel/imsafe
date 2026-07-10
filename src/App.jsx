@@ -109,7 +109,7 @@ const ACC_DEF = [
   { key: "other", shareFatal: 6, lethality: 25 },
 ];
 const LEVEL_DEF = [{ xp: 0, icon: "🐣" }, { xp: 150, icon: "🛫" }, { xp: 400, icon: "👨‍✈️" }, { xp: 900, icon: "⭐" }, { xp: 1800, icon: "🛡️" }, { xp: 3500, icon: "🏆" }];
-const BADGE_DEF = [{ id: "first", icon: "✅" }, { id: "allday", icon: "💯" }, { id: "streak3", icon: "🔥" }, { id: "streak7", icon: "🔥" }, { id: "streak30", icon: "🌋" }, { id: "nogo", icon: "🧠" }, { id: "walk", icon: "🔍" }];
+const BADGE_DEF = [{ id: "first", icon: "✅" }, { id: "allday", icon: "💯" }, { id: "nogo", icon: "🧠" }, { id: "walk", icon: "🔍" }];
 const AIRPORTS = ["ESSB Bromma", "ESKN Skavsta", "ESOW Västerås", "ESSA Arlanda", "ESGG Landvetter", "ESGP Säve", "ESMS Malmö", "ESSL Linköping", "ESSP Norrköping", "ESOE Örebro", "ESKC Uppsala/Sundbro", "ESMK Kristianstad", "ESMQ Kalmar", "ESSV Visby", "ESNZ Östersund", "ESNU Umeå", "ESPA Luleå", "ESOK Karlstad", "ESGJ Jönköping", "ESSU Eskilstuna", "ESMX Växjö"];
 
 /* ============================================================
@@ -734,10 +734,8 @@ function Toast({ toast }) {
   );
 }
 
-/* Swish-länk (endast SV): samma universallänk som Swish QR-koder använder,
-   öppnar appen med nummer, belopp och meddelande förifyllt */
-const swishUrl = (amount, msg) =>
-  `https://app.swish.nu/1/p/sw/?sw=0708869697&amt=${amount}&cur=SEK&msg=${encodeURIComponent(msg)}&src=qr`;
+/* Swish egen QR-payload (A+46708869697) som inbäddad bild */
+
 
 /* ============================================================ */
 
@@ -775,6 +773,7 @@ export default function ImsafeApp() {
   const [loaded, setLoaded] = useState(false);
   const [game, setGame] = useState({ xp: 0, streak: 0, lastDay: null, badges: [], soundOn: true, nogoCount: 0 });
   const [night, setNight] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [confetti, setConfetti] = useState(false);
   const [toast, setToast] = useState(null);
   const [shownPct, setShownPct] = useState(null);
@@ -791,10 +790,11 @@ export default function ImsafeApp() {
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(null), 2200);
   }
-  function addXP(n, label) {
+  function addXP() { /* XP borttaget – återinförs senare */ }
+  function _addXP_disabled(n, label) {
     setGame((g) => ({ ...g, xp: g.xp + n }));
     if (game.soundOn) SND.xp();
-    if (label && user) showToast("✨", `+${n} XP · ${label}`);
+    if (label) showToast("✨", `+${n} XP · ${label}`);
   }
   function award(id) {
     setGame((g) => {
@@ -803,21 +803,10 @@ export default function ImsafeApp() {
       if (g.soundOn) SND.badge();
       setTimeout(() => showToast(BADGE_DEF.find((b) => b.id === id)?.icon || "🏅", `${T.xpEvents.badge}: ${name}!`), 300);
       setConfetti(true); setTimeout(() => setConfetti(false), 2600);
-      return { ...g, badges: [...g.badges, id], xp: g.xp + 75 };
+      return { ...g, badges: [...g.badges, id] };
     });
   }
-  function touchStreak() {
-    const today = new Date().toISOString().slice(0, 10);
-    setGame((g) => {
-      if (g.lastDay === today) return g;
-      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
-      const streak = g.lastDay === yesterday ? g.streak + 1 : 1;
-      if (streak >= 3) setTimeout(() => award("streak3"), 100);
-      if (streak >= 7) setTimeout(() => award("streak7"), 100);
-      if (streak >= 30) setTimeout(() => award("streak30"), 100);
-      return { ...g, streak, lastDay: today };
-    });
-  }
+  function touchStreak() {} /* streak-funktionen borttagen på användarens begäran */
 
   /* Lagring */
   useEffect(() => {
@@ -878,10 +867,7 @@ export default function ImsafeApp() {
   const walkPct = walkAllKeys.filter((k) => walk[k]).length / walkAllKeys.length;
   const stepDone = [imsafePct === 1, true, briefPct === 1, walkPct === 1, assessed];
   const depIcao = dep.slice(0, 4), dstIcao = dst.slice(0, 4);
-  const lvlIdx = LEVEL_DEF.reduce((acc, l, i) => (game.xp >= l.xp ? i : acc), 0);
-  const lvl = LEVEL_DEF[lvlIdx];
-  const nextLvl = LEVEL_DEF[lvlIdx + 1];
-  const lvlPct = nextLvl ? (game.xp - lvl.xp) / (nextLvl.xp - lvl.xp) : 1;
+
   const tipOfDay = T.tips[Math.floor(Date.now() / 864e5) % T.tips.length];
   const hour = new Date().getHours();
   const greeting = hour < 10 ? T.greet.m : hour < 18 ? T.greet.d : T.greet.e;
@@ -931,8 +917,8 @@ export default function ImsafeApp() {
     setLastAssessment((a) => a ? { ...a, decision: d } : a);
     if (d === "nogo") {
       if (game.soundOn) SND.nogo();
-      setGame((g) => ({ ...g, nogoCount: g.nogoCount + 1, xp: g.xp + 50 }));
-      if (user) showToast("🧠", `+50 XP · ${T.xpEvents.nogoToast}`);
+      setGame((g) => ({ ...g, nogoCount: g.nogoCount + 1 }));
+      showToast("🧠", T.xpEvents.nogoToast);
       award("nogo"); touchStreak();
     } else {
       if (game.soundOn) SND.done();
@@ -956,10 +942,10 @@ export default function ImsafeApp() {
 
   function Row({ checked, onChange, children, trailing, color, highlight = false }) {
     return (
-      <label className="flex items-center gap-3 px-4 py-3 cursor-pointer active:opacity-60"
-        style={{ borderTop: `0.5px solid ${C.line}`, background: highlight ? color + "0C" : "transparent", boxShadow: highlight ? `inset 3px 0 0 ${color}` : "none", transition: "all .25s" }}>
-        <span style={{ width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: checked ? color : "transparent", border: checked ? "none" : `1.5px solid ${highlight ? color : "rgba(120,128,140,0.4)"}`, transition: "all .15s", transform: checked ? "scale(1.05)" : "scale(1)" }}>
-          {checked && <svg width="13" height="13" viewBox="0 0 12 12"><path d="M2 6.5L4.7 9 10 3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+      <label className="flex items-center gap-3 px-4 cursor-pointer active:opacity-60"
+        style={{ paddingTop: 15, paddingBottom: 15, borderTop: `0.5px solid ${C.line}`, background: highlight ? color + "0C" : "transparent", boxShadow: highlight ? `inset 3px 0 0 ${color}` : "none", transition: "all .25s" }}>
+        <span style={{ width: 29, height: 29, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: checked ? color : "transparent", border: checked ? "none" : `2px solid ${highlight ? color : "rgba(120,128,140,0.4)"}`, transition: "all .15s", transform: checked ? "scale(1.05)" : "scale(1)" }}>
+          {checked && <svg width="16" height="16" viewBox="0 0 12 12"><path d="M2 6.5L4.7 9 10 3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>}
         </span>
         <input type="checkbox" className="hidden" checked={checked} onChange={onChange} />
         <span className="flex-1 text-[15px]" style={{ ...SF, color: C.ink, fontWeight: highlight ? 600 : 400 }}>{children}</span>
@@ -985,79 +971,63 @@ export default function ImsafeApp() {
   }
 
   function CheeseBoard() {
-    const W = 380, H = 210;
-    const slicePath = "M14,6 Q30,0 46,5 Q62,10 61,26 L63,120 Q64,142 50,150 Q34,158 18,151 Q2,144 4,124 L2,28 Q1,10 14,6 Z";
+    /* Barriärdiagram: fyra sköldar, hål = dina kryss, pil = dagens hot.
+       Pilen stoppas av första intakta barriären – eller tar sig igenom om alla läcker. */
+    const W = 380, H = 168, AY = 74;
+    const BX = (i) => 34 + i * 88, BW = 48, BH = 118, BY = 12;
+    const holdIdx = model.layers.findIndex((l) => l.pen <= 0.4);
+    const breached = model.aligned;
+    const arrowEndX = breached ? W - 16 : holdIdx === -1 ? W - 16 : BX(holdIdx) + 4;
+    const caption = {
+      sv: "Varje sköld är en barriär mellan dig och ett haveri. Dina kryss öppnar hål. Pilen är dagens hot – den stoppas av första intakta barriären, men radar hålen upp sig går den hela vägen igenom.",
+      en: "Each shield is a barrier between you and an accident. Your checks open holes. The arrow is today's threat – it is stopped by the first intact barrier, but if the holes line up it goes all the way through.",
+      de: "Jeder Schild ist eine Barriere zwischen dir und einem Unfall. Deine Kreuze öffnen Löcher. Der Pfeil ist die heutige Gefahr – die erste intakte Barriere stoppt ihn, doch wenn die Löcher fluchten, geht er ganz durch.",
+    }[lang];
     return (
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxWidth: 560 }}>
-        <defs>
-          <linearGradient id="chBody" x1="0" y1="0" x2="0.6" y2="1">
-            <stop offset="0%" stopColor="#FBE79B" /><stop offset="45%" stopColor="#F4D468" /><stop offset="100%" stopColor="#E4B93F" />
-          </linearGradient>
-          <linearGradient id="chRind" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#C79A2E" /><stop offset="100%" stopColor="#A87E22" />
-          </linearGradient>
-          <radialGradient id="chHole" cx="0.5" cy="0.35" r="0.75">
-            <stop offset="0%" stopColor="#B08E3B" /><stop offset="45%" stopColor="#D9C58A" /><stop offset="100%" stopColor={C.bg} />
-          </radialGradient>
-          <radialGradient id="chHoleSm" cx="0.5" cy="0.3" r="0.8">
-            <stop offset="0%" stopColor="#C2A24A" /><stop offset="100%" stopColor="#EFE6C8" />
-          </radialGradient>
-          <filter id="chShadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="4" dy="7" stdDeviation="5" floodColor="#5A4A12" floodOpacity="0.28" />
-          </filter>
-          <linearGradient id="board" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#E9E4D8" /><stop offset="100%" stopColor="#DDD5C2" />
-          </linearGradient>
-        </defs>
-        <ellipse cx={W / 2} cy={H - 18} rx={W / 2 - 14} ry="14" fill="url(#board)" />
-        <ellipse cx={W / 2} cy={H - 20} rx={W / 2 - 14} ry="13" fill="#F0EBDF" />
-        {model.layers.map((l, i) => {
-          const x = 26 + i * 84;
-          const rot = [-3, 2, -2, 3][i];
-          const holes = Math.max(0, Math.round(l.pen * 5));
-          const align = model.aligned;
-          return (
-            <g key={l.id} transform={`translate(${x},18) rotate(${rot} 32 78) skewX(-8)`} filter="url(#chShadow)">
-              <path d={slicePath} transform="translate(6,4)" fill="url(#chRind)" />
-              <path d={slicePath} fill="url(#chBody)" stroke="#C79A2E" strokeWidth="1" />
-              <ellipse cx="30" cy="16" rx="18" ry="6" fill="#FFF6CE" opacity="0.65" />
-              <circle cx="16" cy="30" r="3.2" fill="url(#chHoleSm)" />
-              <circle cx="48" cy="136" r="3.8" fill="url(#chHoleSm)" />
-              <circle cx="50" cy="24" r="2.4" fill="url(#chHoleSm)" />
-              {Array.from({ length: holes }).map((_, h) => {
-                const cy = align ? 78 + (h - (holes - 1) / 2) * 3 : 34 + ((h * 41 + i * 27) % 96);
-                const cx = align ? 32 : 18 + ((h * 17 + i * 13) % 28);
-                const r = 6.5 + l.pen * 9 + (h % 2) * 2;
-                return (
-                  <g key={h} style={{ transition: "all .6s cubic-bezier(.4,0,.2,1)" }}>
-                    <circle cx={cx} cy={cy} r={r} fill="url(#chHole)" />
-                    <path d={`M ${cx - r * 0.7} ${cy + r * 0.55} A ${r * 0.85} ${r * 0.85} 0 0 0 ${cx + r * 0.7} ${cy + r * 0.55}`} stroke="#FFF3C4" strokeWidth="1.6" fill="none" opacity="0.8" />
+      <div>
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ maxWidth: 560 }}>
+          {model.layers.map((l, i) => {
+            const x = BX(i);
+            const holes = Math.max(0, Math.round(l.pen * 4));
+            const holding = !breached && holdIdx === i;
+            return (
+              <g key={l.id}>
+                <rect x={x} y={BY} width={BW} height={BH} rx="13"
+                  fill={l.color + "26"} stroke={l.color} strokeWidth={holding ? 2.5 : 1.5} />
+                {Array.from({ length: holes }).map((_, h) => {
+                  const cy = breached ? AY + (h - (holes - 1) / 2) * 5
+                    : BY + 22 + ((h * 37 + i * 19) % (BH - 44));
+                  const cx = breached ? x + BW / 2 : x + 14 + ((h * 13 + i * 7) % (BW - 28));
+                  const r = 5 + l.pen * 7;
+                  return <circle key={h} cx={cx} cy={cy} r={r} fill={C.card} stroke={l.color + "55"} strokeWidth="1" />;
+                })}
+                {holding && (
+                  <g>
+                    <circle cx={x + 4} cy={AY} r="7" fill={l.color} />
+                    <text x={x + 4} y={AY + 3.5} textAnchor="middle" fontSize="9" fill="#fff" fontWeight="700">✕</text>
                   </g>
-                );
-              })}
-              <g transform="skewX(8)">
-                <rect x="4" y="160" width="56" height="16" rx="8" fill={l.color + "18"} />
-                <text x="32" y="171" textAnchor="middle" fontSize="8.5" style={SF} fill={l.color} fontWeight="700">{l.name.toUpperCase().slice(0, 12)}</text>
+                )}
+                <text x={x + BW / 2} y={BY + BH + 16} textAnchor="middle" fontSize="9.5" style={SF} fill={l.color} fontWeight="700">
+                  {l.name.split(" ")[0].toUpperCase()}
+                </text>
+                <text x={x + BW / 2} y={BY + BH + 28} textAnchor="middle" fontSize="9" style={{ ...mono }} fill={C.inkSoft}>
+                  {Math.round(l.pen * 100)} %
+                </text>
               </g>
-            </g>
-          );
-        })}
-        {model.aligned && (
-          <g>
-            <line x1="8" y1="96" x2={W - 44} y2="96" stroke={C.red} strokeWidth="4.5" strokeDasharray="11 7" strokeLinecap="round">
-              <animate attributeName="stroke-dashoffset" from="36" to="0" dur="0.8s" repeatCount="indefinite" />
-            </line>
-            <polygon points={`${W - 44},87 ${W - 20},96 ${W - 44},105`} fill={C.red} />
-            <circle cx="8" cy="96" r="5" fill={C.red} />
-          </g>
-        )}
-        {!model.aligned && model.riskPct > 25 && (
-          <g opacity="0.9">
-            <line x1="8" y1="96" x2={72 + model.riskPct * 2.3} y2="96" stroke={C.orange} strokeWidth="4" strokeDasharray="9 7" strokeLinecap="round" />
-            <circle cx={72 + model.riskPct * 2.3} cy="96" r="5.5" fill={C.orange} />
-          </g>
-        )}
-      </svg>
+            );
+          })}
+          <line x1="6" y1={AY} x2={arrowEndX - 8} y2={AY}
+            stroke={breached ? C.red : C.orange} strokeWidth="4" strokeDasharray="10 7" strokeLinecap="round">
+            {breached && <animate attributeName="stroke-dashoffset" from="34" to="0" dur="0.8s" repeatCount="indefinite" />}
+          </line>
+          <polygon points={`${arrowEndX - 9},${AY - 7} ${arrowEndX + 3},${AY} ${arrowEndX - 9},${AY + 7}`} fill={breached ? C.red : C.orange} />
+          <circle cx="6" cy={AY} r="5" fill={breached ? C.red : C.orange} />
+          {breached && (
+            <text x={W - 8} y={AY + 5} textAnchor="end" fontSize="14">💥</text>
+          )}
+        </svg>
+        <p className="text-[12px] mt-1 px-1" style={{ color: C.inkSoft }}>{caption}</p>
+      </div>
     );
   }
 
@@ -1079,6 +1049,7 @@ export default function ImsafeApp() {
         @keyframes imsafePop { from { transform: translateX(-50%) scale(0.7); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
         @keyframes imsafeReveal { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes imsafeSlide { from { transform: translateX(18px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes imsafePopIn { from { transform: translateY(-6px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
         @media (prefers-reduced-motion: reduce) { * { animation:none!important; transition:none!important; } }
         @media print {
           body * { visibility: hidden; }
@@ -1094,43 +1065,67 @@ export default function ImsafeApp() {
       <header className="px-5 pt-5 pb-2 max-w-2xl mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[13px] font-bold text-white" style={{ background: C.grad }}>im</span>
-            <span className="text-[15px] font-bold tracking-tight">imsafe<span style={{ color: C.blue }}>.se</span></span>
+            <svg width="30" height="30" viewBox="0 0 30 30" style={{ flexShrink: 0 }}>
+              <defs>
+                <linearGradient id="imLogoGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor={night ? "#4D8DF0" : "#0B5CD6"} />
+                  <stop offset="100%" stopColor={night ? "#7B74F0" : "#4F46E5"} />
+                </linearGradient>
+              </defs>
+              <rect width="30" height="30" rx="9" fill="url(#imLogoGrad)" />
+              {/* Bocken som lyfter: check vars övre streck blir en stigande flygbana */}
+              <path d="M7 16.5 L12 21.5 L22 9.5" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M19.5 8.5 L24 7 L23 11.5" stroke="#fff" strokeWidth="0" fill="#fff" />
+              <circle cx="9.5" cy="10" r="1.1" fill="rgba(255,255,255,0.5)" />
+              <circle cx="13" cy="8" r="0.8" fill="rgba(255,255,255,0.35)" />
+            </svg>
+            <span className="text-[16px] font-bold" style={{ letterSpacing: "-0.02em" }}>imsafe<span style={{ color: C.blue }}>.se</span></span>
           </div>
           <div className="flex items-center gap-2">
-            {user && (
-              <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[13px] font-bold"
-                style={{ background: game.streak > 0 ? "#FFF3E0" : C.fill, color: game.streak > 0 ? "#E65100" : C.inkSoft }}>
-                🔥 {game.streak}
-              </span>
-            )}
             <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: night ? C.gold + "28" : C.fill }}
               title={T.night} onClick={() => { setNight(!night); if (game.soundOn) SND.tick(); }}>{night ? "☀️" : "🌙"}</button>
+            <div style={{ position: "relative" }}>
+              <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: langMenuOpen ? C.blue + "22" : C.fill }}
+                title="Language" onClick={() => { setLangMenuOpen(!langMenuOpen); if (game.soundOn) SND.tick(); }}>🌐</button>
+              {langMenuOpen && (
+                <>
+                  <div style={{ position: "fixed", inset: 0, zIndex: 40 }} onClick={() => setLangMenuOpen(false)} />
+                  <div className="rounded-2xl overflow-hidden" style={{ position: "absolute", top: 38, right: -8, zIndex: 50, minWidth: 168,
+                    background: C.card, border: `1px solid ${C.cardBorder}`, boxShadow: C.cardShadow, animation: "imsafePopIn .15s ease-out" }}>
+                    {["sv", "en", "de"].map((l) => (
+                      <button key={l} className="w-full flex items-center gap-2.5 px-3.5 py-3 active:opacity-60 text-left"
+                        style={{ background: lang === l ? C.blue + "10" : "transparent", borderTop: l !== "sv" ? `0.5px solid ${C.line}` : "none" }}
+                        onClick={() => { setLang(l); setLangMenuOpen(false); if (game.soundOn) SND.tick(); }}>
+                        <span className="text-[18px]">{langMeta[l][0]}</span>
+                        <span className="flex-1 text-[14px] font-semibold" style={{ color: lang === l ? C.blue : C.ink }}>{langMeta[l][1]}</span>
+                        {lang === l && <span style={{ color: C.blue, fontWeight: 700 }}>✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+            <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: C.fill }}
+              title="Reset" onClick={() => {
+                const msg = { sv: "Nollställa hela genomgången?", en: "Reset the entire walkthrough?", de: "Gesamten Durchgang zurücksetzen?" }[lang];
+                if (!window.confirm(msg)) return;
+                setRisks({}); setImsafe({}); setLegal({}); setPre({}); setWalk({});
+                setAssessed(false); setDecision(null); setShownPct(null); setStep(0);
+                celebrated.current = {};
+                showToast("↺", { sv: "Nollställd – ny genomgång", en: "Reset – fresh walkthrough", de: "Zurückgesetzt – neuer Durchgang" }[lang]);
+                if (game.soundOn) SND.tick();
+              }}>↺</button>
             <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: C.fill }}
               onClick={() => setGame((g) => ({ ...g, soundOn: !g.soundOn }))}>{game.soundOn ? "🔊" : "🔇"}</button>
             <button onClick={() => { setTab("more"); setMoreView("account"); }}
               className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold"
-              style={{ background: user ? C.green + "22" : C.fill, color: user ? C.green : C.inkSoft }}>
-              {user ? user.name.slice(0, 1).toUpperCase() : "👤"}
+              style={{ background: C.gold + "22", color: C.gold }}>
+              🏅
             </button>
           </div>
         </div>
-        {user && (
-          <div className="mt-3 flex items-center gap-2">
-            <span className="text-[16px]">{lvl.icon}</span>
-            <div className="flex-1">
-              <div className="flex justify-between text-[11px] font-semibold">
-                <span style={{ color: C.ink2 }}>{T.account.levels[lvlIdx]}</span>
-                <span style={{ color: C.inkSoft }}>{game.xp} XP{nextLvl ? ` · ${T.account.xpTo(nextLvl.xp - game.xp, T.account.levels[lvlIdx + 1])}` : ` · ${T.account.max}`}</span>
-              </div>
-              <div className="h-1.5 rounded-full mt-1 overflow-hidden" style={{ background: C.fill }}>
-                <div className="h-full rounded-full" style={{ width: `${lvlPct * 100}%`, background: C.grad, transition: "width .6s ease" }} />
-              </div>
-            </div>
-          </div>
-        )}
         <p className="text-[13px] font-medium mt-3" style={{ color: C.inkSoft }}>
-          {tab === "fly" ? `${greeting}${user ? " " + user.name : ""} · ` : ""}{new Date().toLocaleDateString(T.locale, { weekday: "long", day: "numeric", month: "long" })}
+          {tab === "fly" ? `${greeting} · ` : ""}{new Date().toLocaleDateString(T.locale, { weekday: "long", day: "numeric", month: "long" })}
         </p>
         <h1 className="text-[32px] font-bold tracking-tight leading-tight">{title}</h1>
       </header>
@@ -1229,15 +1224,22 @@ export default function ImsafeApp() {
                           <span style={{ color: "rgba(120,128,140,0.4)", transform: open ? "rotate(90deg)" : "none", transition: "transform .2s" }}>›</span>
                         </button>
                         {open && b.factors.map((f) => AUTO_INFO[f.key] ? (
-                          <button key={f.key} className="w-full flex items-center gap-3 px-4 py-3 active:opacity-60 text-left"
-                            style={{ borderTop: `0.5px solid ${C.line}`, background: effRisks[f.key] ? col + "0C" : "transparent" }}
+                          /* Statusrad (ej kryssbar): grön bock när IMSAFE är klar, varning annars */
+                          <button key={f.key} className="w-full flex items-center gap-3 px-4 active:opacity-60 text-left"
+                            style={{ paddingTop: 15, paddingBottom: 15, borderTop: `0.5px solid ${C.line}`,
+                              background: effRisks[f.key] ? C.orange + "10" : C.green + "0C" }}
                             onClick={() => goStep(AUTO_INFO[f.key].go)}>
-                            <span style={{ width: 24, height: 24, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: effRisks[f.key] ? col : C.fill, border: effRisks[f.key] ? "none" : "1.5px solid rgba(120,128,140,0.25)" }}>
-                              <svg width="13" height="13" viewBox="0 0 12 12"><path d="M2 6.5L4.7 9 10 3.5" stroke={effRisks[f.key] ? "#fff" : "rgba(120,128,140,0.4)"} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                            <span style={{ width: 29, height: 29, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                              background: effRisks[f.key] ? C.orange : C.green }}>
+                              {effRisks[f.key]
+                                ? <span style={{ color: "#fff", fontWeight: 800, fontSize: 15 }}>!</span>
+                                : <svg width="16" height="16" viewBox="0 0 12 12"><path d="M2 6.5L4.7 9 10 3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                             </span>
                             <span className="flex-1">
-                              <span className="block text-[15px]" style={{ color: C.ink }}>{T.factors[f.key][0]}</span>
-                              <span className="block text-[12px]" style={{ color: effRisks[f.key] ? col : C.inkSoft }}>{effRisks[f.key] ? T.riskStep.autoBad : T.riskStep.autoOk}</span>
+                              <span className="block text-[15px] font-semibold" style={{ color: effRisks[f.key] ? C.orange : C.green }}>
+                                {effRisks[f.key] ? T.factors[f.key][0] : { sv: "IMSAFE – helt grön ✓", en: "IMSAFE – all green ✓", de: "IMSAFE – alles grün ✓" }[lang]}
+                              </span>
+                              <span className="block text-[12px]" style={{ color: C.inkSoft }}>{effRisks[f.key] ? T.riskStep.autoBad : T.riskStep.autoOk}</span>
                             </span>
                             <span className="text-[10px] px-1.5 py-0.5 rounded font-bold flex-shrink-0" style={{ background: C.fill, color: C.inkSoft }}>AUTO</span>
                           </button>
@@ -1376,7 +1378,7 @@ export default function ImsafeApp() {
                               {T.decide.fly}
                             </button>
                             <button onClick={() => decide("nogo")} className="py-3.5 rounded-2xl text-[16px] font-bold text-white active:opacity-70" style={{ background: C.ink }}>
-                              {T.decide.abstain}{user ? " (+50 XP)" : ""}
+                              {T.decide.abstain}
                             </button>
                           </div>
                         ) : (
@@ -1393,7 +1395,7 @@ export default function ImsafeApp() {
                         )}
 
                         <button onClick={createReport} className="w-full py-3 rounded-2xl text-[15px] font-semibold active:opacity-60 mb-2" style={{ background: C.card, color: C.blue }}>
-                          {T.decide.pdf}{user ? " · +10 XP" : ""}
+                          {T.decide.pdf}
                         </button>
                         <button onClick={() => { setRisks({}); setImsafe({}); setLegal({}); setPre({}); setWalk({}); setAssessed(false); setDecision(null); setShownPct(null); setStep(0); celebrated.current = {}; }}
                           className="w-full py-3 rounded-2xl text-[15px] font-semibold active:opacity-60 mb-4" style={{ background: C.card, color: C.red }}>
@@ -1443,7 +1445,7 @@ export default function ImsafeApp() {
                   ["blog", "✍️", ...T.menu.blog, C.orange],
                   ["stats", "📊", ...T.menu.stats, C.red],
                   ...(lang === "sv" && T.menu.support ? [["support", "💙", ...T.menu.support, C.blue]] : []),
-                  ["account", "👤", T.menu.account[0], user ? user.name : T.menu.account[1], C.green],
+                  ["account", "🏅", T.account.badgesTitle, `${game.badges.length} / ${BADGE_DEF.length}`, C.gold],
                   ["lang", "🌐", ...T.menu.lang, C.purple],
                 ].map(([id, icon, mTitle, mSub, col]) => (
                   <button key={id} onClick={() => id === "lang" ? null : setMoreView(id)} className="w-full flex items-center gap-3 px-4 py-3.5 active:opacity-60 text-left"
@@ -1611,17 +1613,21 @@ export default function ImsafeApp() {
               <Card>
                 <CardHead title={T.support.title} sub={T.support.sub} />
                 <div className="px-4 pb-4">
-                  <div className="grid grid-cols-3 gap-2">
-                    {T.support.amounts.map((a) => (
-                      <a key={a} href={swishUrl(a, T.support.msg)}
-                        className="py-4 rounded-2xl text-center font-bold text-[17px] text-white active:opacity-70"
-                        style={{ background: C.grad, textDecoration: "none" }}>
-                        {a} kr
-                      </a>
-                    ))}
+                  {/* Swish-nummer + kopiera (deep-links stöds inte längre av Swish) */}
+                  <div className="rounded-2xl p-4 text-center" style={{ background: C.fill }}>
+                    <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: C.inkSoft }}>Swisha till</p>
+                    <p className="text-[26px] font-bold mt-1" style={{ ...mono, color: C.ink, letterSpacing: 1 }}>0708&nbsp;86&nbsp;96&nbsp;97</p>
+                    <button className="mt-3 px-5 py-2.5 rounded-xl font-semibold text-white active:opacity-70" style={{ background: C.grad }}
+                      onClick={async () => {
+                        try { await navigator.clipboard.writeText("0708869697"); showToast("📋", "Nummer kopierat – öppna Swish"); }
+                        catch { showToast("⚠️", "Kunde inte kopiera – skriv av numret"); }
+                        if (game.soundOn) SND.tick();
+                      }}>
+                      Kopiera nummer
+                    </button>
+                    <p className="text-[12px] mt-2" style={{ color: C.inkSoft }}>Förslag: 29 · 59 · 99 kr – varje krona håller sajten flygande ✈️</p>
                   </div>
-                  <p className="text-[12px] mt-3" style={{ color: C.inkSoft }}>{T.support.note}</p>
-                  <p className="text-[12px] mt-1" style={{ color: C.inkSoft }}>{T.support.thanks}</p>
+                  <p className="text-[12px] mt-3" style={{ color: C.inkSoft }}>{T.support.thanks}</p>
                 </div>
               </Card>
             )}
@@ -1643,32 +1649,6 @@ export default function ImsafeApp() {
                     })}
                   </div>
                 </Card>
-                {user ? (
-                  <Card>
-                    <div className="p-5 text-center">
-                      <span className="inline-flex w-16 h-16 rounded-full items-center justify-center text-[24px] font-bold text-white mb-2" style={{ background: C.grad }}>{user.name.slice(0, 1).toUpperCase()}</span>
-                      <h3 className="text-[18px] font-bold">{user.name}</h3>
-                      <p className="text-[13px]" style={{ color: C.inkSoft }}>{lvl.icon} {T.account.levels[lvlIdx]} · {game.xp} XP · 🔥 {game.streak} {T.account.days}</p>
-                      <button className="mt-4 px-5 py-2.5 rounded-xl font-semibold" style={{ background: C.fill, color: C.red }} onClick={() => setUser(null)}>{T.account.logout}</button>
-                    </div>
-                  </Card>
-                ) : (
-                  <Card>
-                    <div className="p-5">
-                      <h3 className="text-[18px] font-bold text-center">{T.account.loginTitle}</h3>
-                      <p className="text-[13px] text-center mt-1 mb-4" style={{ color: C.inkSoft }}>{T.account.loginSub}</p>
-                      <input style={inputF()} placeholder={T.account.phName} value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
-                      <button className="w-full mt-2 py-3 rounded-xl font-semibold text-[15px] flex items-center justify-center gap-2 active:opacity-70" style={{ background: C.card, border: `1px solid ${C.line}`, color: C.ink }}
-                        onClick={() => nameInput && setUser({ name: nameInput, via: "google" })}>
-                        <span style={{ fontWeight: 700, color: "#4285F4" }}>G</span> {T.account.google}
-                      </button>
-                      <button className="w-full mt-2 py-3 rounded-xl font-semibold text-white text-[15px] active:opacity-70" style={{ background: C.blue }} onClick={() => nameInput && setUser({ name: nameInput, via: "email" })}>
-                        {T.account.email}
-                      </button>
-                      <p className="text-[11px] mt-3 text-center" style={{ color: C.inkSoft }}>{T.account.demo}</p>
-                    </div>
-                  </Card>
-                )}
               </>
             )}
           </>
