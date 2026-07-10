@@ -115,6 +115,14 @@ const AIRPORTS = ["ESSB Bromma", "ESKN Skavsta", "ESOW Västerås", "ESSA Arland
 /* ============================================================
    SPRÅKPAKET
    ============================================================ */
+const EDWIN_IMG = "data:image/jpeg;base64,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";
+function ageNow() {
+  const b = new Date(1997, 3, 7); // 7 april 1997
+  const n = new Date();
+  let a = n.getFullYear() - b.getFullYear();
+  if (n.getMonth() < 3 || (n.getMonth() === 3 && n.getDate() < 7)) a--;
+  return a;
+}
 const I18N = {
   /* ================= SVENSKA ================= */
   sv: {
@@ -774,6 +782,12 @@ export default function ImsafeApp() {
   const [game, setGame] = useState({ xp: 0, streak: 0, lastDay: null, badges: [], soundOn: true, nogoCount: 0 });
   const [night, setNight] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [temNotes, setTemNotes] = useState("");
+  const [uses, setUses] = useState(0);
+  const [nudgeGone, setNudgeGone] = useState(false);
+  const [kbdGone, setKbdGone] = useState(false);
+  const [printMode, setPrintMode] = useState("report");
+  const [helloIdx, setHelloIdx] = useState(0);
   const [confetti, setConfetti] = useState(false);
   const [toast, setToast] = useState(null);
   const [shownPct, setShownPct] = useState(null);
@@ -783,6 +797,11 @@ export default function ImsafeApp() {
   /* Tema före render */
   Object.assign(C, night ? DARK : LIGHT);
   useEffect(() => { document.body.style.background = C.bg; }, [night]);
+  useEffect(() => {
+    if (seenIntro) return;
+    const t = setInterval(() => setHelloIdx((i) => (i + 1) % 3), 2400);
+    return () => clearInterval(t);
+  }, [seenIntro]);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
 
   function showToast(icon, text) {
@@ -796,16 +815,7 @@ export default function ImsafeApp() {
     if (game.soundOn) SND.xp();
     if (label) showToast("✨", `+${n} XP · ${label}`);
   }
-  function award(id) {
-    setGame((g) => {
-      if (g.badges.includes(id)) return g;
-      const name = T.account.badges[id]?.[0] || id;
-      if (g.soundOn) SND.badge();
-      setTimeout(() => showToast(BADGE_DEF.find((b) => b.id === id)?.icon || "🏅", `${T.xpEvents.badge}: ${name}!`), 300);
-      setConfetti(true); setTimeout(() => setConfetti(false), 2600);
-      return { ...g, badges: [...g.badges, id] };
-    });
-  }
+  function award() { /* utmärkelser borttagna – återinförs senare */ }
   function touchStreak() {} /* streak-funktionen borttagen på användarens begäran */
 
   /* Lagring */
@@ -821,6 +831,10 @@ export default function ImsafeApp() {
           if (typeof d.step === "number") setStep(Math.min(4, d.step));
           if (d.lastAssessment) setLastAssessment(d.lastAssessment);
           if (d.night) setNight(true);
+          if (d.temNotes) setTemNotes(d.temNotes);
+          if (d.uses) setUses(d.uses);
+          if (d.nudgeGone) setNudgeGone(true);
+          if (d.kbdGone) setKbdGone(true);
           if (d.lang && I18N[d.lang]) setLang(d.lang);
           setSeenIntro(!!d.seenIntro);
         } else { setSeenIntro(false); }
@@ -830,8 +844,8 @@ export default function ImsafeApp() {
   }, []);
   useEffect(() => {
     if (!loaded) return;
-    (async () => { try { await window.storage.set("imsafe-profile-v7", JSON.stringify({ user, minVals, game, step, seenIntro, lastAssessment, night, lang })); } catch {} })();
-  }, [user, minVals, game, step, seenIntro, lastAssessment, night, lang, loaded]);
+    (async () => { try { await window.storage.set("imsafe-profile-v7", JSON.stringify({ user, minVals, game, step, seenIntro, lastAssessment, night, lang, temNotes, uses, nudgeGone, kbdGone })); } catch {} })();
+  }, [user, minVals, game, step, seenIntro, lastAssessment, night, lang, temNotes, uses, nudgeGone, kbdGone, loaded]);
 
   /* IMSAFE auto-import + riskmodell */
   const imsafePct = IMSAFE_KEYS.filter((k) => imsafe[k]).length / IMSAFE_KEYS.length;
@@ -886,6 +900,39 @@ export default function ImsafeApp() {
     // eslint-disable-next-line
   }, [imsafePct, briefPct, walkPct]);
 
+  /* Tangentbord på dator: ←/→ byter steg, Enter/Space bockar nästa punkt */
+  const kbdRef = useRef({});
+  kbdRef.current = { step, imsafe, legal, pre, walk, assessed, tab };
+  useEffect(() => {
+    const onKey = (e) => {
+      const K = kbdRef.current;
+      if (K.tab !== "fly") return;
+      const tag = (e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select") return;
+      if (e.key === "ArrowRight") { e.preventDefault(); goStep(K.step + 1); return; }
+      if (e.key === "ArrowLeft") { e.preventDefault(); goStep(K.step - 1); return; }
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      if (K.step === 0) {
+        const k = IMSAFE_KEYS.find((x) => !K.imsafe[x]);
+        if (k) { setImsafe({ ...K.imsafe, [k]: true }); if (game.soundOn) SND.tick(); }
+      } else if (K.step === 2) {
+        const lk = LEGAL_DEF.map((d) => d.key).find((x) => !K.legal[x]);
+        if (lk) { setLegal({ ...K.legal, [lk]: true }); if (game.soundOn) SND.tick(); return; }
+        const pk = PREFLIGHT_KEYS.find((x) => !K.pre[x]);
+        if (pk) { setPre({ ...K.pre, [pk]: true }); if (game.soundOn) SND.tick(); }
+      } else if (K.step === 3) {
+        const wk = WALK_DEF.flatMap((g) => g.keys).find((x) => !K.walk[x]);
+        if (wk) { setWalk({ ...K.walk, [wk]: true }); if (game.soundOn) SND.tick(); }
+      } else if (K.step === 4 && !K.assessed) {
+        makeAssessment();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line
+  }, []);
+
   function goStep(n) {
     if (n < 0 || n > 4 || n === step) return;
     setStep(n);
@@ -896,6 +943,7 @@ export default function ImsafeApp() {
     setAssessed(true);
     setLastAssessment({ date: new Date().toISOString().slice(0, 10), verdict: model.verdict, riskPct: model.riskPct, decision: null });
     addXP(20, T.xpEvents.assess); touchStreak();
+    setUses((u) => u + 1);
     const target = model.riskPct;
     setShownPct(0);
     if (game.soundOn) tone(520, 0.06, 0, "sine", 0.05);
@@ -932,7 +980,11 @@ export default function ImsafeApp() {
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1200, messages: [{ role: "user", content: T.news.prompt }], tools: [{ type: "web_search_20250305", name: "web_search" }] }),
+        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1200, messages: [{ role: "user", content: {
+          sv: "Sök på webben efter senaste nytt (1-2 månader) inom allmänflyg och flygsäkerhet för en svensk VFR-privatpilot. Källor att prioritera: Mentour Pilot (YouTube – senaste avsnitt/ämnen), Statens haverikommission havkom.se (nya rapporter), EASA, Transportstyrelsen, AOPA, Flygtorget. Svara på svenska som punktlista, max 6 punkter: **källa – rubrik** och 1-2 meningar med varför det är relevant. Om inget hittas: hänvisa till källornas egna sidor.",
+          en: "Search the web for the latest general aviation and flight safety news (past 1-2 months) relevant to a European VFR private pilot. Prioritise: Mentour Pilot (YouTube – latest topics), EASA, NTSB/AOPA, national AIBs. Reply in English as a bullet list, max 6 items: **source – headline** plus 1-2 sentences on relevance.",
+          de: "Suche im Web nach den neuesten Nachrichten (1-2 Monate) zu Allgemeiner Luftfahrt und Flugsicherheit für einen VFR-Privatpiloten. Priorisiere: Mentour Pilot (YouTube), EASA, BFU, AOPA, DWD/flugwetter. Antworte auf Deutsch als Liste, max. 6 Punkte: **Quelle – Schlagzeile** plus 1-2 Sätze zur Relevanz.",
+        }[lang] }], tools: [{ type: "web_search_20250305", name: "web_search" }] }),
       });
       const data = await res.json();
       const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n").trim();
@@ -1050,16 +1102,48 @@ export default function ImsafeApp() {
         @keyframes imsafeReveal { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes imsafeSlide { from { transform: translateX(18px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes imsafePopIn { from { transform: translateY(-6px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes imsafeHello { 0% { opacity: 0; transform: translateY(16px) scale(0.97); } 14% { opacity: 1; transform: translateY(0) scale(1); } 86% { opacity: 1; } 100% { opacity: 1; } }
+        @keyframes imsafeFloat { from { transform: translateY(0) translateX(0); } to { transform: translateY(26px) translateX(-14px); } }
         @media (prefers-reduced-motion: reduce) { * { animation:none!important; transition:none!important; } }
         @media print {
           body * { visibility: hidden; }
-          #report, #report * { visibility: visible; }
-          #report { position: absolute; left: 0; top: 0; width: 100%; display: block !important; }
+          #${printMode === "minima" ? "lathund" : "report"}, #${printMode === "minima" ? "lathund" : "report"} * { visibility: visible; }
+          #${printMode === "minima" ? "lathund" : "report"} { position: absolute; left: 0; top: 0; width: 100%; display: block !important; }
         }
       `}</style>
 
       <Confetti show={confetti} />
       <Toast toast={toast} />
+
+      {/* ===== Intro-overlay (första besöket) ===== */}
+      {!seenIntro && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 80, background: "linear-gradient(160deg,#0B5CD6 0%,#4F46E5 60%,#3B2FA8 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 28, overflow: "hidden" }}>
+          <div style={{ position: "absolute", width: 340, height: 340, borderRadius: "50%", background: "rgba(255,255,255,0.07)", top: -90, right: -110, filter: "blur(2px)", animation: "imsafeFloat 9s ease-in-out infinite alternate" }} />
+          <div style={{ position: "absolute", width: 260, height: 260, borderRadius: "50%", background: "rgba(255,255,255,0.05)", bottom: -70, left: -90, animation: "imsafeFloat 11s ease-in-out infinite alternate-reverse" }} />
+          <svg width="76" height="76" viewBox="0 0 30 30" style={{ marginBottom: 28, filter: "drop-shadow(0 10px 24px rgba(0,0,0,0.25))", animation: "imsafeHello 0.9s ease-out" }}>
+            <rect width="30" height="30" rx="9" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.35)" strokeWidth="0.75" />
+            <path d="M7 16.5 L12 21.5 L22 9.5" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M19.5 8.5 L24 7 L23 11.5" fill="#fff" />
+          </svg>
+          <h1 key={helloIdx} className="font-bold" style={{ color: "#fff", fontSize: 40, letterSpacing: "-0.02em", animation: "imsafeHello 2.4s ease-in-out", minHeight: 52, textAlign: "center" }}>
+            {["Välkommen", "Welcome", "Willkommen"][helloIdx]}
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, marginTop: 6, textAlign: "center" }}>imsafe.se · {T.onboard.tag}</p>
+          <div className="grid grid-cols-3 gap-2" style={{ marginTop: 34, width: "100%", maxWidth: 340 }}>
+            {["sv", "en", "de"].map((l) => (
+              <button key={l} onClick={() => setLang(l)} className="py-2.5 rounded-xl active:opacity-70"
+                style={{ background: lang === l ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.09)", border: lang === l ? "1.5px solid rgba(255,255,255,0.9)" : "1.5px solid rgba(255,255,255,0.2)" }}>
+                <span className="block text-[20px] leading-none">{langMeta[l][0]}</span>
+                <span className="block text-[12px] font-semibold mt-1" style={{ color: "#fff" }}>{langMeta[l][1]}</span>
+              </button>
+            ))}
+          </div>
+          <button onClick={() => { setSeenIntro(true); if (game.soundOn) SND.step(); }}
+            className="active:opacity-70" style={{ marginTop: 14, width: "100%", maxWidth: 340, padding: "14px 0", borderRadius: 16, background: "#fff", color: "#0B5CD6", fontSize: 16, fontWeight: 700, boxShadow: "0 10px 26px rgba(0,0,0,0.25)" }}>
+            {T.onboard.start}
+          </button>
+        </div>
+      )}
 
       {/* ===== Header ===== */}
       <header className="px-5 pt-5 pb-2 max-w-2xl mx-auto">
@@ -1117,11 +1201,6 @@ export default function ImsafeApp() {
               }}>↺</button>
             <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: C.fill }}
               onClick={() => setGame((g) => ({ ...g, soundOn: !g.soundOn }))}>{game.soundOn ? "🔊" : "🔇"}</button>
-            <button onClick={() => { setTab("more"); setMoreView("account"); }}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold"
-              style={{ background: C.gold + "22", color: C.gold }}>
-              🏅
-            </button>
           </div>
         </div>
         <p className="text-[13px] font-medium mt-3" style={{ color: C.inkSoft }}>
@@ -1135,6 +1214,34 @@ export default function ImsafeApp() {
         {/* ================= FLYG ================= */}
         {tab === "fly" && (
           <div>
+            {/* Stöd-nudge efter flitig användning */}
+            {lang === "sv" && uses >= 5 && !nudgeGone && seenIntro && (
+              <Card style={{ background: `linear-gradient(135deg, ${C.blue}0E, ${C.indigo}06)` }}>
+                <div className="p-3.5 flex items-center gap-3">
+                  <img src={EDWIN_IMG} alt="" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
+                  <p className="flex-1 text-[13px]" style={{ color: C.ink2 }}>
+                    Du har gjort {uses} genomgångar – kul att appen används! Vill du hålla den gratis och reklamfri? <button className="font-bold underline" style={{ color: C.blue }} onClick={() => { setTab("more"); setMoreView("support"); }}>Stöd utvecklingen</button>
+                  </p>
+                  <button className="text-[13px] font-bold px-2" style={{ color: C.inkSoft }} onClick={() => setNudgeGone(true)}>✕</button>
+                </div>
+              </Card>
+            )}
+
+            {/* Tangentbordstips på dator */}
+            {!kbdGone && typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: fine)").matches && (
+              <Card style={{ background: `linear-gradient(135deg, ${C.indigo}0E, ${C.blue}06)` }}>
+                <div className="p-3.5 flex items-center gap-3">
+                  <span className="text-[18px]">⌨️</span>
+                  <p className="flex-1 text-[13px]" style={{ color: C.ink2 }}>
+                    {{ sv: "På dator: piltangenterna ← → byter steg, Enter bockar av nästa punkt.",
+                       en: "On desktop: arrow keys ← → switch steps, Enter checks the next item.",
+                       de: "Am Computer: Pfeiltasten ← → wechseln den Schritt, Enter hakt den nächsten Punkt ab." }[lang]}
+                  </p>
+                  <button className="text-[13px] font-bold px-2" style={{ color: C.inkSoft }} onClick={() => setKbdGone(true)}>✕</button>
+                </div>
+              </Card>
+            )}
+
             {/* Stegvisare */}
             <div className="flex items-center mb-4 px-1">
               {STEP_DEF.map((s, i) => (
@@ -1158,32 +1265,8 @@ export default function ImsafeApp() {
               ))}
             </div>
 
-            {/* Onboarding */}
-            {!seenIntro && (
-              <Card style={{ background: `linear-gradient(135deg, ${C.blue}14, ${C.indigo}08)`, border: `1px solid ${C.blue}30` }}>
-                <div className="p-4">
-                  <p className="text-[17px] font-bold">{T.onboard.hi}</p>
-                  <p className="text-[14px] mt-1.5" style={{ color: C.ink2 }}>{T.onboard.tag}</p>
-                  <p className="mt-2.5 text-[13px]" style={{ color: C.ink2 }}>🧍 → 🌤 → 📋 → 🛩 → ⚖️</p>
-                  <p className="mt-1.5 text-[12px]" style={{ color: C.inkSoft }}>{T.onboard.tip}</p>
-                  <div className="grid grid-cols-3 gap-1.5 mt-3">
-                    {["sv", "en", "de"].map((l) => (
-                      <button key={l} onClick={() => setLang(l)} className="py-2.5 rounded-xl active:opacity-70"
-                        style={{ background: lang === l ? C.blue + "14" : C.fill, border: lang === l ? `1.5px solid ${C.blue}` : "1.5px solid transparent" }}>
-                        <span className="block text-[20px] leading-none">{langMeta[l][0]}</span>
-                        <span className="block text-[12px] font-semibold mt-1" style={{ color: lang === l ? C.blue : C.inkSoft }}>{langMeta[l][1]}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <button onClick={() => setSeenIntro(true)} className="w-full mt-3 py-2.5 rounded-xl font-semibold text-white active:opacity-70" style={{ background: C.blue }}>
-                    {T.onboard.start}
-                  </button>
-                </div>
-              </Card>
-            )}
-
+            {/* Stegets fråga (animeras vid stegbyte) */}
             <div key={step + lang} style={{ animation: "imsafeSlide .25s ease-out" }}>
-              {/* Stegets fråga */}
               <Card style={{ background: `linear-gradient(135deg, ${C[S.colorKey]}12, ${C[S.colorKey]}04)`, border: `1px solid ${C[S.colorKey]}30` }}>
                 <div className="p-4 flex items-center gap-3">
                   <span className="text-[26px]">{S.icon}</span>
@@ -1252,6 +1335,13 @@ export default function ImsafeApp() {
                       </div>
                     );
                   })}
+                  <div className="px-4 pt-3 pb-1" style={{ borderTop: `0.5px solid ${C.line}` }}>
+                    <p className="text-[12px] font-semibold mb-1" style={{ color: C.inkSoft }}>
+                      {{ sv: "TEM – ÖVRIGA HOT (FRIVILLIGT)", en: "TEM – OTHER THREATS (OPTIONAL)", de: "TEM – WEITERE GEFAHREN (OPTIONAL)" }[lang]}
+                    </p>
+                    <textarea style={{ ...inputF(), minHeight: 52 }} value={temNotes} onChange={(e) => setTemNotes(e.target.value)}
+                      placeholder={{ sv: "T.ex. mycket skoltrafik, ovan passagerare, tidig start…", en: "E.g. busy circuit, unfamiliar passenger, early start…", de: "Z.B. viel Platzverkehr, unerfahrener Passagier, früher Start…" }[lang]} />
+                  </div>
                   <p className="text-[11px] px-4 py-3" style={{ color: C.inkSoft }}>{T.riskStep.foot}</p>
                 </Card>
               )}
@@ -1274,6 +1364,21 @@ export default function ImsafeApp() {
               {step === 3 && (
                 <Card>
                   <CardHead title={T.walk.title} sub={walkPct === 1 ? T.walk.subDone : T.walk.subTodo} right={<Ring pct={walkPct} color={C.green} />} />
+                  {walkPct < 1 && (
+                    <div className="px-4 pb-1">
+                      <button className="w-full py-2.5 rounded-xl text-[14px] font-semibold active:opacity-60"
+                        style={{ background: C.green + "12", color: C.green, border: `1.5px solid ${C.green}40` }}
+                        onClick={() => {
+                          const all = {};
+                          WALK_DEF.forEach((g) => g.keys.forEach((k) => { all[k] = true; }));
+                          setWalk(all);
+                          if (game.soundOn) SND.step();
+                          showToast("✓", { sv: "Walkaround markerad som gjord", en: "Walkaround marked as done", de: "Walkaround als erledigt markiert" }[lang]);
+                        }}>
+                        {{ sv: "✓ Redan gjord enligt POH – bocka allt", en: "✓ Already done per POH – check all", de: "✓ Bereits nach POH erledigt – alles abhaken" }[lang]}
+                      </button>
+                    </div>
+                  )}
                   {WALK_DEF.map((g) => (
                     <div key={g.id}>
                       <div className="flex items-center gap-2 px-4 py-2" style={{ background: C.fill }}>
@@ -1371,6 +1476,12 @@ export default function ImsafeApp() {
                         </Card>
 
                         {!decision ? (
+                          <>
+                          <p className="text-[13px] text-center mb-2 font-medium" style={{ color: C.ink2 }}>
+                            {{ sv: "Siffran är ett underlag – du är befälhavare och beslutet är alltid ditt.",
+                               en: "The number is guidance – you are pilot in command and the decision is always yours.",
+                               de: "Die Zahl ist eine Hilfe – du bist verantwortlicher Pilot und die Entscheidung liegt immer bei dir." }[lang]}
+                          </p>
                           <div className="grid grid-cols-2 gap-2 mb-4">
                             <button onClick={() => decide("go")} disabled={model.riskPct > 80}
                               className="py-3.5 rounded-2xl text-[16px] font-bold text-white active:opacity-70"
@@ -1381,6 +1492,7 @@ export default function ImsafeApp() {
                               {T.decide.abstain}
                             </button>
                           </div>
+                          </>
                         ) : (
                           <Card style={{ border: `1.5px solid ${decision === "nogo" ? C.purple : C.green}` }}>
                             <div className="p-4 text-center">
@@ -1440,12 +1552,11 @@ export default function ImsafeApp() {
               <Card>
                 {[
                   ["links", "☁️", ...T.menu.links, C.blue],
-                  ["minima", "📏", ...T.menu.minima, C.indigo],
-                  ["news", "📰", ...T.menu.news, C.teal],
-                  ["blog", "✍️", ...T.menu.blog, C.orange],
-                  ["stats", "📊", ...T.menu.stats, C.red],
-                  ...(lang === "sv" && T.menu.support ? [["support", "💙", ...T.menu.support, C.blue]] : []),
-                  ["account", "🏅", T.account.badgesTitle, `${game.badges.length} / ${BADGE_DEF.length}`, C.gold],
+                  ["minima", "📏", { sv: "Skapa mina personliga minima", en: "Create my personal minimums", de: "Meine persönlichen Minima" }[lang], T.menu.minima[1], C.indigo],
+                  ["guide", "📖", { sv: "Så funkar imsafe", en: "How imsafe works", de: "So funktioniert imsafe" }[lang], { sv: "Metoden bakom de fem stegen", en: "The method behind the five steps", de: "Die Methode hinter den fünf Schritten" }[lang], C.gold],
+                  ["news", "📰", T.menu.news[0], { sv: "Mentour Pilot, SHK, EASA m.fl.", en: "Mentour Pilot, EASA, NTSB and more", de: "Mentour Pilot, EASA, BFU u.a." }[lang], C.teal],
+                  ["stats", "📊", { sv: "Haveristatistik", en: "Accident insights", de: "Unfallstatistik" }[lang], { sv: "Vad statistiken lär oss", en: "What the data teaches us", de: "Was die Daten uns lehren" }[lang], C.red],
+                  ...(lang === "sv" && T.support ? [["support", "💙", ...T.menu.support, C.blue]] : []),
                   ["lang", "🌐", ...T.menu.lang, C.purple],
                 ].map(([id, icon, mTitle, mSub, col]) => (
                   <button key={id} onClick={() => id === "lang" ? null : setMoreView(id)} className="w-full flex items-center gap-3 px-4 py-3.5 active:opacity-60 text-left"
@@ -1526,6 +1637,11 @@ export default function ImsafeApp() {
                     </div>
                   </div>
                 </Card>
+                <button className="w-full py-3 rounded-2xl text-[15px] font-semibold active:opacity-60 mb-4"
+                  style={{ background: C.card, color: C.blue, border: `1px solid ${C.cardBorder}` }}
+                  onClick={() => { setPrintMode("minima"); setTimeout(() => { window.print(); setTimeout(() => setPrintMode("report"), 500); }, 150); }}>
+                  {{ sv: "🖶 Skapa lathund (PDF) – för kneeboard eller klubbrummet", en: "🖶 Create cheat sheet (PDF)", de: "🖶 Spickzettel erstellen (PDF)" }[lang]}
+                </button>
                 <Card>
                   <CardHead title={T.minima.vmcTitle} sub={T.minima.vmcSub} />
                   {T.minima.vmcRows.map((r) => (
@@ -1540,9 +1656,48 @@ export default function ImsafeApp() {
               </>
             )}
 
-            {moreView === "news" && (
+            {moreView === "guide" && (
               <Card>
-                <CardHead title={T.news.title} sub={T.news.sub} />
+                <CardHead title={{ sv: "Så funkar imsafe", en: "How imsafe works", de: "So funktioniert imsafe" }[lang]} />
+                <div className="px-4 pb-4 space-y-3">
+                  {({
+                    sv: [
+                      ["🧍 Piloten", "IMSAFE är ICAO:s självkontroll: Illness, Medication, Stress, Alcohol, Fatigue, Eating. Är du inte grön här spelar resten mindre roll – därför börjar allt med dig."],
+                      ["🌤 Risker", "Kryssa ärligt i det som stämmer idag. Faktorerna är viktade efter haveristatistik – väder nära minima väger tyngre än en ny flygplats. TEM-rutan fångar det som inte står i listan."],
+                      ["📋 Briefing", "Legalt (certifikat, medical, 90-dagarsregeln) och planering (NOTAM, väder, bränsle, massa & balans). Punkterna följer EASA Part-NCO."],
+                      ["🛩 Planet", "Generisk walkaround i tre grupper: vätskor, elektronik, skick. Typens POH-checklista har alltid företräde."],
+                      ["⚖️ Beslut", "Modellen bygger på Swiss cheese: varje område är en barriär, dina kryss öppnar hål, och när hålen radar upp sig släpps hotet igenom. Siffran är ett underlag – befälhavaren bestämmer."],
+                      ["📏 Minima", "Dina personliga gränser är starkare än lagens. Sätt dem i lugn och ro hemma – och håll dem heliga vid planet."],
+                    ],
+                    en: [
+                      ["🧍 Pilot", "IMSAFE is ICAO's self-check: Illness, Medication, Stress, Alcohol, Fatigue, Eating. If you are not green here, the rest matters less – that is why everything starts with you."],
+                      ["🌤 Risks", "Check honestly what applies today. Factors are weighted by accident statistics – weather near minimums weighs more than an unfamiliar airfield. The TEM box catches what the list misses."],
+                      ["📋 Briefing", "Legal (licence, medical, 90-day rule) and planning (NOTAM, weather, fuel, mass & balance). Items follow EASA Part-NCO."],
+                      ["🛩 Aircraft", "Generic walkaround in three groups: fluids, electrics, condition. Your type's POH checklist always takes precedence."],
+                      ["⚖️ Decision", "The model is Swiss cheese: each area is a barrier, your checks open holes, and when holes line up the threat gets through. The number is guidance – the pilot in command decides."],
+                      ["📏 Minimums", "Your personal limits are stronger than the law's. Set them calmly at home – and keep them sacred at the aircraft."],
+                    ],
+                    de: [
+                      ["🧍 Pilot", "IMSAFE ist die ICAO-Selbstkontrolle: Illness, Medication, Stress, Alcohol, Fatigue, Eating. Bist du hier nicht grün, zählt der Rest weniger – deshalb beginnt alles bei dir."],
+                      ["🌤 Risiken", "Kreuze ehrlich an, was heute zutrifft. Die Faktoren sind nach Unfallstatistik gewichtet. Das TEM-Feld fängt auf, was die Liste nicht abdeckt."],
+                      ["📋 Briefing", "Rechtliches (Lizenz, Medical, 90-Tage-Regel) und Planung (NOTAM, Wetter, Kraftstoff, Masse & Schwerpunkt) nach EASA Part-NCO."],
+                      ["🛩 Flugzeug", "Generischer Walkaround in drei Gruppen: Flüssigkeiten, Elektrik, Zustand. Die POH-Checkliste des Musters hat immer Vorrang."],
+                      ["⚖️ Entscheidung", "Das Modell ist Swiss Cheese: jeder Bereich eine Barriere, deine Kreuze öffnen Löcher – fluchten sie, kommt die Gefahr durch. Die Zahl ist Hilfe – der verantwortliche Pilot entscheidet."],
+                      ["📏 Minima", "Deine persönlichen Grenzen sind stärker als das Gesetz. Lege sie zuhause fest – und halte sie am Flugzeug heilig."],
+                    ],
+                  })[lang].map(([h, t]) => (
+                    <div key={h}>
+                      <p className="text-[14px] font-bold">{h}</p>
+                      <p className="text-[13px] mt-0.5" style={{ color: C.ink2 }}>{t}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
+                        {moreView === "news" && (
+              <Card>
+                <CardHead title={T.news.title} sub={{ sv: "Mentour Pilot, Haverikommissionen, EASA m.fl. – hämtas live", en: "Mentour Pilot, EASA, NTSB and more – fetched live", de: "Mentour Pilot, EASA, BFU u.a. – live geladen" }[lang]} />
                 <div className="px-4 pb-4">
                   <button onClick={fetchNews} disabled={news.status === "loading"} className="w-full py-3 rounded-xl text-[15px] font-semibold text-white active:opacity-70"
                     style={{ background: C.blue, opacity: news.status === "loading" ? 0.6 : 1 }}>
@@ -1595,7 +1750,7 @@ export default function ImsafeApp() {
 
             {moreView === "stats" && (
               <Card>
-                <CardHead title={T.stats.title} sub={T.stats.sub} />
+                <CardHead title={{ sv: "Haveristatistik – vad lär den oss?", en: "Accident insights", de: "Unfallstatistik – was lernen wir?" }[lang]} sub={T.stats.sub} />
                 {ACC_DEF.map((d) => (
                   <div key={d.key} className="px-4 py-3" style={{ borderTop: `0.5px solid ${C.line}` }}>
                     <span className="text-[14px] font-semibold">{T.stats.cats[d.key][0]}</span>
@@ -1613,6 +1768,16 @@ export default function ImsafeApp() {
               <Card>
                 <CardHead title={T.support.title} sub={T.support.sub} />
                 <div className="px-4 pb-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <img src={EDWIN_IMG} alt="Edwin Müller"
+                      style={{ width: 68, height: 68, borderRadius: "50%", objectFit: "cover", border: `2.5px solid ${C.blue}`, flexShrink: 0 }} />
+                    <div>
+                      <p className="text-[15px] font-bold">Edwin Müller, {ageNow()} år</p>
+                      <p className="text-[13px] mt-0.5" style={{ color: C.ink2 }}>
+                        Privatpilot sedan 2024. imsafe.se började som min egen checklista i mobilen – nu delar jag den för att bidra till flygsäkerheten. Appen är gratis och utan reklam.
+                      </p>
+                    </div>
+                  </div>
                   {/* Swish-nummer + kopiera (deep-links stöds inte längre av Swish) */}
                   <div className="rounded-2xl p-4 text-center" style={{ background: C.fill }}>
                     <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: C.inkSoft }}>Swisha till</p>
@@ -1632,25 +1797,6 @@ export default function ImsafeApp() {
               </Card>
             )}
 
-            {moreView === "account" && (
-              <>
-                <Card>
-                  <CardHead title={T.account.badgesTitle} sub={T.account.badgesSub(game.badges.length, BADGE_DEF.length, game.nogoCount)} />
-                  <div className="px-4 pb-4 grid grid-cols-3 gap-2">
-                    {BADGE_DEF.map((b) => {
-                      const has = game.badges.includes(b.id);
-                      return (
-                        <div key={b.id} className="rounded-xl p-2.5 text-center" style={{ background: has ? C.gold + "18" : C.fill, opacity: has ? 1 : 0.55, border: has ? `1px solid ${C.gold}55` : "1px solid transparent" }}>
-                          <span className="text-[22px]" style={{ filter: has ? "none" : "grayscale(1)" }}>{b.icon}</span>
-                          <p className="text-[11px] font-bold mt-0.5">{T.account.badges[b.id][0]}</p>
-                          <p className="text-[9.5px] leading-tight" style={{ color: C.inkSoft }}>{T.account.badges[b.id][1]}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </Card>
-              </>
-            )}
           </>
         )}
 
@@ -1671,6 +1817,33 @@ export default function ImsafeApp() {
       </nav>
 
       {/* ===== PDF-RAPPORT ===== */}
+      {/* ===== MINIMA-LATHUND (PDF) ===== */}
+      <div id="lathund" style={{ display: "none", ...SF, color: "#111", padding: 32 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 700 }}>{{ sv: "Mina personliga minima", en: "My personal minimums", de: "Meine persönlichen Minima" }[lang]} · imsafe.se</h1>
+        <p style={{ fontSize: 12, color: "#555" }}>{new Date().toLocaleDateString(T.locale)}</p>
+        <hr style={{ margin: "12px 0" }} />
+        <table style={{ width: "100%", fontSize: 14, borderCollapse: "collapse" }}><tbody>
+          {MIN_DEF.map((m) => (
+            <tr key={m.key} style={{ borderBottom: "1px solid #ddd" }}>
+              <td style={{ padding: "8px 0", fontWeight: 600 }}>{T.minima.labels[m.key][0]}</td>
+              <td style={{ textAlign: "right", fontWeight: 700 }}>{m.dir === "max" ? T.minima.max : T.minima.min} {minVals[m.key]} {m.unit}</td>
+            </tr>
+          ))}
+          <tr><td style={{ padding: "8px 0", fontWeight: 600 }}>{T.minima.surface}</td>
+            <td style={{ textAlign: "right", fontWeight: 700 }}>{surfaceOk === "asfalt" ? T.minima.surfAsphalt : T.minima.surfGrass}</td></tr>
+        </tbody></table>
+        <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 16 }}>{T.minima.vmcTitle} · {T.minima.vmcSub}</h3>
+        <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}><tbody>
+          {T.minima.vmcRows.map((r) => (
+            <tr key={r[0]} style={{ borderBottom: "1px solid #eee" }}>
+              <td style={{ padding: "5px 0" }}>{r[0]}</td><td>{r[1]}</td><td style={{ color: "#555" }}>{r[2]}</td>
+            </tr>
+          ))}
+        </tbody></table>
+        <p style={{ fontSize: 11, color: "#555", marginTop: 16 }}>{{ sv: "Håll dem heliga – särskilt när du vill flyga som mest.", en: "Keep them sacred – especially when you most want to fly.", de: "Halte sie heilig – besonders wenn du am liebsten fliegen willst." }[lang]}</p>
+        <p style={{ fontSize: 12, marginTop: 24 }}>{{ sv: "Underskrift", en: "Signature", de: "Unterschrift" }[lang]}: ______________________________</p>
+      </div>
+
       <div id="report" style={{ display: "none", ...SF, color: "#111", padding: 32 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700 }}>{T.report.title}</h1>
         <p style={{ fontSize: 12, color: "#555" }}>{T.report.generated} {new Date().toLocaleString(T.locale)}{user ? ` · ${T.report.pilot}: ${user.name}` : ""}</p>
@@ -1690,6 +1863,10 @@ export default function ImsafeApp() {
         {model.active.length === 0 ? <p style={{ fontSize: 12 }}>{T.report.noneF}</p> : (
           <ul style={{ fontSize: 12, paddingLeft: 18 }}>{model.active.map((f) => <li key={f.key} style={{ marginBottom: 6 }}><b>{T.factors[f.key][0]}</b> ({f.barrier}, +{f.w})<br />{T.report.action}: {T.factors[f.key][1]}</li>)}</ul>
         )}
+        {temNotes && (<>
+          <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>TEM</h3>
+          <p style={{ fontSize: 12 }}>{temNotes}</p>
+        </>)}
         <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>{T.report.status}</h3>
         <p style={{ fontSize: 12 }}>{T.decide.cols[0]} {Math.round(imsafePct * 100)} % · {T.decide.cols[2]} {Math.round(briefPct * 100)} % · {T.decide.cols[3]} {Math.round(walkPct * 100)} %</p>
         <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>{T.report.minima}</h3>
