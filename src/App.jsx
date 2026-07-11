@@ -116,6 +116,18 @@ const AIRPORTS = ["ESSB Bromma", "ESKN Skavsta", "ESOW Västerås", "ESSA Arland
    SPRÅKPAKET
    ============================================================ */
 const EDWIN_IMG = "data:image/jpeg;base64,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";
+function logEvent(e) {
+  try {
+    const raw = localStorage.getItem("imsafe:events");
+    const arr = raw ? JSON.parse(raw) : [];
+    arr.push({ d: new Date().toISOString().slice(0, 10), e });
+    if (arr.length > 5000) arr.splice(0, arr.length - 5000);
+    localStorage.setItem("imsafe:events", JSON.stringify(arr));
+  } catch {}
+}
+function readEvents() {
+  try { const raw = localStorage.getItem("imsafe:events"); return raw ? JSON.parse(raw) : []; } catch { return []; }
+}
 function ageNow() {
   const b = new Date(1997, 3, 7); // 7 april 1997
   const n = new Date();
@@ -749,9 +761,17 @@ function Toast({ toast }) {
 
 export default function ImsafeApp() {
   const [lang, setLang] = useState(() => {
+    try {
+      const p = new URLSearchParams(window.location.search).get("lang");
+      if (p && ["sv", "en", "de"].includes(p)) return p;           // imsafe.se?lang=de
+      if (window.location.hostname.endsWith(".de")) return "de";  // framtida imsafe.de
+      if (window.location.hostname.endsWith(".eu")) return "en";  // imsafe.eu → engelska
+    } catch {}
     const nav = (typeof navigator !== "undefined" && navigator.language) || "en";
     return nav.startsWith("sv") ? "sv" : nav.startsWith("de") ? "de" : "en";
   });
+  const urlHasLang = useRef(false);
+  useEffect(() => { try { urlHasLang.current = !!new URLSearchParams(window.location.search).get("lang"); } catch {} }, []);
   const T = I18N[lang];
 
   const [tab, setTab] = useState("fly");
@@ -782,6 +802,15 @@ export default function ImsafeApp() {
   const [game, setGame] = useState({ xp: 0, streak: 0, lastDay: null, badges: [], soundOn: true, nogoCount: 0 });
   const [night, setNight] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [installEvt, setInstallEvt] = useState(null);
+  const isAdmin = typeof window !== "undefined" && window.location.pathname.replace(/\/+$/, "") === "/admin";
+  const [adminPw, setAdminPw] = useState("");
+  const [adminOk, setAdminOk] = useState(false);
+  useEffect(() => {
+    const h = (e) => { e.preventDefault(); setInstallEvt(e); };
+    window.addEventListener("beforeinstallprompt", h);
+    return () => window.removeEventListener("beforeinstallprompt", h);
+  }, []);
   const [temNotes, setTemNotes] = useState("");
   const [uses, setUses] = useState(0);
   const [nudgeGone, setNudgeGone] = useState(false);
@@ -797,6 +826,7 @@ export default function ImsafeApp() {
   /* Tema före render */
   Object.assign(C, night ? DARK : LIGHT);
   useEffect(() => { document.body.style.background = C.bg; }, [night]);
+  useEffect(() => { logEvent("visit"); }, []);
   useEffect(() => {
     if (seenIntro) return;
     const t = setInterval(() => setHelloIdx((i) => (i + 1) % 3), 2400);
@@ -835,7 +865,7 @@ export default function ImsafeApp() {
           if (d.uses) setUses(d.uses);
           if (d.nudgeGone) setNudgeGone(true);
           if (d.kbdGone) setKbdGone(true);
-          if (d.lang && I18N[d.lang]) setLang(d.lang);
+          if (d.lang && I18N[d.lang] && !urlHasLang.current) setLang(d.lang);
           setSeenIntro(!!d.seenIntro);
         } else { setSeenIntro(false); }
       } catch { setSeenIntro(false); }
@@ -944,6 +974,7 @@ export default function ImsafeApp() {
     setLastAssessment({ date: new Date().toISOString().slice(0, 10), verdict: model.verdict, riskPct: model.riskPct, decision: null });
     addXP(20, T.xpEvents.assess); touchStreak();
     setUses((u) => u + 1);
+    logEvent("assess");
     const target = model.riskPct;
     setShownPct(0);
     if (game.soundOn) tone(520, 0.06, 0, "sine", 0.05);
@@ -961,6 +992,7 @@ export default function ImsafeApp() {
     requestAnimationFrame(tick);
   }
   function decide(d) {
+    logEvent(d === "nogo" ? "nogo" : "go");
     setDecision(d);
     setLastAssessment((a) => a ? { ...a, decision: d } : a);
     if (d === "nogo") {
@@ -1020,6 +1052,39 @@ export default function ImsafeApp() {
         {i.label}
       </Row>
     ));
+  }
+
+  function Gauge({ value, size = 300 }) {
+    /* Halvmätare i flyginstrumentstil: grön/gul/orange/röd zon + nål */
+    const W = 300, H = 172, cx = 150, cy = 150, R = 118;
+    const a = (p) => (-180 + p * 1.8) * Math.PI / 180; // 0..100 → -180..0 grader
+    const pt = (p, r) => [cx + r * Math.cos(a(p)), cy + r * Math.sin(a(p))];
+    const arc = (p1, p2, r) => {
+      const [x1, y1] = pt(p1, r), [x2, y2] = pt(p2, r);
+      return `M ${x1} ${y1} A ${r} ${r} 0 ${p2 - p1 > 55 ? 1 : 0} 1 ${x2} ${y2}`;
+    };
+    const zones = [[0, 25, C.green], [25, 55, "#D9A400"], [55, 80, C.orange], [80, 100, C.red]];
+    const [nx, ny] = pt(value, R - 26);
+    const vcol = value <= 25 ? C.green : value <= 55 ? "#D9A400" : value <= 80 ? C.orange : C.red;
+    return (
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", maxWidth: size }}>
+        {zones.map(([p1, p2, col]) => (
+          <path key={p1} d={arc(p1, p2 - 1.2, R)} stroke={col} strokeWidth="15" fill="none" strokeLinecap="butt" opacity="0.92" />
+        ))}
+        {[0, 25, 55, 80, 100].map((p) => {
+          const [tx, ty] = pt(p, R + 15);
+          return <text key={p} x={tx} y={ty + 4} textAnchor="middle" fontSize="9.5" style={mono} fill={C.inkSoft}>{p}</text>;
+        })}
+        {/* Nål */}
+        <line x1={cx} y1={cy} x2={nx} y2={ny} stroke={C.ink} strokeWidth="3.5" strokeLinecap="round"
+          style={{ transition: "all .1s linear" }} />
+        <circle cx={cx} cy={cy} r="9" fill={C.ink} />
+        <circle cx={cx} cy={cy} r="4" fill={C.card} />
+        {/* Värdet */}
+        <text x={cx} y={cy - 38} textAnchor="middle" fontSize="44" fontWeight="800" style={SF} fill={vcol}>{value}</text>
+        <text x={cx} y={cy - 22} textAnchor="middle" fontSize="11" style={SF} fill={C.inkSoft}>/ 100</text>
+      </svg>
+    );
   }
 
   function CheeseBoard() {
@@ -1092,6 +1157,81 @@ export default function ImsafeApp() {
   const preItems = PREFLIGHT_KEYS.map((k) => ({ key: k, label: T.brief.pre[k], ref: PREFLIGHT_REF[k] || "" }));
   const langNames = { sv: "Svenska", en: "English", de: "Deutsch" };
   const langMeta = { sv: ["🇸🇪", "Svenska"], en: ["🇬🇧", "English"], de: ["🇩🇪", "Deutsch"] };
+
+  /* ===== ADMIN (imsafe.se/admin) ===== */
+  if (isAdmin) {
+    const ev = readEvents();
+    const days = {};
+    ev.forEach((x) => { days[x.d] = days[x.d] || { visit: 0, assess: 0, go: 0, nogo: 0 }; days[x.d][x.e] = (days[x.d][x.e] || 0) + 1; });
+    const dates = Object.keys(days).sort().reverse().slice(0, 30);
+    const tot = (e) => ev.filter((x) => x.e === e).length;
+    const maxDay = Math.max(1, ...dates.map((d) => days[d].visit + days[d].assess));
+    return (
+      <div className="min-h-screen" style={{ background: C.bg, color: C.ink, padding: 20, ...SF }}>
+        <div className="max-w-2xl mx-auto pt-6">
+          <div className="flex items-center gap-2 mb-6">
+            <svg width="30" height="30" viewBox="0 0 30 30"><rect width="30" height="30" rx="9" fill="#0B5CD6" /><path d="M7 16.5 L12 21.5 L22 9.5" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <h1 className="text-[24px] font-bold">imsafe · admin</h1>
+          </div>
+          {!adminOk ? (
+            <Card>
+              <div className="p-5">
+                <p className="text-[15px] font-semibold mb-2">Lösenord</p>
+                <input type="password" style={inputF()} value={adminPw} onChange={(e) => setAdminPw(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && adminPw === "455bd6dd52" && setAdminOk(true)} />
+                <button className="w-full mt-2 py-3 rounded-xl font-semibold text-white" style={{ background: C.grad }}
+                  onClick={() => adminPw === "455bd6dd52" && setAdminOk(true)}>Logga in</button>
+                <p className="text-[11px] mt-3" style={{ color: C.inkSoft }}>Obs: enkelt skydd mot nyfikna – känslig data ska aldrig ligga här.</p>
+              </div>
+            </Card>
+          ) : (
+            <>
+              <div className="grid grid-cols-4 gap-2 mb-4">
+                {[["Besök", tot("visit"), C.blue], ["Bedömn.", tot("assess"), C.indigo], ["GO", tot("go"), C.green], ["NO-GO", tot("nogo"), C.purple]].map(([l, v, col]) => (
+                  <Card key={l} style={{ marginBottom: 0 }}>
+                    <div className="p-3 text-center">
+                      <p className="text-[22px] font-bold" style={{ color: col }}>{v}</p>
+                      <p className="text-[11px] font-semibold" style={{ color: C.inkSoft }}>{l}</p>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+              <Card>
+                <CardHead title="Per dag (30 senaste)" sub="Besök + bedömningar" />
+                <div className="px-4 pb-4 space-y-1.5">
+                  {dates.length === 0 && <p className="text-[13px]" style={{ color: C.inkSoft }}>Inga händelser ännu.</p>}
+                  {dates.map((d) => (
+                    <div key={d} className="flex items-center gap-2">
+                      <span className="text-[11px]" style={{ ...mono, color: C.inkSoft, width: 78 }}>{d}</span>
+                      <div className="flex-1 h-4 rounded-md overflow-hidden flex" style={{ background: C.fill }}>
+                        <div style={{ width: `${(days[d].visit / maxDay) * 100}%`, background: C.blue }} />
+                        <div style={{ width: `${(days[d].assess / maxDay) * 100}%`, background: C.indigo }} />
+                      </div>
+                      <span className="text-[11px]" style={{ ...mono, color: C.inkSoft, width: 110, textAlign: "right" }}>
+                        {days[d].visit}b · {days[d].assess}bed · {days[d].go || 0}go · {days[d].nogo || 0}no
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+              <Card>
+                <div className="p-4">
+                  <p className="text-[13px] font-semibold mb-1">ℹ️ Vad visas här?</p>
+                  <p className="text-[12px]" style={{ color: C.ink2 }}>
+                    Statistiken ovan är från DEN HÄR enhetens webbläsare (ingen central databas ännu – appen sparar allt lokalt hos varje användare, per designval).
+                    Global trafik (alla besökare, länder, enheter, per datum) finns i Vercel → ditt projekt → fliken Analytics.
+                    Vill du ha global knapp-statistik här på /admin krävs en liten gratis databas (Supabase) – säg till så bygger vi det som nästa steg.
+                  </p>
+                </div>
+              </Card>
+              <button className="w-full py-3 rounded-xl font-semibold mb-8" style={{ background: C.card, color: C.blue }}
+                onClick={() => (window.location.href = "/")}>← Till appen</button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen" style={{ background: C.bg, color: C.ink, paddingBottom: 96, ...SF }}>
@@ -1401,6 +1541,7 @@ export default function ImsafeApp() {
                       {T.decide.last(lastAssessment, lastAssessment.decision ? (lastAssessment.decision === "nogo" ? T.decide.lastNogo : T.decide.lastGo) : "")}
                     </p>
                   )}
+                  {!assessed && (
                   <Card>
                     <CardHead title={T.decide.basisTitle} sub={T.decide.basisSub} />
                     <div className="px-4 pb-4 grid grid-cols-4 gap-2 text-center">
@@ -1419,6 +1560,7 @@ export default function ImsafeApp() {
                       <p className="text-[12px] px-4 pb-3" style={{ color: C.orange }}>{T.decide.incomplete}</p>
                     )}
                   </Card>
+                  )}
 
                   {!assessed ? (
                     <>
@@ -1430,22 +1572,20 @@ export default function ImsafeApp() {
                     </>
                   ) : (
                     <div style={{ animation: "imsafeReveal .4s ease-out" }}>
-                      <Card style={{ background: shownPct !== null ? C.card : `linear-gradient(135deg, ${model.color}16, ${model.color}06)`, border: `1.5px solid ${shownPct !== null ? C.line : model.color}`, transition: "all .3s" }}>
-                        <div className="p-4">
-                          <div className="flex items-center gap-4">
-                            <Ring pct={(shownPct !== null ? shownPct : model.riskPct) / 100} color={shownPct !== null ? C.inkSoft : model.color} size={64} />
-                            <div className="flex-1">
-                              {shownPct !== null ? (
-                                <p className="text-[16px] font-semibold" style={{ color: C.inkSoft }}>{T.decide.weighing}</p>
-                              ) : (
-                                <>
-                                  <p className="text-[20px] font-bold" style={{ color: model.color }}>{model.verdict}</p>
-                                  <p className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: C.inkSoft }}>{T.decide.riskLabel} {model.level} · {model.riskPct}/100</p>
-                                </>
-                              )}
-                            </div>
+                      <Card style={{ background: shownPct !== null ? C.card : `linear-gradient(180deg, ${model.color}14, ${model.color}04)`, border: `1.5px solid ${shownPct !== null ? C.line : model.color}`, transition: "all .3s" }}>
+                        <div className="p-4 pt-5">
+                          <Gauge value={shownPct !== null ? shownPct : model.riskPct} />
+                          <div className="text-center" style={{ marginTop: -6 }}>
+                            {shownPct !== null ? (
+                              <p className="text-[15px] font-semibold" style={{ color: C.inkSoft }}>{T.decide.weighing}</p>
+                            ) : (
+                              <>
+                                <p className="text-[26px] font-bold tracking-tight" style={{ color: model.color }}>{model.verdict}</p>
+                                <p className="text-[12px] font-semibold uppercase tracking-wide mt-0.5" style={{ color: C.inkSoft }}>{T.decide.riskLabel} {model.level}</p>
+                                <p className="text-[14px] mt-2.5 text-left" style={{ color: C.ink2 }}>{model.advice}</p>
+                              </>
+                            )}
                           </div>
-                          {shownPct === null && <p className="text-[14px] mt-3" style={{ color: C.ink2 }}>{model.advice}</p>}
                         </div>
                       </Card>
 
@@ -1506,7 +1646,18 @@ export default function ImsafeApp() {
                           </Card>
                         )}
 
-                        <button onClick={createReport} className="w-full py-3 rounded-2xl text-[15px] font-semibold active:opacity-60 mb-2" style={{ background: C.card, color: C.blue }}>
+                        <Card>
+                        <div className="px-4 py-3 flex items-center justify-around">
+                          {[[T.decide.cols[0], imsafePct, C.purple], [T.decide.cols[2], briefPct, C.indigo], [T.decide.cols[3], walkPct, C.green]].map(([k, p, col]) => (
+                            <div key={k} className="flex items-center gap-1.5">
+                              <Ring pct={p} color={col} size={32} />
+                              <span className="text-[11px] font-semibold" style={{ color: C.inkSoft }}>{k}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </Card>
+
+                      <button onClick={createReport} className="w-full py-3 rounded-2xl text-[15px] font-semibold active:opacity-60 mb-2" style={{ background: C.card, color: C.blue }}>
                           {T.decide.pdf}
                         </button>
                         <button onClick={() => { setRisks({}); setImsafe({}); setLegal({}); setPre({}); setWalk({}); setAssessed(false); setDecision(null); setShownPct(null); setStep(0); celebrated.current = {}; }}
@@ -1554,9 +1705,9 @@ export default function ImsafeApp() {
                   ["links", "☁️", ...T.menu.links, C.blue],
                   ["minima", "📏", { sv: "Skapa mina personliga minima", en: "Create my personal minimums", de: "Meine persönlichen Minima" }[lang], T.menu.minima[1], C.indigo],
                   ["guide", "📖", { sv: "Så funkar imsafe", en: "How imsafe works", de: "So funktioniert imsafe" }[lang], { sv: "Metoden bakom de fem stegen", en: "The method behind the five steps", de: "Die Methode hinter den fünf Schritten" }[lang], C.gold],
-                  ["news", "📰", T.menu.news[0], { sv: "Mentour Pilot, SHK, EASA m.fl.", en: "Mentour Pilot, EASA, NTSB and more", de: "Mentour Pilot, EASA, BFU u.a." }[lang], C.teal],
                   ["stats", "📊", { sv: "Haveristatistik", en: "Accident insights", de: "Unfallstatistik" }[lang], { sv: "Vad statistiken lär oss", en: "What the data teaches us", de: "Was die Daten uns lehren" }[lang], C.red],
                   ...(lang === "sv" && T.support ? [["support", "💙", ...T.menu.support, C.blue]] : []),
+                  ["install", "📲", { sv: "Spara som app", en: "Save as app", de: "Als App speichern" }[lang], { sv: "Lägg imsafe på hemskärmen", en: "Add imsafe to your home screen", de: "imsafe zum Startbildschirm hinzufügen" }[lang], C.teal],
                   ["lang", "🌐", ...T.menu.lang, C.purple],
                 ].map(([id, icon, mTitle, mSub, col]) => (
                   <button key={id} onClick={() => id === "lang" ? null : setMoreView(id)} className="w-full flex items-center gap-3 px-4 py-3.5 active:opacity-60 text-left"
@@ -1656,7 +1807,38 @@ export default function ImsafeApp() {
               </>
             )}
 
-            {moreView === "guide" && (
+            {moreView === "install" && (
+              <Card>
+                <CardHead title={{ sv: "Spara imsafe som app 📲", en: "Save imsafe as an app 📲", de: "imsafe als App speichern 📲" }[lang]}
+                  sub={{ sv: "Egen ikon, fullskärm, blixtsnabb start – ingen App Store behövs", en: "Own icon, full screen, instant start – no App Store needed", de: "Eigenes Icon, Vollbild, sofortiger Start – kein App Store nötig" }[lang]} />
+                <div className="px-4 pb-4 space-y-4">
+                  {installEvt && (
+                    <button className="w-full py-3 rounded-xl font-semibold text-white active:opacity-70" style={{ background: C.grad }}
+                      onClick={async () => { installEvt.prompt(); await installEvt.userChoice; setInstallEvt(null); }}>
+                      {{ sv: "Installera nu – ett tryck", en: "Install now – one tap", de: "Jetzt installieren – ein Tipp" }[lang]}
+                    </button>
+                  )}
+                  <div>
+                    <p className="text-[14px] font-bold mb-1.5">🍎 iPhone / iPad (Safari)</p>
+                    {({ sv: ["1. Tryck på Dela-knappen (rutan med pil uppåt)", "2. Skrolla ner → ”Lägg till på hemskärmen”", "3. Tryck ”Lägg till” – klart!"],
+                       en: ["1. Tap the Share button (square with arrow)", "2. Scroll down → ”Add to Home Screen”", "3. Tap ”Add” – done!"],
+                       de: ["1. Tippe auf Teilen (Quadrat mit Pfeil)", "2. Nach unten scrollen → „Zum Home-Bildschirm“", "3. „Hinzufügen“ tippen – fertig!"] }[lang]).map((s) => (
+                      <p key={s} className="text-[13px] py-0.5" style={{ color: C.ink2 }}>{s}</p>
+                    ))}
+                  </div>
+                  <div>
+                    <p className="text-[14px] font-bold mb-1.5">🤖 Android (Chrome)</p>
+                    {({ sv: ["1. Tryck på menyn ⋮ uppe till höger", "2. Välj ”Lägg till på startskärmen” eller ”Installera app”", "3. Bekräfta – klart!"],
+                       en: ["1. Tap the ⋮ menu top right", "2. Choose ”Add to Home screen” or ”Install app”", "3. Confirm – done!"],
+                       de: ["1. Tippe auf das ⋮-Menü oben rechts", "2. „Zum Startbildschirm“ oder „App installieren“ wählen", "3. Bestätigen – fertig!"] }[lang]).map((s) => (
+                      <p key={s} className="text-[13px] py-0.5" style={{ color: C.ink2 }}>{s}</p>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            )}
+
+                        {moreView === "guide" && (
               <Card>
                 <CardHead title={{ sv: "Så funkar imsafe", en: "How imsafe works", de: "So funktioniert imsafe" }[lang]} />
                 <div className="px-4 pb-4 space-y-3">
@@ -1790,7 +1972,6 @@ export default function ImsafeApp() {
                       }}>
                       Kopiera nummer
                     </button>
-                    <p className="text-[12px] mt-2" style={{ color: C.inkSoft }}>Förslag: 29 · 59 · 99 kr – varje krona håller sajten flygande ✈️</p>
                   </div>
                   <p className="text-[12px] mt-3" style={{ color: C.inkSoft }}>{T.support.thanks}</p>
                 </div>
