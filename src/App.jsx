@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 /* ============================================================
    IMSAFE.SE — v11 "International"
@@ -2056,6 +2057,7 @@ export default function ImsafeApp() {
         <p style={{ fontSize: 11, color: "#555" }}>{T.report.formula}</p>
         <p style={{ fontSize: 12, marginTop: 24 }}>{T.report.sign}: ______________________________ {T.report.date}: ______________</p>
       </div>
+      <Analytics />
     </div>
   );
 }
