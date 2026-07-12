@@ -164,7 +164,7 @@ const I18N = {
     barriers: { pilot: "Pilot", wx: "Väder & miljö", acft: "Flygplan", plan: "Planering & press" },
     factors: {
       imsafe: ["IMSAFE ej helt grön", "Flyg inte idag – eller kort lokalflygning med instruktör."],
-      lowRecent: ["Under 10 h senaste 90 dagarna", "Boka en timme med instruktör, eller börja med tre varv ensam i lugnt väder."],
+      lowRecent: ["Mindre än 10 h senaste 90 dagarna", "Boka en timme med instruktör, eller börja med tre varv ensam i lugnt väder."],
       recency90: ["90-dagarsregeln utan marginal (FCL.060)", "Flyg starter och landningar solo först – ta passagerarna nästa gång."],
       newType: ["Under 10 h på typen", "Läs nödprocedurerna kvällen innan och höj dina minima tills du har 10 h på typen."],
       noDryFly: ["Ingen torrflygning gjord", "Ta 5 minuter nu: blunda och flyg trafikvarvet och en avbruten landning."],
@@ -193,7 +193,7 @@ const I18N = {
     walk: {
       title: "Walkaround", subDone: "Planet genomgånget – sista blicken: inget kvarglömt på vingen? ✓", subTodo: "Vätskor → Elektronik → Skick. I din takt.",
       groups: { fluids: "Vätskor", electric: "Elektronik", condition: "Skick" },
-      items: { oil: "Olja – nivå inom gränser, lock åtdraget", fuelQty: "Bränslemängd – verifierad med ögonen i båda tankarna", drain: "Dränering – alla punkter, fritt från vatten och partiklar", fuelCaps: "Tanklock stängda och låsta", leaks: "Inga droppar eller fläckar under motor och vingar", master: "Huvudström på – batterispänning OK", lights: "Belysning: beacon, strobe, nav- och landningsljus", pitot: "Pitotvärme – känn att den blir varm (kort test)", stall: "Stallvarnare testad", flaps: "Klaffar – ut och in, symmetriskt", prop: "Propeller – inga hack, sprickor eller glapp", cowl: "Motorkåpa fäst, inga lösa föremål", wings: "Vingar och roder – hela ytor, fria rörelser", tires: "Däck – tryck och mönster OK", struts: "Fjäderben – rätt utskjut, inget läckage", static: "Statiska portar och pitotrör fria", tiedown: "Förtöjning, klossar och pitotskydd BORTTAGNA" },
+      items: { oil: "Olja – nivå inom gränser, lock åtdraget", fuelQty: "Bränslemängd – visuellt verifierad i alla tankar", drain: "Dränering – alla punkter, fritt från vatten och partiklar", fuelCaps: "Tanklock stängda och låsta", leaks: "Inga droppar eller fläckar under motor och vingar", master: "Huvudström på – batterispänning OK", lights: "Belysning: beacon, strobe, nav- och landningsljus", pitot: "Pitotvärme – känn att den blir varm (kort test)", stall: "Stallvarnare testad", flaps: "Klaffar – ut och in, symmetriskt", prop: "Propeller – inga hack, sprickor eller glapp", cowl: "Motorkåpa fäst, inga lösa föremål", wings: "Vingar och roder – hela ytor, fria rörelser", tires: "Däck – tryck och mönster OK", struts: "Fjäderben – rätt utskjut, inget läckage", static: "Statiska portar och pitotrör fria", tiedown: "Förtöjning, klossar och pitotskydd BORTTAGNA" },
       poh: "Generisk lista – flygplanstypens egen checklista har alltid företräde.",
     },
     decide: {
@@ -333,7 +333,7 @@ const I18N = {
     stepOf: (n) => `Step ${n} of 5`,
     onboard: { hi: "Welcome 👋", tag: "Five steps. Five minutes. One clear decision.", tip: "Tip: set your personal minimums under More → Minimums.", start: "Let's go", langLabel: "Språk / Language / Sprache" },
     imsafe: {
-      title: "IMSAFE", subDone: "You're green – on to the risks ✓", subTodo: "Tick top to bottom – like the paper checklist",
+      title: "IMSAFE", subDone: "You're in the green – on to the risks ✓", subTodo: "Tick top to bottom – like the paper checklist",
       items: { illness: ["Illness – free of illness", "No"], medication: ["Medication – nothing impairing", "No"], stress: ["Stress – under control", "No"], alcohol: ["Alcohol – 8 h bottle-to-throttle, within legal limits", "No"], fatigue: ["Fatigue – well rested", "Yes"], eating: ["Eating – fed & hydrated", "Yes"] },
     },
     riskStep: {
@@ -345,7 +345,7 @@ const I18N = {
     barriers: { pilot: "Pilot", wx: "Weather & environment", acft: "Aircraft", plan: "Planning & pressure" },
     factors: {
       imsafe: ["IMSAFE not fully green", "Don't fly today – or a short local flight with an instructor."],
-      lowRecent: ["Under 10 h in the last 90 days", "Book an hour with an instructor, or start with three solo circuits in calm weather."],
+      lowRecent: ["Less than 10 h in the last 90 days", "Book an hour with an instructor, or start with three solo circuits in calm weather."],
       recency90: ["90-day rule without margin (FCL.060)", "Fly take-offs and landings solo first – bring passengers next time."],
       newType: ["Under 10 h on type", "Read the emergency procedures the night before and raise your minimums until 10 h on type."],
       noDryFly: ["No chair-flying done", "Take 5 minutes now: close your eyes and fly the circuit and a go-around."],
@@ -374,7 +374,7 @@ const I18N = {
     walk: {
       title: "Walkaround", subDone: "Aircraft checked – one last look: nothing left on the wing? ✓", subTodo: "Fluids → Electrics → Condition. At your pace.",
       groups: { fluids: "Fluids", electric: "Electrics", condition: "Condition" },
-      items: { oil: "Oil – level within limits, cap secure", fuelQty: "Fuel quantity – visually verified in both tanks", drain: "Fuel drains – all points, free of water and debris", fuelCaps: "Fuel caps closed and locked", leaks: "No drips or stains under engine or wings", master: "Master on – battery voltage OK", lights: "Lights: beacon, strobe, nav and landing", pitot: "Pitot heat – feel it getting warm (brief test)", stall: "Stall warner tested", flaps: "Flaps – out and in, symmetrical", prop: "Propeller – no nicks, cracks or play", cowl: "Cowling secure, no loose objects", wings: "Wings and controls – surfaces intact, free movement", tires: "Tyres – pressure and tread OK", struts: "Struts – correct extension, no leaks", static: "Static ports and pitot clear", tiedown: "Tie-downs, chocks and pitot cover REMOVED" },
+      items: { oil: "Oil – level within limits, cap secure", fuelQty: "Fuel quantity – visually verified in all tanks", drain: "Fuel drains – all points, free of water and debris", fuelCaps: "Fuel caps closed and locked", leaks: "No drips or stains under engine or wings", master: "Master on – battery voltage OK", lights: "Lights: beacon, strobe, nav and landing", pitot: "Pitot heat – feel it getting warm (brief test)", stall: "Stall warner tested", flaps: "Flaps – out and in, symmetrical", prop: "Propeller – no nicks, cracks or play", cowl: "Cowling secure, no loose objects", wings: "Wings and controls – surfaces intact, free movement", tires: "Tyres – pressure and tread OK", struts: "Struts – correct extension, no leaks", static: "Static ports and pitot clear", tiedown: "Tie-downs, chocks and pitot cover REMOVED" },
       poh: "Generic list – your aircraft type's own checklist always takes precedence.",
     },
     decide: {
@@ -509,8 +509,8 @@ const I18N = {
     stepOf: (n) => `Schritt ${n} von 5`,
     onboard: { hi: "Willkommen 👋", tag: "Fünf Schritte. Fünf Minuten. Eine klare Entscheidung.", tip: "Tipp: Stelle deine Minima unter Mehr → Minima ein.", start: "Los geht's", langLabel: "Språk / Language / Sprache" },
     imsafe: {
-      title: "IMSAFE", subDone: "Du bist grün – weiter zu den Risiken ✓", subTodo: "Von oben nach unten abhaken – wie auf der Papier-Checkliste",
-      items: { illness: ["Illness – frei von Krankheit", "Nein"], medication: ["Medication – keine beeinträchtigenden Medikamente", "Nein"], stress: ["Stress – unter Kontrolle", "Nein"], alcohol: ["Alcohol – 8 h Flasche→Steuer, innerhalb der Grenzen", "Nein"], fatigue: ["Fatigue – ausgeruht", "Ja"], eating: ["Eating – gegessen & getrunken", "Ja"] },
+      title: "IMSAFE", subDone: "Du bist im grünen Bereich – weiter zu den Risiken ✓", subTodo: "Von oben nach unten abhaken – wie auf der Papier-Checkliste",
+      items: { illness: ["Illness – frei von Krankheit", "Nein"], medication: ["Medication – keine beeinträchtigenden Medikamente", "Nein"], stress: ["Stress – unter Kontrolle", "Nein"], alcohol: ["Alcohol – 8 h bottle to throttle, innerhalb der Grenzen", "Nein"], fatigue: ["Fatigue – ausgeruht", "Ja"], eating: ["Eating – gegessen & getrunken", "Ja"] },
     },
     riskStep: {
       title: "Heutige Risikofaktoren", sub: "Öffne jeden Bereich und hake an, was heute zutrifft. Keine Häkchen = starker Tag.",
@@ -521,10 +521,10 @@ const I18N = {
     barriers: { pilot: "Pilot", wx: "Wetter & Umgebung", acft: "Flugzeug", plan: "Planung & Druck" },
     factors: {
       imsafe: ["IMSAFE nicht ganz grün", "Heute nicht fliegen – oder ein kurzer Platzflug mit Fluglehrer."],
-      lowRecent: ["Unter 10 h in den letzten 90 Tagen", "Buche eine Stunde mit Fluglehrer, oder starte mit drei Platzrunden solo bei ruhigem Wetter."],
+      lowRecent: ["Weniger als 10 h in den letzten 90 Tagen", "Buche eine Stunde mit Fluglehrer, oder starte mit drei Platzrunden solo bei ruhigem Wetter."],
       recency90: ["90-Tage-Regel ohne Reserve (FCL.060)", "Erst Starts und Landungen solo fliegen – Passagiere beim nächsten Mal."],
       newType: ["Unter 10 h auf dem Muster", "Notverfahren am Vorabend lesen und Minima erhöhen, bis 10 h auf dem Muster erreicht sind."],
-      noDryFly: ["Kein Trockentraining gemacht", "Nimm dir 5 Minuten: Augen zu, Platzrunde und Durchstarten mental durchfliegen."],
+      noDryFly: ["Kein Chair Flying gemacht", "Nimm dir 5 Minuten: Augen zu, Platzrunde und Durchstarten mental durchfliegen."],
       marginal: ["Sicht oder Wolkenuntergrenze nahe deiner Minima", "Warten. Setze einen harten Umkehrpunkt: unter X ft Untergrenze kehre ich um – ohne Diskussion."],
       deterio: ["Vorhersage verschlechtert sich im Tagesverlauf", "Das lange Bein zuerst fliegen, oder den Rückflug drei Stunden vor der Verschlechterung planen."],
       xwind: ["Seitenwind oder Böen über deiner Grenze", "Wähle einen Platz mit besserer Windrichtung – oder warte, bis der Wind nachlässt."],
@@ -533,7 +533,7 @@ const I18N = {
       icing: ["Gefahr von Vergaser- oder Flugzeugvereisung", "Vergaservorwärmung frühzeitig – und immer vor dem Sinkflug."],
       fuelTight: ["Kraftstoffreserve unter deiner Grenze", "Volltanken oder Tankstopp planen. Sprit ist die günstigste Versicherung."],
       nearMtow: ["Nahe MTOW oder hinterer Schwerpunkt", "Ladung nach vorn verlagern oder eine Tasche zu Hause lassen."],
-      defect: ["Offene Beanstandung am Flugzeug", "Vor dem Flug den Techniker anrufen. Ohne klare Freigabe – kein Flug."],
+      defect: ["Defekt am Flugzeug", "Vor dem Flug den Techniker anrufen. Ohne klare Freigabe – kein Flug."],
       unfamiliarEquip: ["Ungewohnte Avionik oder Ausrüstung", "15 Minuten am Boden sitzen bleiben und die ganze Route vor dem Start programmieren."],
       pressure: ["Zeitdruck oder Erwartungsdruck", "Sag es den Passagieren jetzt laut: Wir müssen vielleicht umkehren oder das Auto nehmen."],
       newAd: ["Neuer oder unbekannter Flugplatz", "Karte und Satellitenbild studieren, Platzrunde zeichnen, bei Unklarheit anrufen."],
@@ -545,12 +545,12 @@ const I18N = {
       legalTitle: "Recht & Dokumente", legalSub: "Part-FCL · Part-MED · NCO.GEN.135",
       legal: { license: "Lizenz und SEP-Berechtigung gültig", medical: "Medical gültig", recency: "90-Tage-Regel für Passagiere erfüllt", docsAboard: "An Bord: Eintragungsschein, ARC, Funkzulassung, Versicherung, Flughandbuch", techlog: "Bordbuch: Stunden OK, keine offenen Beanstandungen" },
       preTitle: "Briefing & Planung", preSub: "Wetter- und NOTAM-Links unter Mehr → Wetter & Briefing",
-      pre: { notam: "NOTAM – gesamte Route und Ausweichplätze", airspace: "Luftraum: Sperrgebiete, TMA, Drohnenzonen", wx: "Wetter: METAR/TAF · GAFOR · Karten", booking: "Buchung bestätigt", massbalance: "Masse & Schwerpunkt sowie Leistung", fuelplan: "Kraftstoff: Trip + 30 Min Tag / 45 Min Nacht", freq: "Frequenzen und Transpondercodes", ppr: "PPR und Öffnungszeiten", dryfly: "Trockentraining – Platzrunde visualisieren", efb: "EFB: Route und Karten heruntergeladen", paxbrief: "Passagier-Briefing" },
+      pre: { notam: "NOTAM – gesamte Route und Ausweichplätze", airspace: "Luftraum: Sperrgebiete, TMA, Drohnenzonen", wx: "Wetter: METAR/TAF · GAFOR · Karten", booking: "Buchung bestätigt", massbalance: "Masse & Schwerpunkt sowie Leistung", fuelplan: "Kraftstoff: Trip + 30 Min Tag / 45 Min Nacht", freq: "Frequenzen und Transpondercodes", ppr: "PPR und Öffnungszeiten", dryfly: "Chair Flying – Platzrunde visualisieren", efb: "EFB: Route und Karten heruntergeladen", paxbrief: "Passagier-Briefing" },
     },
     walk: {
       title: "Außencheck", subDone: "Flugzeug geprüft – letzter Blick: nichts auf der Fläche vergessen? ✓", subTodo: "Flüssigkeiten → Elektrik → Zustand. In deinem Tempo.",
       groups: { fluids: "Flüssigkeiten", electric: "Elektrik", condition: "Zustand" },
-      items: { oil: "Öl – Stand innerhalb der Grenzen, Deckel fest", fuelQty: "Kraftstoffmenge – in beiden Tanks per Auge geprüft", drain: "Drainage – alle Punkte, frei von Wasser und Partikeln", fuelCaps: "Tankdeckel geschlossen und verriegelt", leaks: "Keine Tropfen oder Flecken unter Motor und Flächen", master: "Hauptschalter ein – Batteriespannung OK", lights: "Beleuchtung: Beacon, Strobe, Nav- und Landelicht", pitot: "Pitotheizung – kurz testen, wird warm", stall: "Überziehwarnung getestet", flaps: "Klappen – aus- und einfahren, symmetrisch", prop: "Propeller – keine Kerben, Risse oder Spiel", cowl: "Motorhaube fest, keine losen Gegenstände", wings: "Flächen und Ruder – Oberflächen intakt, freigängig", tires: "Reifen – Druck und Profil OK", struts: "Federbeine – korrekter Ausschub, keine Lecks", static: "Statikports und Pitotrohr frei", tiedown: "Verzurrung, Bremsklötze und Pitotabdeckung ENTFERNT" },
+      items: { oil: "Öl – Stand innerhalb der Grenzen, Deckel fest", fuelQty: "Kraftstoffmenge – in allen Tanks geprüft", drain: "Fuel Drain – alle Punkte, frei von Wasser und Partikeln", fuelCaps: "Tankdeckel geschlossen und verriegelt", leaks: "Keine Tropfen oder Flecken unter Motor und Flächen", master: "Hauptschalter ein – Batteriespannung OK", lights: "Beleuchtung: Beacon, Strobe, Nav- und Landelicht", pitot: "Pitot Heat – kurz testen, wird warm", stall: "Überziehwarnung getestet", flaps: "Klappen – fahren symmetrisch ein und aus", prop: "Propeller – keine Kerben, Risse oder Spiel", cowl: "Motorhaube fest, keine losen Gegenstände", wings: "Flächen und Rumpf – Oberflächen intakt, freigängig", tires: "Reifen – Druck und Profil OK", struts: "Struts – korrekter Ausschub, keine Lecks", static: "Statikports und Pitotrohr frei", tiedown: "Verzurrung, Bremsklötze und Pitotabdeckung ENTFERNT" },
       poh: "Generische Liste – die Checkliste deines Flugzeugmusters hat immer Vorrang.",
     },
     decide: {
@@ -1098,7 +1098,7 @@ export default function ImsafeApp() {
     const caption = {
       sv: "Varje sköld är en barriär mellan dig och ett haveri. Dina kryss öppnar hål. Pilen är dagens hot – den stoppas av första intakta barriären, men radar hålen upp sig går den hela vägen igenom.",
       en: "Each shield is a barrier between you and an accident. Your checks open holes. The arrow is today's threat – it is stopped by the first intact barrier, but if the holes line up it goes all the way through.",
-      de: "Jeder Schild ist eine Barriere zwischen dir und einem Unfall. Deine Kreuze öffnen Löcher. Der Pfeil ist die heutige Gefahr – die erste intakte Barriere stoppt ihn, doch wenn die Löcher fluchten, geht er ganz durch.",
+      de: "Jeder Schild ist eine Barriere zwischen dir und einem Unfall. Deine Kreuze öffnen Löcher. Der Pfeil ist die heutige Gefahr – die erste intakte Barriere stoppt ihn, doch wenn sich die Löcher überlappen, geht er ganz durch.",
     }[lang];
     return (
       <div>
@@ -1628,7 +1628,7 @@ export default function ImsafeApp() {
                               style={{ background: C.green, opacity: model.riskPct > 80 ? 0.35 : 1 }}>
                               {T.decide.fly}
                             </button>
-                            <button onClick={() => decide("nogo")} className="py-3.5 rounded-2xl text-[16px] font-bold text-white active:opacity-70" style={{ background: C.ink }}>
+                            <button onClick={() => decide("nogo")} className="py-3.5 rounded-2xl text-[16px] font-bold active:opacity-70" style={{ background: night ? "#39424E" : C.ink, color: night ? "#E9EDF3" : "#fff" }}>
                               {T.decide.abstain}
                             </button>
                           </div>
@@ -1864,7 +1864,7 @@ export default function ImsafeApp() {
                       ["🌤 Risiken", "Kreuze ehrlich an, was heute zutrifft. Die Faktoren sind nach Unfallstatistik gewichtet. Das TEM-Feld fängt auf, was die Liste nicht abdeckt."],
                       ["📋 Briefing", "Rechtliches (Lizenz, Medical, 90-Tage-Regel) und Planung (NOTAM, Wetter, Kraftstoff, Masse & Schwerpunkt) nach EASA Part-NCO."],
                       ["🛩 Flugzeug", "Generischer Walkaround in drei Gruppen: Flüssigkeiten, Elektrik, Zustand. Die POH-Checkliste des Musters hat immer Vorrang."],
-                      ["⚖️ Entscheidung", "Das Modell ist Swiss Cheese: jeder Bereich eine Barriere, deine Kreuze öffnen Löcher – fluchten sie, kommt die Gefahr durch. Die Zahl ist Hilfe – der verantwortliche Pilot entscheidet."],
+                      ["⚖️ Entscheidung", "Das Modell ist Swiss Cheese: jeder Bereich eine Barriere, deine Kreuze öffnen Löcher – überlappen sie sich, kommt die Gefahr durch. Die Zahl ist Hilfe – der verantwortliche Pilot entscheidet."],
                       ["📏 Minima", "Deine persönlichen Grenzen sind stärker als das Gesetz. Lege sie zuhause fest – und halte sie am Flugzeug heilig."],
                     ],
                   })[lang].map(([h, t]) => (
