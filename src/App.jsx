@@ -1201,7 +1201,7 @@ export default function ImsafeApp() {
   const legalItems = LEGAL_DEF.map((d) => ({ ...d, label: T.brief.legal[d.key] }));
   const preItems = PREFLIGHT_KEYS.map((k) => ({ key: k, label: T.brief.pre[k][0], info: T.brief.pre[k][1], ref: PREFLIGHT_REF[k] || "" }));
   const langNames = { sv: "Svenska", en: "English", de: "Deutsch" };
-  const langMeta = { sv: ["🇸🇪", "Svenska"], en: ["🇬🇧", "English"], de: ["🇩🇪", "Deutsch"] };
+  const langMeta = { sv: ["SV", "Svenska"], en: ["EN", "English"], de: ["DE", "Deutsch"] }; /* textkoder – flaggemojis renderas inte på Windows */
 
   /* ===== ADMIN (imsafe.se/admin) ===== */
   if (isAdmin) {
@@ -1215,7 +1215,7 @@ export default function ImsafeApp() {
       <div className="min-h-screen" style={{ background: C.bg, color: C.ink, padding: 20, ...SF }}>
         <div className="max-w-2xl mx-auto pt-6">
           <div className="flex items-center gap-2 mb-6">
-            <svg width="30" height="30" viewBox="0 0 30 30"><rect width="30" height="30" rx="9" fill="#0B5CD6" /><path d="M7.5 16 L12.5 21 L22.5 9" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <svg width="30" height="30" viewBox="0 0 30 30"><rect width="30" height="30" rx="9" fill="#0B5CD6" /><path d="M7.5 16 L12.5 21 L22.5 9" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" /><circle cx="9.5" cy="10" r="1.1" fill="rgba(255,255,255,0.5)" /><circle cx="13" cy="8" r="0.8" fill="rgba(255,255,255,0.35)" /></svg>
             <h1 className="text-[24px] font-bold">imsafe · admin</h1>
           </div>
           {!adminOk ? (
@@ -1309,6 +1309,8 @@ export default function ImsafeApp() {
           <svg width="76" height="76" viewBox="0 0 30 30" style={{ marginBottom: 28, filter: "drop-shadow(0 10px 24px rgba(0,0,0,0.25))", animation: "imsafeHello 0.9s ease-out" }}>
             <rect width="30" height="30" rx="9" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.35)" strokeWidth="0.75" />
             <path d="M7.5 16 L12.5 21 L22.5 9" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="9.5" cy="10" r="1.1" fill="rgba(255,255,255,0.5)" />
+            <circle cx="13" cy="8" r="0.8" fill="rgba(255,255,255,0.35)" />
           </svg>
           {!introSplash && (
           <h1 key={helloIdx} className="font-bold" style={{ color: "#fff", fontSize: 40, letterSpacing: "-0.02em", animation: "imsafeHello 2.4s ease-in-out", minHeight: 52, textAlign: "center" }}>
@@ -1321,7 +1323,7 @@ export default function ImsafeApp() {
             {["sv", "en", "de"].map((l) => (
               <button key={l} onClick={() => setLang(l)} className="py-2.5 rounded-xl active:opacity-70"
                 style={{ background: lang === l ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.09)", border: lang === l ? "1.5px solid rgba(255,255,255,0.9)" : "1.5px solid rgba(255,255,255,0.2)" }}>
-                <span className="block text-[20px] leading-none">{langMeta[l][0]}</span>
+                <span className="block text-[17px] font-bold leading-none" style={{ letterSpacing: "0.04em" }}>{langMeta[l][0]}</span>
                 <span className="block text-[12px] font-semibold mt-1" style={{ color: "#fff" }}>{langMeta[l][1]}</span>
               </button>
             ))}
@@ -1368,7 +1370,7 @@ export default function ImsafeApp() {
                       <button key={l} className="w-full flex items-center gap-2.5 px-3.5 py-3 active:opacity-60 text-left"
                         style={{ background: lang === l ? C.blue + "10" : "transparent", borderTop: l !== "sv" ? `0.5px solid ${C.line}` : "none" }}
                         onClick={() => { setLang(l); setLangMenuOpen(false); if (game.soundOn) SND.tick(); }}>
-                        <span className="text-[18px]">{langMeta[l][0]}</span>
+                        <span className="text-[12px] font-bold" style={{ ...mono, color: lang === l ? C.blue : C.inkSoft, width: 24 }}>{langMeta[l][0]}</span>
                         <span className="flex-1 text-[15px] font-semibold" style={{ color: lang === l ? C.blue : C.ink }}>{langMeta[l][1]}</span>
                         {lang === l && <span style={{ color: C.blue, fontWeight: 700 }}>✓</span>}
                       </button>
@@ -1771,7 +1773,7 @@ export default function ImsafeApp() {
                         {["sv", "en", "de"].map((l) => (
                           <span key={l} onClick={(e) => { e.stopPropagation(); setLang(l); }}
                             className="flex items-center justify-center rounded-lg cursor-pointer"
-                            style={{ width: 36, height: 30, fontSize: 17, background: lang === l ? C.blue + "18" : C.fill,
+                            style={{ width: 36, height: 30, fontSize: 12, fontWeight: 700, ...mono, background: lang === l ? C.blue + "18" : C.fill,
                               border: lang === l ? `1.5px solid ${C.blue}` : "1.5px solid transparent", opacity: lang === l ? 1 : 0.55 }}>{langMeta[l][0]}</span>
                         ))}
                       </span>
