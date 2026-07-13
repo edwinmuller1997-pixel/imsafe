@@ -77,7 +77,7 @@ const LEGAL_DEF = [
   { key: "docsAboard", ref: "NCO.GEN.135" },
   { key: "techlog", ref: "" },
 ];
-const PREFLIGHT_KEYS = ["notam", "airspace", "wx", "booking", "massbalance", "fuelplan", "freq", "ppr", "dryfly", "efb", "paxbrief"];
+const PREFLIGHT_KEYS = ["notam", "airspace", "wx", "massbalance", "fuelplan", "fuelcard", "freq", "ppr", "dryfly", "efb", "paxbrief"];
 const PREFLIGHT_REF = { massbalance: "NCO.POL", fuelplan: "NCO.OP.125", paxbrief: "NCO.OP.130" };
 const WALK_DEF = [
   { id: "fluids", icon: "💧", colorKey: "blue", keys: ["oil", "fuelQty", "drain", "fuelCaps", "leaks"] },
@@ -86,7 +86,7 @@ const WALK_DEF = [
 ];
 const BARRIER_DEF = [
   { id: "pilot", colorKey: "purple", icon: "🧍", factors: [{ key: "imsafe", w: 4 }, { key: "lowRecent", w: 3 }, { key: "recency90", w: 2 }, { key: "newType", w: 3 }, { key: "noDryFly", w: 1 }] },
-  { id: "wx", colorKey: "blue", icon: "🌤", factors: [{ key: "marginal", w: 5 }, { key: "deterio", w: 4 }, { key: "xwind", w: 3 }, { key: "dusk", w: 4 }, { key: "terrain", w: 2 }, { key: "icing", w: 3 }] },
+  { id: "wx", colorKey: "blue", icon: "🌤", factors: [{ key: "marginal", w: 5 }, { key: "deterio", w: 4 }, { key: "xwind", w: 3 }, { key: "dusk", w: 4 }, { key: "gps", w: 2 }, { key: "terrain", w: 2 }, { key: "icing", w: 3 }] },
   { id: "acft", colorKey: "green", icon: "🛩", factors: [{ key: "fuelTight", w: 4 }, { key: "nearMtow", w: 2 }, { key: "defect", w: 3 }, { key: "unfamiliarEquip", w: 2 }] },
   { id: "plan", colorKey: "orange", icon: "🗂", factors: [{ key: "pressure", w: 4 }, { key: "newAd", w: 2 }, { key: "grassShort", w: 2 }, { key: "noAltn", w: 3 }, { key: "noBrief", w: 2 }] },
 ];
@@ -144,7 +144,7 @@ const I18N = {
     titles: { fly: "Dagens flygning", menu: "Mer", links: "Väder & briefing", minima: "Minima", news: "Nyheter", blog: "Säkerhetsblogg", stats: "Haveribild", account: "Konto", support: "Stöd imsafe" },
     steps: [
       { name: "Piloten", q: "Är jag i skick att flyga idag?", time: "~30 sek" },
-      { name: "Risker", q: "Vilka hot finns idag? Var ärlig – varje kryss får en åtgärd.", time: "~1 min" },
+      { name: "Risker", q: "Vilka hot finns idag?", time: "~1 min" },
       { name: "Briefing", q: "Papper, briefing och planering på plats?", time: "~2 min" },
       { name: "Planet", q: "Runt planet – i lugn takt. Låt ingen stressa dig.", time: "vid planet" },
       { name: "Beslut", q: "Dags att väga ihop allt.", time: "~30 sek" },
@@ -153,7 +153,7 @@ const I18N = {
     onboard: { hi: "Välkommen 👋", tag: "Fem steg. Fem minuter. Ett tydligt beslut.", tip: "Tips: ställ in dina minima under Mer → Minima.", start: "Sätt igång", langLabel: "Språk / Language / Sprache" },
     imsafe: {
       title: "IMSAFE", subDone: "Du är grön – vidare till riskerna ✓", subTodo: "Bocka av uppifrån och ner – som på papperschecklistan",
-      items: { illness: ["Illness – fri från sjukdom", "Nej"], medication: ["Medication – inga påverkande mediciner", "Nej"], stress: ["Stress – under kontroll", "Nej"], alcohol: ["Alcohol – 8 h flaska→spak, under laggräns", "Nej"], fatigue: ["Fatigue – utvilad", "Ja"], eating: ["Eating – ätit & druckit", "Ja"] },
+      items: { illness: ["Illness", "Nej", "Fri från sjukdom som påverkar flygningen"], medication: ["Medication", "Nej", "Inga mediciner som påverkar omdöme eller vakenhet"], stress: ["Stress", "Nej", "Privat eller jobbrelaterad stress under kontroll"], alcohol: ["Alcohol", "Nej", "Minst 8 h flaska→spak och under laggräns (0,2 ‰)"], fatigue: ["Fatigue", "Ja", "Utvilad – tillräcklig sömn senaste natten"], eating: ["Eating", "Ja", "Ätit och druckit – energi för hela flygningen"] },
     },
     riskStep: {
       title: "Dagens riskfaktorer", sub: "Öppna varje område och kryssa det som stämmer idag. Inga kryss = stark dag.",
@@ -163,40 +163,42 @@ const I18N = {
     },
     barriers: { pilot: "Pilot", wx: "Väder & miljö", acft: "Flygplan", plan: "Planering & press" },
     factors: {
-      imsafe: ["IMSAFE ej helt grön", "Flyg inte idag – eller kort lokalflygning med instruktör."],
-      lowRecent: ["Mindre än 10 h senaste 90 dagarna", "Boka en timme med instruktör, eller börja med tre varv ensam i lugnt väder."],
-      recency90: ["90-dagarsregeln utan marginal (FCL.060)", "Flyg starter och landningar solo först – ta passagerarna nästa gång."],
-      newType: ["Under 10 h på typen", "Läs nödprocedurerna kvällen innan och höj dina minima tills du har 10 h på typen."],
-      noDryFly: ["Ingen torrflygning gjord", "Ta 5 minuter nu: blunda och flyg trafikvarvet och en avbruten landning."],
-      marginal: ["Sikt eller molnbas nära dina minima", "Vänta. Sätt en hård vändpunkt: under X ft molnbas vänder jag – utan diskussion."],
-      deterio: ["Prognosen försämras under dagen", "Flyg det långa benet först, eller lägg hemresan tre timmar före försämringen."],
-      xwind: ["Sidvind eller byar över din gräns", "Välj ett fält med bättre vindriktning – eller vänta tills vinden mojnar."],
-      dusk: ["Skymning eller mörker", "Planera landning senast 30 minuter före solnedgång – och håll den marginalen helig."],
-      terrain: ["Terräng eller vatten utan nödlandningsalternativ", "Lägg rutten längs fält och vägar, flyg högre. Över vatten: flytvästar på."],
-      icing: ["Risk för förgasaris eller isbildning", "Förgasarvärme i god tid – och alltid före planén."],
-      fuelTight: ["Bränslereserv under din gräns", "Tanka fullt eller planera en mellanlandning. Bränsle är den billigaste försäkringen."],
-      nearMtow: ["Nära max startvikt eller bakre tyngdpunkt", "Flytta last framåt eller lämna en väska hemma."],
-      defect: ["Kvarstående anmärkning på flygplanet", "Ring teknikern före flygning. Utan tydligt besked – inget flyg."],
-      unfamiliarEquip: ["Ovan vid avioniken eller utrustningen", "Sitt kvar på marken i 15 minuter och programmera hela rutten före start."],
-      pressure: ["Tidspress eller förväntanstryck", "Säg det högt till passagerarna redan nu: vi kan behöva vända eller ta bilen."],
-      newAd: ["Ny eller obekant flygplats", "Studera kartan och satellitbilden, rita trafikvarvet, ring fältet om något är oklart."],
-      grassShort: ["Gräsbana eller kort bana utan beräkning", "Gör prestandaberäkningen med tillägg: gräs +20 %, vått +30 %."],
+      imsafe: ["IMSAFE ej helt grön", "Flyg inte idag."],
+      lowRecent: ["Mindre än 10 h senaste 90 dagarna", "Boka en timme med instruktör, eller börja med några trafikvarv i lugnt väder."],
+      recency90: ["90-dagarsregeln ej uppfylld (FCL.060)", "Flyg 3 starter och landningar solo för att få ta med passagerare."],
+      newType: ["Under 10 h på typen", "Läs manualen och höj dina minima tills du har 10 h på typen."],
+      noDryFly: ["Ingen torrflygning gjord", "Ta 5 minuter nu: blunda och ”flyg” trafikvarvet och en go-around."],
+      marginal: ["Sikt eller molnbas nära dina minima", "Sätt en vändpunkt: under X ft molnbas vänder jag. Låt inte dina minima förändras under flygningen."],
+      deterio: ["Prognosen försämras under dagen", "Ta höjd för försämringen – flyg hem några timmar tidigare."],
+      xwind: ["Sidvind eller byar över din gräns", "Vänta tills vinden lugnat ner sig. Det är bättre att vara på marken och längta upp än att vara i luften och längta ner…"],
+      dusk: ["Skymning eller mörker", "Planera landning senast 30 minuter före solnedgång (VFR dag) – och håll den marginalen."],
+      nightOk: ["Jag har mörkerbevis (NQ) och planet är nattutrustat", "Mörker-VFR: håll högre väderminima och välj belysta fält – utmaningen är att hitta lämpligt nödfält i mörker."],
+      gps: ["Risk för GPS-störning (jamming) längs rutten", "Kolla läget på gpsjam.org (länk under Mer), skriv ut backupkartor och briefa: vad gör vi om GPS:en försvinner?"],
+      terrain: ["Terräng eller vatten utan nödlandningsalternativ", "Lägg rutten längs fält och vägar i den mån det går, flyg högre. Över vatten: flytvästar på – överväg flotte och överlevnadsdräkt."],
+      icing: ["Risk för förgasaris eller isbildning", "Kom ihåg förgasarvärme med jämna intervall samt vid plané."],
+      fuelTight: ["Bränslereserv under ditt personliga minima", "Tanka fullt eller planera en mellanlandning. Bränsle är den billigaste försäkringen."],
+      nearMtow: ["Nära max startvikt eller tyngdpunkt långt fram/bak", "Justera var passagerare och bagage placeras, eller lämna en väska hemma."],
+      defect: ["Kvarstående anmärkning på flygplanet", "Läs i loggboken. Ring teknikern vid osäkerhet. Utan tydligt besked – inget flyg."],
+      unfamiliarEquip: ["Ovan vid avioniken eller utrustningen", "Sitt kvar på marken i 15 minuter, programmera hela rutten och öva de mest grundläggande funktionerna."],
+      pressure: ["Tidspress (get-there-itis) eller förväntanstryck", "Säg det högt till passagerarna redan nu: vi kan behöva vända, ställa in eller ta bilen."],
+      newAd: ["Obekant flygplats", "Studera kartan och satellitbilden, rita trafikvarvet, ring fältet om något är oklart."],
+      grassShort: ["Gräsbana eller kort bana", "Gör prestandaberäkningen med tillägg: gräs +20 %, vått +30 %."],
       noAltn: ["Ingen tydlig plan B", "Välj ett alternativ med bättre väder eller längre bana – skriv upp frekvens och kurs dit."],
       noBrief: ["Ofullständig briefing", "Ta 10 minuter: NOTAM, TAF och PPR. Länkarna finns under Mer."],
     },
     brief: {
       legalTitle: "Legalt & dokument", legalSub: "Part-FCL · Part-MED · NCO.GEN.135",
-      legal: { license: "Certifikat och SEP-behörighet giltiga", medical: "Medical giltigt", recency: "90-dagarsregeln för passagerare uppfylld", docsAboard: "Dokument ombord: registreringsbevis, ARC, radiotillstånd, försäkring, flyghandbok", techlog: "Techlog: gångtid OK, inga öppna anmärkningar" },
+      legal: { license: "Certifikat och behörigheter giltiga", medical: "Medical giltigt", recency: "90-dagarsregeln för passagerare uppfylld", docsAboard: "Dokument ombord: registreringsbevis, ARC, radiotillstånd, försäkring, flyghandbok", techlog: "Techlog: gångtid OK, inga öppna anmärkningar" },
       preTitle: "Briefing & planering", preSub: "Länkar till väder och NOTAM finns under Mer → Väder & briefing",
-      pre: { notam: "NOTAM – hela rutten och alternativen", airspace: "Luftrum: restriktionsområden, TMA, drönarzoner", wx: "Väder: METAR/TAF · LHP · SWC · SMHI", booking: "Bokningen bekräftad (MyWeblog)", massbalance: "Massa & balans samt prestanda", fuelplan: "Bränsle: trip + 30 min dag / 45 min natt", freq: "Frekvenser och transponderkoder", ppr: "PPR och öppettider", dryfly: "Torrflygning – visualisera trafikvarvet", efb: "SkyDemon: rutt och kartor nedladdade", paxbrief: "Passagerarbriefing" },
+      pre: { notam: ["NOTAM", "Hela rutten och alternativen"], airspace: ["Luftrum", "Restriktionsområden, TMA, drönarzoner"], wx: ["Väder", "METAR/TAF · LHP · SWC · SMHI"], booking: ["Bokning", null], massbalance: ["Vikt & balans samt prestandaberäkningar", null], fuelplan: ["Bränsle", "Trip + 30 min dag / 45 min natt"], fuelcard: ["Bränslekort med", "Tankning möjlig på destinationen"], freq: ["Frekvenser och transponderkoder", null], ppr: ["PPR och öppettider", null], dryfly: ["Torrflygning", "Visualisera trafikvarvet"], efb: ["Offlinebackup av kartor · laddade enheter", "Skriv ut kartor eller ta med fysiska kartor"], paxbrief: ["Passagerarbriefing", null] },
     },
     walk: {
       title: "Walkaround", subDone: "Planet genomgånget – sista blicken: inget kvarglömt på vingen? ✓", subTodo: "Vätskor → Elektronik → Skick. I din takt.",
       groups: { fluids: "Vätskor", electric: "Elektronik", condition: "Skick" },
-      items: { oil: "Olja – nivå inom gränser, lock åtdraget", fuelQty: "Bränslemängd – visuellt verifierad i alla tankar", drain: "Dränering – alla punkter, fritt från vatten och partiklar", fuelCaps: "Tanklock stängda och låsta", leaks: "Inga droppar eller fläckar under motor och vingar", master: "Huvudström på – batterispänning OK", lights: "Belysning: beacon, strobe, nav- och landningsljus", pitot: "Pitotvärme – känn att den blir varm (kort test)", stall: "Stallvarnare testad", flaps: "Klaffar – ut och in, symmetriskt", prop: "Propeller – inga hack, sprickor eller glapp", cowl: "Motorkåpa fäst, inga lösa föremål", wings: "Vingar och roder – hela ytor, fria rörelser", tires: "Däck – tryck och mönster OK", struts: "Fjäderben – rätt utskjut, inget läckage", static: "Statiska portar och pitotrör fria", tiedown: "Förtöjning, klossar och pitotskydd BORTTAGNA" },
+      items: { oil: ["Olja", "Nivå inom gränser, lock åtdraget"], fuelQty: ["Bränslemängd", "Visuellt verifierad i alla tankar"], drain: ["Dränering", "Alla punkter, fritt från vatten och partiklar"], fuelCaps: ["Tanklock", "Stängda och låsta"], leaks: ["Läckage", "Inga droppar eller fläckar under motor och vingar"], master: ["Huvudström", "På – batterispänning OK"], lights: ["Belysning", "Beacon, strobe, nav- och landningsljus"], pitot: ["Pitotvärme", "Känn att den blir varm (kort test)"], stall: ["Stallvarnare", "Testad"], flaps: ["Klaffar", "Ut och in, symmetriskt"], prop: ["Propeller", "Inga hack, sprickor eller glapp"], cowl: ["Motorkåpa", "Fäst, inga lösa föremål"], wings: ["Vingar och roder", "Hela ytor, fria rörelser"], tires: ["Däck", "Tryck och mönster OK"], struts: ["Dämpare", "Inget läckage"], static: ["Statiska portar", "Portar och pitotrör fria"], tiedown: ["Pitotskydd och bogserstång", "Borttagna – även förtöjning och klossar"] },
       poh: "Generisk lista – flygplanstypens egen checklista har alltid företräde.",
     },
-    decide: {
+    decide: { imsafeBlock: "IMSAFE ist nicht grün – heute nicht fliegen.", imsafeBlock: "IMSAFE is not green – don't fly today.", imsafeBlock: "IMSAFE är inte grön – flyg inte idag.",
       basisTitle: "Ditt underlag", basisSub: "Så komplett är genomgången",
       cols: ["Piloten", "Risker", "Briefing", "Planet"], threats: "hot",
       incomplete: "⚠ Genomgången är inte komplett – bedömningen blir bara så bra som underlaget.",
@@ -209,8 +211,8 @@ const I18N = {
       actionsEmpty: "Inga riskfaktorer markerade", strongDay: "Stark dag! Håll ändå dina minima heliga och sätt en vändpunkt före start.",
       moreN: (n) => `+ ${n} till – men börja med de fem tyngsta.`,
       fly: "✈️ Jag flyger", abstain: "🧠 Jag avstår",
-      decidedNogo: ["🧠 Rätt beslut. Flygplanet står kvar imorgon.", "Skriv gärna ner varför – framtida du tackar dig."],
-      decidedGo: ["✈️ Beslut fattat – flyg din plan, inte dina förhoppningar.", "Håll minima heliga och vändpunkten skarp."],
+      decidedNogo: ["🧠 Det är bättre att vara på marken och längta upp än att vara i luften och längta ner.", "Skriv gärna ner varför – framtida du tackar dig."],
+      decidedGo: ["✈️ Trevlig flygtur!", "Flyg din plan – och välkommen ner."],
       pdf: "Spara som PDF-rapport", restart: "Börja om – ny genomgång",
       verdicts: { GO: "GO", COND: "GO MED VILLKOR", DOUBT: "TVEKSAMT", NOGO: "NO-GO" },
       levels: { LOW: "LÅG", ELEV: "FÖRHÖJD", HIGH: "HÖG", CRIT: "KRITISK" },
@@ -249,6 +251,7 @@ const I18N = {
       briefTitle: "Briefing & NOTAM",
       briefRows: [
         ["https://aro.lfv.se", "Aroweb – NOTAM, LHP, AIP", "LFV:s briefingtjänst", "indigo"],
+        ["https://gpsjam.org", "GPS-jamming – gpsjam.org", "Störningsläget längs rutten", "red"],
         ["https://www.smhi.se/vader", "SMHI", "Prognoser, radar, blixt", "blue"],
         ["https://www.windy.com", "Windy", "Vind och moln – visuellt", "teal"],
       ],
@@ -325,7 +328,7 @@ const I18N = {
     titles: { fly: "Today's flight", menu: "More", links: "Weather & briefing", minima: "Minimums", news: "News", blog: "Safety blog", stats: "Accident picture", account: "Account", support: "Support" },
     steps: [
       { name: "Pilot", q: "Am I fit to fly today?", time: "~30 sec" },
-      { name: "Risks", q: "What threats exist today? Be honest – every tick gets an action.", time: "~1 min" },
+      { name: "Risks", q: "What threats exist today?", time: "~1 min" },
       { name: "Briefing", q: "Paperwork, briefing and planning in place?", time: "~2 min" },
       { name: "Aircraft", q: "Around the aircraft – at your pace. Let no one rush you.", time: "at the acft" },
       { name: "Decision", q: "Time to weigh it all up.", time: "~30 sec" },
@@ -334,7 +337,7 @@ const I18N = {
     onboard: { hi: "Welcome 👋", tag: "Five steps. Five minutes. One clear decision.", tip: "Tip: set your personal minimums under More → Minimums.", start: "Let's go", langLabel: "Språk / Language / Sprache" },
     imsafe: {
       title: "IMSAFE", subDone: "You're in the green – on to the risks ✓", subTodo: "Tick top to bottom – like the paper checklist",
-      items: { illness: ["Illness – free of illness", "No"], medication: ["Medication – nothing impairing", "No"], stress: ["Stress – under control", "No"], alcohol: ["Alcohol – 8 h bottle-to-throttle, within legal limits", "No"], fatigue: ["Fatigue – well rested", "Yes"], eating: ["Eating – fed & hydrated", "Yes"] },
+      items: { illness: ["Illness", "No", "Free of illness that affects the flight"], medication: ["Medication", "No", "No medication impairing judgement or alertness"], stress: ["Stress", "No", "Personal or work stress under control"], alcohol: ["Alcohol", "No", "At least 8 h bottle-to-throttle and within legal limits"], fatigue: ["Fatigue", "Yes", "Well rested – enough sleep last night"], eating: ["Eating", "Yes", "Fed and hydrated – energy for the whole flight"] },
     },
     riskStep: {
       title: "Today's risk factors", sub: "Open each area and tick what applies today. No ticks = a strong day.",
@@ -344,37 +347,39 @@ const I18N = {
     },
     barriers: { pilot: "Pilot", wx: "Weather & environment", acft: "Aircraft", plan: "Planning & pressure" },
     factors: {
-      imsafe: ["IMSAFE not fully green", "Don't fly today – or a short local flight with an instructor."],
-      lowRecent: ["Less than 10 h in the last 90 days", "Book an hour with an instructor, or start with three solo circuits in calm weather."],
-      recency90: ["90-day rule without margin (FCL.060)", "Fly take-offs and landings solo first – bring passengers next time."],
-      newType: ["Under 10 h on type", "Read the emergency procedures the night before and raise your minimums until 10 h on type."],
-      noDryFly: ["No chair-flying done", "Take 5 minutes now: close your eyes and fly the circuit and a go-around."],
-      marginal: ["Visibility or ceiling near your minimums", "Wait. Set a hard turn-back point: below X ft ceiling I turn back – no debate."],
-      deterio: ["Forecast deteriorating during the day", "Fly the long leg first, or plan the return three hours before the deterioration."],
-      xwind: ["Crosswind or gusts above your limit", "Choose a field with a better wind angle – or wait for the wind to ease."],
-      dusk: ["Dusk or darkness", "Plan to land no later than 30 minutes before sunset – keep that margin sacred."],
-      terrain: ["Terrain or water without forced-landing options", "Route along fields and roads, fly higher. Over water: life jackets on."],
-      icing: ["Risk of carburettor or airframe icing", "Carb heat early – and always before descent."],
-      fuelTight: ["Fuel reserve below your limit", "Fill up or plan a fuel stop. Fuel is the cheapest insurance there is."],
-      nearMtow: ["Near MTOW or aft CG", "Move load forward or leave a bag behind."],
-      defect: ["Open defect on the aircraft", "Call the engineer before flight. No clear release – no flight."],
-      unfamiliarEquip: ["Unfamiliar avionics or equipment", "Sit on the ground for 15 minutes and programme the whole route before start."],
-      pressure: ["Time pressure or expectations", "Say it out loud to your passengers now: we may turn back or take the car."],
-      newAd: ["New or unfamiliar aerodrome", "Study the chart and satellite view, draw the circuit, call the field if unsure."],
-      grassShort: ["Grass or short runway without calculation", "Do the performance calculation with factors: grass +20 %, wet +30 %."],
+      imsafe: ["IMSAFE not fully green", "Don't fly today."],
+      lowRecent: ["Less than 10 h in the last 90 days", "Book an hour with an instructor, or start with a few circuits in calm weather."],
+      recency90: ["90-day rule not met (FCL.060)", "Fly 3 take-offs and landings solo before carrying passengers."],
+      newType: ["Under 10 h on type", "Read the manual and raise your minimums until you have 10 h on type."],
+      noDryFly: ["No chair-flying done", "Take 5 minutes now: close your eyes and ”fly” the circuit and a go-around."],
+      marginal: ["Visibility or ceiling near your minimums", "Set a turn-back point: below X ft ceiling I turn back. Don't let your minimums shift in flight."],
+      deterio: ["Forecast deteriorating during the day", "Build in margin for the deterioration – head home a few hours earlier."],
+      xwind: ["Crosswind or gusts above your limit", "Wait for the wind to settle. Better to be on the ground wishing you were in the air than the other way around…"],
+      dusk: ["Dusk or darkness", "Plan to land no later than 30 minutes before sunset (day VFR) – and keep that margin."],
+      nightOk: ["I hold a night rating (NQ) and the aircraft is night-equipped", "Night VFR: keep higher weather minimums and choose lit fields – the challenge is finding a forced-landing site in the dark."],
+      gps: ["Risk of GPS jamming along the route", "Check gpsjam.org (link under More), print backup charts and brief: what do we do if GPS drops out?"],
+      terrain: ["Terrain or water without forced-landing options", "Route along fields and roads where possible, fly higher. Over water: life jackets on – consider a raft and immersion suits."],
+      icing: ["Risk of carburettor or airframe icing", "Remember carb heat at regular intervals and before descent."],
+      fuelTight: ["Fuel reserve below your personal minimum", "Fill up or plan a fuel stop. Fuel is the cheapest insurance there is."],
+      nearMtow: ["Near MTOW or CG far forward/aft", "Adjust where passengers and baggage go, or leave a bag behind."],
+      defect: ["Open defect on the aircraft", "Check the tech log. Call the engineer if unsure. No clear release – no flight."],
+      unfamiliarEquip: ["Unfamiliar avionics or equipment", "Sit on the ground for 15 minutes, programme the whole route and practise the basic functions."],
+      pressure: ["Time pressure (get-there-itis) or expectations", "Say it out loud to your passengers now: we may turn back, cancel or take the car."],
+      newAd: ["Unfamiliar aerodrome", "Study the chart and satellite view, draw the circuit, call the field if unsure."],
+      grassShort: ["Grass or short runway", "Do the performance calculation with factors: grass +20 %, wet +30 %."],
       noAltn: ["No clear plan B", "Pick an alternate with better weather or a longer runway – note frequency and heading."],
       noBrief: ["Incomplete briefing", "Take 10 minutes: NOTAM, TAF and PPR. Links are under More."],
     },
     brief: {
       legalTitle: "Legal & documents", legalSub: "Part-FCL · Part-MED · NCO.GEN.135",
-      legal: { license: "Licence and SEP rating valid", medical: "Medical valid", recency: "90-day rule for passengers met", docsAboard: "On board: registration, ARC, radio licence, insurance, flight manual", techlog: "Tech log: hours OK, no open defects" },
+      legal: { license: "Licence and ratings valid", medical: "Medical valid", recency: "90-day rule for passengers met", docsAboard: "On board: registration, ARC, radio licence, insurance, flight manual", techlog: "Tech log: hours OK, no open defects" },
       preTitle: "Briefing & planning", preSub: "Weather and NOTAM links are under More → Weather & briefing",
-      pre: { notam: "NOTAM – whole route and alternates", airspace: "Airspace: restricted areas, TMA, drone zones", wx: "Weather: METAR/TAF · area forecast · charts", booking: "Booking confirmed", massbalance: "Mass & balance and performance", fuelplan: "Fuel: trip + 30 min day / 45 min night", freq: "Frequencies and transponder codes", ppr: "PPR and opening hours", dryfly: "Chair-flying – visualise the circuit", efb: "EFB: route and charts downloaded", paxbrief: "Passenger briefing" },
+      pre: { notam: ["NOTAM", "Whole route and alternates"], airspace: ["Airspace", "Restricted areas, TMA, drone zones"], wx: ["Weather", "METAR/TAF · area forecast · charts"], booking: ["Booking", null], massbalance: ["Weight & balance and performance", null], fuelplan: ["Fuel", "Trip + 30 min day / 45 min night"], fuelcard: ["Fuel card packed", "Refuelling possible at destination"], freq: ["Frequencies and transponder codes", null], ppr: ["PPR and opening hours", null], dryfly: ["Chair-flying", "Visualise the circuit"], efb: ["Offline chart backup · devices charged", "Print charts or bring paper charts"], paxbrief: ["Passenger briefing", null] },
     },
     walk: {
       title: "Walkaround", subDone: "Aircraft checked – one last look: nothing left on the wing? ✓", subTodo: "Fluids → Electrics → Condition. At your pace.",
       groups: { fluids: "Fluids", electric: "Electrics", condition: "Condition" },
-      items: { oil: "Oil – level within limits, cap secure", fuelQty: "Fuel quantity – visually verified in all tanks", drain: "Fuel drains – all points, free of water and debris", fuelCaps: "Fuel caps closed and locked", leaks: "No drips or stains under engine or wings", master: "Master on – battery voltage OK", lights: "Lights: beacon, strobe, nav and landing", pitot: "Pitot heat – feel it getting warm (brief test)", stall: "Stall warner tested", flaps: "Flaps – out and in, symmetrical", prop: "Propeller – no nicks, cracks or play", cowl: "Cowling secure, no loose objects", wings: "Wings and controls – surfaces intact, free movement", tires: "Tyres – pressure and tread OK", struts: "Struts – correct extension, no leaks", static: "Static ports and pitot clear", tiedown: "Tie-downs, chocks and pitot cover REMOVED" },
+      items: { oil: ["Oil", "Level within limits, cap secure"], fuelQty: ["Fuel quantity", "Visually verified in all tanks"], drain: ["Fuel drains", "All points, free of water and debris"], fuelCaps: ["Fuel caps", "Closed and locked"], leaks: ["Leaks", "No drips or stains under engine or wings"], master: ["Master", "On – battery voltage OK"], lights: ["Lights", "Beacon, strobe, nav and landing"], pitot: ["Pitot heat", "Feel it getting warm (brief test)"], stall: ["Stall warner", "Tested"], flaps: ["Flaps", "Out and in, symmetrical"], prop: ["Propeller", "No nicks, cracks or play"], cowl: ["Cowling", "Secure, no loose objects"], wings: ["Wings and controls", "Surfaces intact, free movement"], tires: ["Tyres", "Pressure and tread OK"], struts: ["Struts", "Correct extension, no leaks"], static: ["Static ports", "Ports and pitot clear"], tiedown: ["Tie-downs", "Tie-downs, chocks and pitot cover REMOVED"] },
       poh: "Generic list – your aircraft type's own checklist always takes precedence.",
     },
     decide: {
@@ -390,8 +395,8 @@ const I18N = {
       actionsEmpty: "No risk factors ticked", strongDay: "Strong day! Still keep your minimums sacred and set a turn-back point before departure.",
       moreN: (n) => `+ ${n} more – but start with the heaviest five.`,
       fly: "✈️ I'm flying", abstain: "🧠 I stand down",
-      decidedNogo: ["🧠 The right call. The aircraft will still be there tomorrow.", "Note down why – future you will be grateful."],
-      decidedGo: ["✈️ Decision made – fly your plan, not your hopes.", "Keep your minimums sacred and your turn-back point sharp."],
+      decidedNogo: ["🧠 Better to be on the ground wishing you were in the air than in the air wishing you were on the ground.", "Note down why – future you will be grateful."],
+      decidedGo: ["✈️ Have a great flight!", "Fly your plan – and welcome back down."],
       pdf: "Save as PDF report", restart: "Start over – new review",
       verdicts: { GO: "GO", COND: "GO WITH CONDITIONS", DOUBT: "DOUBTFUL", NOGO: "NO-GO" },
       levels: { LOW: "LOW", ELEV: "ELEVATED", HIGH: "HIGH", CRIT: "CRITICAL" },
@@ -430,6 +435,7 @@ const I18N = {
       briefTitle: "Briefing & NOTAM",
       briefRows: [
         ["https://www.windy.com", "Windy", "Wind and cloud – visual", "teal"],
+        ["https://gpsjam.org", "GPS jamming – gpsjam.org", "Interference along your route", "red"],
         ["https://skybrary.aero", "SKYbrary", "Safety knowledge base", "indigo"],
       ],
       otherTitle: "More",
@@ -501,7 +507,7 @@ const I18N = {
     titles: { fly: "Heutiger Flug", menu: "Mehr", links: "Wetter & Briefing", minima: "Minima", news: "News", blog: "Safety-Blog", stats: "Unfallbild", account: "Konto", support: "Support" },
     steps: [
       { name: "Pilot", q: "Bin ich heute flugtauglich?", time: "~30 Sek" },
-      { name: "Risiken", q: "Welche Gefahren gibt es heute? Sei ehrlich – jedes Häkchen bekommt eine Maßnahme.", time: "~1 Min" },
+      { name: "Risiken", q: "Welche Gefahren gibt es heute?", time: "~1 Min" },
       { name: "Briefing", q: "Papiere, Briefing und Planung erledigt?", time: "~2 Min" },
       { name: "Flugzeug", q: "Rund ums Flugzeug – in Ruhe. Lass dich von niemandem hetzen.", time: "am Flugzeug" },
       { name: "Entscheidung", q: "Zeit, alles abzuwägen.", time: "~30 Sek" },
@@ -510,7 +516,7 @@ const I18N = {
     onboard: { hi: "Willkommen 👋", tag: "Fünf Schritte. Fünf Minuten. Eine klare Entscheidung.", tip: "Tipp: Stelle deine Minima unter Mehr → Minima ein.", start: "Los geht's", langLabel: "Språk / Language / Sprache" },
     imsafe: {
       title: "IMSAFE", subDone: "Du bist im grünen Bereich – weiter zu den Risiken ✓", subTodo: "Von oben nach unten abhaken – wie auf der Papier-Checkliste",
-      items: { illness: ["Illness – frei von Krankheit", "Nein"], medication: ["Medication – keine beeinträchtigenden Medikamente", "Nein"], stress: ["Stress – unter Kontrolle", "Nein"], alcohol: ["Alcohol – 8 h bottle to throttle, innerhalb der Grenzen", "Nein"], fatigue: ["Fatigue – ausgeruht", "Ja"], eating: ["Eating – gegessen & getrunken", "Ja"] },
+      items: { illness: ["Illness", "Nein", "Frei von Krankheit, die den Flug beeinträchtigt"], medication: ["Medication", "Nein", "Keine Medikamente, die Urteilsvermögen oder Wachheit beeinträchtigen"], stress: ["Stress", "Nein", "Privater oder beruflicher Stress unter Kontrolle"], alcohol: ["Alcohol", "Nein", "Mindestens 8 h bottle to throttle – 0,0 als Richtwert"], fatigue: ["Fatigue", "Ja", "Ausgeruht – genug Schlaf letzte Nacht"], eating: ["Eating", "Ja", "Gegessen und getrunken – Energie für den ganzen Flug"] },
     },
     riskStep: {
       title: "Heutige Risikofaktoren", sub: "Öffne jeden Bereich und hake an, was heute zutrifft. Keine Häkchen = starker Tag.",
@@ -520,37 +526,39 @@ const I18N = {
     },
     barriers: { pilot: "Pilot", wx: "Wetter & Umgebung", acft: "Flugzeug", plan: "Planung & Druck" },
     factors: {
-      imsafe: ["IMSAFE nicht ganz grün", "Heute nicht fliegen – oder ein kurzer Platzflug mit Fluglehrer."],
-      lowRecent: ["Weniger als 10 h in den letzten 90 Tagen", "Buche eine Stunde mit Fluglehrer, oder starte mit drei Platzrunden solo bei ruhigem Wetter."],
-      recency90: ["90-Tage-Regel ohne Reserve (FCL.060)", "Erst Starts und Landungen solo fliegen – Passagiere beim nächsten Mal."],
-      newType: ["Unter 10 h auf dem Muster", "Notverfahren am Vorabend lesen und Minima erhöhen, bis 10 h auf dem Muster erreicht sind."],
+      imsafe: ["IMSAFE nicht ganz grün", "Heute nicht fliegen."],
+      lowRecent: ["Weniger als 10 h in den letzten 90 Tagen", "Buche eine Stunde mit Fluglehrer, oder starte mit ein paar Platzrunden bei ruhigem Wetter."],
+      recency90: ["90-Tage-Regel nicht erfüllt (FCL.060)", "Fliege 3 Starts und Landungen solo, bevor du Passagiere mitnimmst."],
+      newType: ["Unter 10 h auf dem Muster", "Lies das Handbuch und erhöhe deine Minima, bis du 10 h auf dem Muster hast."],
       noDryFly: ["Kein Chair Flying gemacht", "Nimm dir 5 Minuten: Augen zu, Platzrunde und Durchstarten mental durchfliegen."],
-      marginal: ["Sicht oder Wolkenuntergrenze nahe deiner Minima", "Warten. Setze einen harten Umkehrpunkt: unter X ft Untergrenze kehre ich um – ohne Diskussion."],
-      deterio: ["Vorhersage verschlechtert sich im Tagesverlauf", "Das lange Bein zuerst fliegen, oder den Rückflug drei Stunden vor der Verschlechterung planen."],
-      xwind: ["Seitenwind oder Böen über deiner Grenze", "Wähle einen Platz mit besserer Windrichtung – oder warte, bis der Wind nachlässt."],
-      dusk: ["Dämmerung oder Dunkelheit", "Landung spätestens 30 Minuten vor Sonnenuntergang planen – diese Reserve ist heilig."],
-      terrain: ["Gelände oder Wasser ohne Notlandemöglichkeit", "Route entlang Feldern und Straßen, höher fliegen. Über Wasser: Schwimmwesten an."],
-      icing: ["Gefahr von Vergaser- oder Flugzeugvereisung", "Vergaservorwärmung frühzeitig – und immer vor dem Sinkflug."],
-      fuelTight: ["Kraftstoffreserve unter deiner Grenze", "Volltanken oder Tankstopp planen. Sprit ist die günstigste Versicherung."],
-      nearMtow: ["Nahe MTOW oder hinterer Schwerpunkt", "Ladung nach vorn verlagern oder eine Tasche zu Hause lassen."],
-      defect: ["Defekt am Flugzeug", "Vor dem Flug den Techniker anrufen. Ohne klare Freigabe – kein Flug."],
-      unfamiliarEquip: ["Ungewohnte Avionik oder Ausrüstung", "15 Minuten am Boden sitzen bleiben und die ganze Route vor dem Start programmieren."],
-      pressure: ["Zeitdruck oder Erwartungsdruck", "Sag es den Passagieren jetzt laut: Wir müssen vielleicht umkehren oder das Auto nehmen."],
-      newAd: ["Neuer oder unbekannter Flugplatz", "Karte und Satellitenbild studieren, Platzrunde zeichnen, bei Unklarheit anrufen."],
-      grassShort: ["Gras- oder kurze Bahn ohne Berechnung", "Leistungsberechnung mit Zuschlägen: Gras +20 %, nass +30 %."],
+      marginal: ["Sicht oder Wolkenuntergrenze nahe deiner Minima", "Setze einen Umkehrpunkt: unter X ft Untergrenze kehre ich um. Lass deine Minima im Flug nicht wandern."],
+      deterio: ["Vorhersage verschlechtert sich im Tagesverlauf", "Plane Reserve für die Verschlechterung ein – flieg ein paar Stunden früher heim."],
+      xwind: ["Seitenwind oder Böen über deiner Grenze", "Warte, bis der Wind nachlässt. Lieber am Boden sein und nach oben wollen, als in der Luft sein und nach unten wollen…"],
+      dusk: ["Dämmerung oder Dunkelheit", "Landung spätestens 30 Minuten vor Sonnenuntergang planen (VFR am Tag) – und diese Reserve halten."],
+      nightOk: ["Ich habe eine Nachtflugberechtigung (NQ) und das Flugzeug ist nachtflugtauglich", "Nacht-VFR: höhere Wetterminima halten und beleuchtete Plätze wählen – die Herausforderung ist ein Notlandefeld im Dunkeln."],
+      gps: ["Gefahr von GPS-Störung (Jamming) entlang der Route", "Lage auf gpsjam.org prüfen (Link unter Mehr), Backup-Karten drucken und briefen: Was tun wir, wenn das GPS ausfällt?"],
+      terrain: ["Gelände oder Wasser ohne Notlandemöglichkeit", "Route entlang Feldern und Straßen wo möglich, höher fliegen. Über Wasser: Schwimmwesten an – Rettungsinsel und Überlebensanzug erwägen."],
+      icing: ["Gefahr von Vergaser- oder Flugzeugvereisung", "Vergaservorwärmung in regelmäßigen Abständen und vor dem Sinkflug."],
+      fuelTight: ["Kraftstoffreserve unter deinem persönlichen Minimum", "Volltanken oder Tankstopp planen. Sprit ist die günstigste Versicherung."],
+      nearMtow: ["Nahe MTOW oder Schwerpunkt weit vorn/hinten", "Passagiere und Gepäck umverteilen oder eine Tasche zu Hause lassen."],
+      defect: ["Defekt am Flugzeug", "Bordbuch lesen. Bei Unsicherheit den Techniker anrufen. Ohne klare Freigabe – kein Flug."],
+      unfamiliarEquip: ["Ungewohnte Avionik oder Ausrüstung", "15 Minuten am Boden sitzen bleiben, die ganze Route programmieren und die grundlegenden Funktionen üben."],
+      pressure: ["Zeitdruck (Get-there-itis) oder Erwartungsdruck", "Sag es den Passagieren jetzt laut: Wir müssen vielleicht umkehren, absagen oder das Auto nehmen."],
+      newAd: ["Unbekannter Flugplatz", "Karte und Satellitenbild studieren, Platzrunde zeichnen, bei Unklarheit anrufen."],
+      grassShort: ["Gras- oder kurze Bahn", "Leistungsberechnung mit Zuschlägen: Gras +20 %, nass +30 %."],
       noAltn: ["Kein klarer Plan B", "Wähle einen Ausweichplatz mit besserem Wetter oder längerer Bahn – Frequenz und Kurs notieren."],
       noBrief: ["Unvollständiges Briefing", "Nimm dir 10 Minuten: NOTAM, TAF und PPR. Links unter Mehr."],
     },
     brief: {
       legalTitle: "Recht & Dokumente", legalSub: "Part-FCL · Part-MED · NCO.GEN.135",
-      legal: { license: "Lizenz und SEP-Berechtigung gültig", medical: "Medical gültig", recency: "90-Tage-Regel für Passagiere erfüllt", docsAboard: "An Bord: Eintragungsschein, ARC, Funkzulassung, Versicherung, Flughandbuch", techlog: "Bordbuch: Stunden OK, keine offenen Beanstandungen" },
+      legal: { license: "Lizenz und Berechtigungen gültig", medical: "Medical gültig", recency: "90-Tage-Regel für Passagiere erfüllt", docsAboard: "An Bord: Eintragungsschein, ARC, Funkzulassung, Versicherung, Flughandbuch", techlog: "Bordbuch: Stunden OK, keine offenen Beanstandungen" },
       preTitle: "Briefing & Planung", preSub: "Wetter- und NOTAM-Links unter Mehr → Wetter & Briefing",
-      pre: { notam: "NOTAM – gesamte Route und Ausweichplätze", airspace: "Luftraum: Sperrgebiete, TMA, Drohnenzonen", wx: "Wetter: METAR/TAF · GAFOR · Karten", booking: "Buchung bestätigt", massbalance: "Masse & Schwerpunkt sowie Leistung", fuelplan: "Kraftstoff: Trip + 30 Min Tag / 45 Min Nacht", freq: "Frequenzen und Transpondercodes", ppr: "PPR und Öffnungszeiten", dryfly: "Chair Flying – Platzrunde visualisieren", efb: "EFB: Route und Karten heruntergeladen", paxbrief: "Passagier-Briefing" },
+      pre: { notam: ["NOTAM", "Gesamte Route und Ausweichplätze"], airspace: ["Luftraum", "Sperrgebiete, TMA, Drohnenzonen"], wx: ["Wetter", "METAR/TAF · GAFOR · Karten"], booking: ["Buchung", null], massbalance: ["Masse & Schwerpunkt sowie Leistungsberechnung", null], fuelplan: ["Kraftstoff", "Trip + 30 Min Tag / 45 Min Nacht"], fuelcard: ["Tankkarte dabei", "Tanken am Zielplatz möglich"], freq: ["Frequenzen und Transpondercodes", null], ppr: ["PPR und Öffnungszeiten", null], dryfly: ["Chair Flying", "Platzrunde visualisieren"], efb: ["Offline-Backup der Karten · Geräte geladen", "Karten drucken oder Papierkarten mitnehmen"], paxbrief: ["Passagier-Briefing", null] },
     },
     walk: {
       title: "Außencheck", subDone: "Flugzeug geprüft – letzter Blick: nichts auf der Fläche vergessen? ✓", subTodo: "Flüssigkeiten → Elektrik → Zustand. In deinem Tempo.",
       groups: { fluids: "Flüssigkeiten", electric: "Elektrik", condition: "Zustand" },
-      items: { oil: "Öl – Stand innerhalb der Grenzen, Deckel fest", fuelQty: "Kraftstoffmenge – in allen Tanks geprüft", drain: "Fuel Drain – alle Punkte, frei von Wasser und Partikeln", fuelCaps: "Tankdeckel geschlossen und verriegelt", leaks: "Keine Tropfen oder Flecken unter Motor und Flächen", master: "Hauptschalter ein – Batteriespannung OK", lights: "Beleuchtung: Beacon, Strobe, Nav- und Landelicht", pitot: "Pitot Heat – kurz testen, wird warm", stall: "Überziehwarnung getestet", flaps: "Klappen – fahren symmetrisch ein und aus", prop: "Propeller – keine Kerben, Risse oder Spiel", cowl: "Motorhaube fest, keine losen Gegenstände", wings: "Flächen und Rumpf – Oberflächen intakt, freigängig", tires: "Reifen – Druck und Profil OK", struts: "Struts – korrekter Ausschub, keine Lecks", static: "Statikports und Pitotrohr frei", tiedown: "Verzurrung, Bremsklötze und Pitotabdeckung ENTFERNT" },
+      items: { oil: ["Öl", "Stand innerhalb der Grenzen, Deckel fest"], fuelQty: ["Kraftstoffmenge", "In allen Tanks geprüft"], drain: ["Fuel Drain", "Alle Punkte, frei von Wasser und Partikeln"], fuelCaps: ["Tankdeckel", "Geschlossen und verriegelt"], leaks: ["Lecks", "Keine Tropfen oder Flecken unter Motor und Flächen"], master: ["Hauptschalter", "Ein – Batteriespannung OK"], lights: ["Beleuchtung", "Beacon, Strobe, Nav- und Landelicht"], pitot: ["Pitot Heat", "Kurz testen, wird warm"], stall: ["Überziehwarnung", "Getestet"], flaps: ["Klappen", "Fahren symmetrisch ein und aus"], prop: ["Propeller", "Keine Kerben, Risse oder Spiel"], cowl: ["Motorhaube", "Fest, keine losen Gegenstände"], wings: ["Flächen und Rumpf", "Oberflächen intakt, freigängig"], tires: ["Reifen", "Druck und Profil OK"], struts: ["Struts", "Korrekter Ausschub, keine Lecks"], static: ["Statikports", "Ports und Pitotrohr frei"], tiedown: ["Verzurrung", "Verzurrung, Bremsklötze und Pitotabdeckung ENTFERNT"] },
       poh: "Generische Liste – die Checkliste deines Flugzeugmusters hat immer Vorrang.",
     },
     decide: {
@@ -566,7 +574,7 @@ const I18N = {
       actionsEmpty: "Keine Risikofaktoren markiert", strongDay: "Starker Tag! Halte trotzdem deine Minima heilig und setze einen Umkehrpunkt vor dem Start.",
       moreN: (n) => `+ ${n} weitere – aber beginne mit den fünf schwersten.`,
       fly: "✈️ Ich fliege", abstain: "🧠 Ich sage ab",
-      decidedNogo: ["🧠 Die richtige Entscheidung. Das Flugzeug steht morgen noch da.", "Notiere, warum – dein zukünftiges Ich dankt dir."],
+      decidedNogo: ["🧠 Lieber am Boden sein und nach oben wollen, als in der Luft sein und nach unten wollen.", "Notiere, warum – dein zukünftiges Ich dankt dir."],
       decidedGo: ["✈️ Entschieden – fliege deinen Plan, nicht deine Hoffnungen.", "Halte die Minima heilig und den Umkehrpunkt scharf."],
       pdf: "Als PDF-Bericht speichern", restart: "Neu beginnen – neuer Durchgang",
       verdicts: { GO: "GO", COND: "GO MIT AUFLAGEN", DOUBT: "FRAGLICH", NOGO: "NO-GO" },
@@ -606,6 +614,7 @@ const I18N = {
       briefTitle: "Briefing & NOTAM",
       briefRows: [
         ["https://www.flugwetter.de", "flugwetter.de (DWD)", "Amtliches Flugwetter · Anmeldung nötig", "indigo"],
+        ["https://gpsjam.org", "GPS-Jamming – gpsjam.org", "Störungslage entlang der Route", "red"],
         ["https://www.windy.com", "Windy", "Wind und Wolken – visuell", "teal"],
         ["https://skybrary.aero", "SKYbrary", "Sicherheits-Wissensdatenbank", "blue"],
       ],
@@ -747,8 +756,8 @@ function Toast({ toast }) {
   return (
     <div className="fixed left-1/2 pointer-events-none" style={{ top: 70, transform: "translateX(-50%)", zIndex: 70, animation: "imsafePop .3s ease-out" }}>
       <div className="px-4 py-2.5 rounded-full flex items-center gap-2 shadow-lg" style={{ background: "rgba(28,28,30,0.92)", backdropFilter: "blur(10px)", color: "#fff", ...SF }}>
-        <span className="text-[16px]">{toast.icon}</span>
-        <span className="text-[14px] font-semibold">{toast.text}</span>
+        <span className="text-[17px]">{toast.icon}</span>
+        <span className="text-[15px] font-semibold">{toast.text}</span>
       </div>
     </div>
   );
@@ -780,7 +789,7 @@ export default function ImsafeApp() {
   const [decision, setDecision] = useState(null);
   const [moreView, setMoreView] = useState("menu");
   const [expandedBarrier, setExpandedBarrier] = useState("pilot");
-  const [seenIntro, setSeenIntro] = useState(true);
+  const [seenIntro, setSeenIntro] = useState(false); /* intro visas vid varje kallstart */
   const [lastAssessment, setLastAssessment] = useState(null);
   const [risks, setRisks] = useState({});
   const [imsafe, setImsafe] = useState({});
@@ -816,6 +825,9 @@ export default function ImsafeApp() {
   const [nudgeGone, setNudgeGone] = useState(false);
   const [kbdGone, setKbdGone] = useState(false);
   const [printMode, setPrintMode] = useState("report");
+  const [infoOpen, setInfoOpen] = useState(null);
+  const [introSplash, setIntroSplash] = useState(false);
+  const [seenIntroEver, setSeenIntroEver] = useState(false);
   const [helloIdx, setHelloIdx] = useState(0);
   const [confetti, setConfetti] = useState(false);
   const [toast, setToast] = useState(null);
@@ -858,24 +870,28 @@ export default function ImsafeApp() {
           if (d.user) setUser(d.user);
           if (d.minVals) setMinVals((v) => ({ ...v, ...d.minVals }));
           if (d.game) setGame((g) => ({ ...g, ...d.game }));
-          if (typeof d.step === "number") setStep(Math.min(4, d.step));
+          const fresh = !d.ts || Date.now() - d.ts < 12 * 3600 * 1000; /* 12 h: ny dag = ny genomgång */
+          if (d.seenIntroEver) {
+            setSeenIntroEver(true);
+            if (fresh) { setIntroSplash(true); setTimeout(() => setSeenIntro(true), 1100); } /* 1 s splash, fullt intro efter nollning */
+          }
+          if (typeof d.step === "number" && fresh) setStep(Math.min(4, d.step));
           if (d.lastAssessment) setLastAssessment(d.lastAssessment);
           if (d.night) setNight(true);
-          if (d.temNotes) setTemNotes(d.temNotes);
+          if (d.temNotes && fresh) setTemNotes(d.temNotes);
           if (d.uses) setUses(d.uses);
           if (d.nudgeGone) setNudgeGone(true);
           if (d.kbdGone) setKbdGone(true);
           if (d.lang && I18N[d.lang] && !urlHasLang.current) setLang(d.lang);
-          setSeenIntro(!!d.seenIntro);
-        } else { setSeenIntro(false); }
-      } catch { setSeenIntro(false); }
+        }
+      } catch {}
       setLoaded(true);
     })();
   }, []);
   useEffect(() => {
     if (!loaded) return;
-    (async () => { try { await window.storage.set("imsafe-profile-v7", JSON.stringify({ user, minVals, game, step, seenIntro, lastAssessment, night, lang, temNotes, uses, nudgeGone, kbdGone })); } catch {} })();
-  }, [user, minVals, game, step, seenIntro, lastAssessment, night, lang, temNotes, uses, nudgeGone, kbdGone, loaded]);
+    (async () => { try { await window.storage.set("imsafe-profile-v7", JSON.stringify({ user, minVals, game, step, seenIntro, seenIntroEver, lastAssessment, night, lang, temNotes, uses, nudgeGone, kbdGone, ts: Date.now() })); } catch {} })();
+  }, [user, minVals, game, step, seenIntro, seenIntroEver, lastAssessment, night, lang, temNotes, uses, nudgeGone, kbdGone, loaded]);
 
   /* IMSAFE auto-import + riskmodell */
   const imsafePct = IMSAFE_KEYS.filter((k) => imsafe[k]).length / IMSAFE_KEYS.length;
@@ -883,9 +899,11 @@ export default function ImsafeApp() {
   const AUTO_INFO = { imsafe: { go: 0 } };
 
   const model = useMemo(() => {
+    /* NQ + nattutrustat plan sänker skymningsfaktorns vikt från 4 till 1 */
+    const wOf = (f) => (f.key === "dusk" && risks.nightOk ? 1 : f.w);
     const layers = BARRIER_DEF.map((b) => {
       const max = b.factors.reduce((s, f) => s + f.w, 0);
-      const score = b.factors.reduce((s, f) => s + (effRisks[f.key] ? f.w : 0), 0);
+      const score = b.factors.reduce((s, f) => s + (effRisks[f.key] ? wOf(f) : 0), 0);
       return { ...b, color: C[b.colorKey], name: T.barriers[b.id], score, max, pen: score / max };
     });
     const protection = layers.reduce((p, l) => p * (1 - l.pen), 1);
@@ -897,10 +915,16 @@ export default function ImsafeApp() {
     else lv = ["CRIT", C.red, "NOGO"];
     const [lvKey, color, vKey] = lv;
     const aligned = layers.every((l) => l.pen > 0.4);
-    const active = BARRIER_DEF.flatMap((b) => b.factors.filter((f) => effRisks[f.key]).map((f) => ({ ...f, color: C[b.colorKey], barrier: T.barriers[b.id] }))).sort((a, b2) => b2.w - a.w);
-    return { layers, protection, riskPct, level: T.decide.levels[lvKey], color, advice: T.decide.advice[lvKey], verdict: T.decide.verdicts[vKey], aligned, active };
+    const active = BARRIER_DEF.flatMap((b) => b.factors.filter((f) => effRisks[f.key]).map((f) => ({ ...f, w: wOf(f), color: C[b.colorKey], barrier: T.barriers[b.id] }))).sort((a, b2) => b2.w - a.w);
+    /* IMSAFE är absolut: ett fel = NO-GO, oavsett beräknad procent */
+    const imsafeBlock = !!effRisks.imsafe;
+    return { layers, protection, riskPct, level: T.decide.levels[lvKey],
+      color: imsafeBlock ? C.red : color,
+      advice: imsafeBlock ? T.decide.imsafeBlock : T.decide.advice[lvKey],
+      verdict: imsafeBlock ? T.decide.verdicts[3] : T.decide.verdicts[vKey],
+      aligned, active, imsafeBlock };
     // eslint-disable-next-line
-  }, [effRisks, lang, night]);
+  }, [effRisks, risks.nightOk, lang, night]);
 
   useEffect(() => { if (assessed) { setAssessed(false); setDecision(null); setShownPct(null); } /* eslint-disable-next-line */ }, [risks, imsafe, walk, legal, pre]);
 
@@ -976,17 +1000,25 @@ export default function ImsafeApp() {
     setUses((u) => u + 1);
     logEvent("assess");
     const target = model.riskPct;
+    const reduce = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) { /* tillgänglighet: ingen svepande nål */
+      setShownPct(null);
+      if (game.soundOn) SND.verdict();
+      return;
+    }
     setShownPct(0);
     if (game.soundOn) tone(520, 0.06, 0, "sine", 0.05);
-    const t0 = performance.now(), dur = 900;
+    const t0 = performance.now(), dur = 1400;
     const tick = (t) => {
       const f = Math.min(1, (t - t0) / dur);
-      setShownPct(Math.round((1 - Math.pow(1 - f, 3)) * target));
+      setShownPct(Math.round((1 - Math.pow(1 - f, 3)) * target)); /* mjuk inbromsning */
       if (f < 1) requestAnimationFrame(tick);
       else {
-        setShownPct(null);
-        if (game.soundOn) SND.verdict();
-        if (imsafePct === 1 && briefPct === 1 && walkPct === 1) { award("allday"); setConfetti(true); setTimeout(() => setConfetti(false), 2400); }
+        try { navigator.vibrate && navigator.vibrate(12); } catch {} /* kännbart stopp */
+        setTimeout(() => { /* ett andetag innan domen faller */
+          setShownPct(null);
+          if (game.soundOn) SND.verdict();
+        }, 450);
       }
     };
     requestAnimationFrame(tick);
@@ -1024,16 +1056,29 @@ export default function ImsafeApp() {
     } catch { setNews({ status: "error", text: T.news.fail }); }
   }
 
-  function Row({ checked, onChange, children, trailing, color, highlight = false }) {
+  function Row({ checked, onChange, children, trailing, color, highlight = false, danger = false, info = null, infoKey = null }) {
+    /* danger = negativt kryss (riskfaktor): rött med utropstecken. info = förklaring bakom ⓘ */
+    const mark = danger ? C.red : color;
+    const open = info && infoKey && infoOpen === infoKey;
     return (
       <label className="flex items-center gap-3 px-4 cursor-pointer active:opacity-60"
-        style={{ paddingTop: 15, paddingBottom: 15, borderTop: `0.5px solid ${C.line}`, background: highlight ? color + "0C" : "transparent", boxShadow: highlight ? `inset 3px 0 0 ${color}` : "none", transition: "all .25s" }}>
-        <span style={{ width: 29, height: 29, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: checked ? color : "transparent", border: checked ? "none" : `2px solid ${highlight ? color : "rgba(120,128,140,0.4)"}`, transition: "all .15s", transform: checked ? "scale(1.05)" : "scale(1)" }}>
-          {checked && <svg width="16" height="16" viewBox="0 0 12 12"><path d="M2 6.5L4.7 9 10 3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+        style={{ paddingTop: 16, paddingBottom: 16, borderTop: `0.5px solid ${C.line}`, background: danger && checked ? C.red + "0C" : highlight ? color + "0C" : "transparent", boxShadow: highlight ? `inset 3px 0 0 ${color}` : "none", transition: "all .25s" }}>
+        <span style={{ width: 29, height: 29, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: checked ? mark : "transparent", border: checked ? "none" : `2px solid ${highlight ? color : "rgba(120,128,140,0.4)"}`, transition: "all .15s", transform: checked ? "scale(1.05)" : "scale(1)", alignSelf: "flex-start" }}>
+          {checked && (danger
+            ? <span style={{ color: "#fff", fontWeight: 800, fontSize: 15, lineHeight: 1 }}>!</span>
+            : <svg width="16" height="16" viewBox="0 0 12 12"><path d="M2 6.5L4.7 9 10 3.5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>)}
         </span>
         <input type="checkbox" className="hidden" checked={checked} onChange={onChange} />
-        <span className="flex-1 text-[15px]" style={{ ...SF, color: C.ink, fontWeight: highlight ? 600 : 400 }}>{children}</span>
+        <span className="flex-1">
+          <span className="block text-[15px]" style={{ ...SF, color: C.ink, fontWeight: highlight ? 600 : 400 }}>{children}</span>
+          {open && <span className="block text-[13px] mt-1 pr-2" style={{ color: C.ink2, animation: "imsafePopIn .18s ease-out" }}>{info}</span>}
+        </span>
         {trailing}
+        {info && (
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setInfoOpen(open ? null : infoKey); }}
+            style={{ width: 20, height: 20, borderRadius: "50%", flexShrink: 0, fontSize: 12, fontWeight: 700, lineHeight: 1, color: open ? "#fff" : C.inkSoft, background: open ? C.blue : C.fill, border: `1px solid ${open ? C.blue : C.line}`, alignSelf: "flex-start", marginTop: 5 }}>i</button>
+        )}
       </label>
     );
   }
@@ -1046,9 +1091,9 @@ export default function ImsafeApp() {
   function Checklist({ items, state, set, color, trail }) {
     const firstOpen = items.find((i) => !state[i.key])?.key;
     return items.map((i) => (
-      <Row key={i.key} checked={!!state[i.key]} color={color} highlight={i.key === firstOpen}
+      <Row key={i.key} checked={!!state[i.key]} color={color} highlight={i.key === firstOpen} info={i.info || null} infoKey={i.key}
         onChange={(e) => toggle(state, set, i.key, e)}
-        trailing={trail && trail(i) ? <span className="text-[11px] flex-shrink-0" style={{ ...mono, color: C.inkSoft }}>{trail(i)}</span> : null}>
+        trailing={trail && trail(i) ? <span className="text-[12px] flex-shrink-0" style={{ ...mono, color: C.inkSoft }}>{trail(i)}</span> : null}>
         {i.label}
       </Row>
     ));
@@ -1152,9 +1197,9 @@ export default function ImsafeApp() {
   const title = tab === "fly" ? T.titles.fly : T.titles[moreView];
   const S = STEP_DEF[step];
   const ST = T.steps[step];
-  const imsafeItems = IMSAFE_KEYS.map((k) => ({ key: k, label: T.imsafe.items[k][0], target: T.imsafe.items[k][1] }));
+  const imsafeItems = IMSAFE_KEYS.map((k) => ({ key: k, label: T.imsafe.items[k][0], target: T.imsafe.items[k][1], info: T.imsafe.items[k][2] }));
   const legalItems = LEGAL_DEF.map((d) => ({ ...d, label: T.brief.legal[d.key] }));
-  const preItems = PREFLIGHT_KEYS.map((k) => ({ key: k, label: T.brief.pre[k], ref: PREFLIGHT_REF[k] || "" }));
+  const preItems = PREFLIGHT_KEYS.map((k) => ({ key: k, label: T.brief.pre[k][0], info: T.brief.pre[k][1], ref: PREFLIGHT_REF[k] || "" }));
   const langNames = { sv: "Svenska", en: "English", de: "Deutsch" };
   const langMeta = { sv: ["🇸🇪", "Svenska"], en: ["🇬🇧", "English"], de: ["🇩🇪", "Deutsch"] };
 
@@ -1170,7 +1215,7 @@ export default function ImsafeApp() {
       <div className="min-h-screen" style={{ background: C.bg, color: C.ink, padding: 20, ...SF }}>
         <div className="max-w-2xl mx-auto pt-6">
           <div className="flex items-center gap-2 mb-6">
-            <svg width="30" height="30" viewBox="0 0 30 30"><rect width="30" height="30" rx="9" fill="#0B5CD6" /><path d="M7 16.5 L12 21.5 L22 9.5" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <svg width="30" height="30" viewBox="0 0 30 30"><rect width="30" height="30" rx="9" fill="#0B5CD6" /><path d="M7.5 16 L12.5 21 L22.5 9" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
             <h1 className="text-[24px] font-bold">imsafe · admin</h1>
           </div>
           {!adminOk ? (
@@ -1181,7 +1226,7 @@ export default function ImsafeApp() {
                   onKeyDown={(e) => e.key === "Enter" && adminPw === "455bd6dd52" && setAdminOk(true)} />
                 <button className="w-full mt-2 py-3 rounded-xl font-semibold text-white" style={{ background: C.grad }}
                   onClick={() => adminPw === "455bd6dd52" && setAdminOk(true)}>Logga in</button>
-                <p className="text-[11px] mt-3" style={{ color: C.inkSoft }}>Obs: enkelt skydd mot nyfikna – känslig data ska aldrig ligga här.</p>
+                <p className="text-[12px] mt-3" style={{ color: C.inkSoft }}>Obs: enkelt skydd mot nyfikna – känslig data ska aldrig ligga här.</p>
               </div>
             </Card>
           ) : (
@@ -1191,7 +1236,7 @@ export default function ImsafeApp() {
                   <Card key={l} style={{ marginBottom: 0 }}>
                     <div className="p-3 text-center">
                       <p className="text-[22px] font-bold" style={{ color: col }}>{v}</p>
-                      <p className="text-[11px] font-semibold" style={{ color: C.inkSoft }}>{l}</p>
+                      <p className="text-[12px] font-semibold" style={{ color: C.inkSoft }}>{l}</p>
                     </div>
                   </Card>
                 ))}
@@ -1202,12 +1247,12 @@ export default function ImsafeApp() {
                   {dates.length === 0 && <p className="text-[13px]" style={{ color: C.inkSoft }}>Inga händelser ännu.</p>}
                   {dates.map((d) => (
                     <div key={d} className="flex items-center gap-2">
-                      <span className="text-[11px]" style={{ ...mono, color: C.inkSoft, width: 78 }}>{d}</span>
+                      <span className="text-[12px]" style={{ ...mono, color: C.inkSoft, width: 78 }}>{d}</span>
                       <div className="flex-1 h-4 rounded-md overflow-hidden flex" style={{ background: C.fill }}>
                         <div style={{ width: `${(days[d].visit / maxDay) * 100}%`, background: C.blue }} />
                         <div style={{ width: `${(days[d].assess / maxDay) * 100}%`, background: C.indigo }} />
                       </div>
-                      <span className="text-[11px]" style={{ ...mono, color: C.inkSoft, width: 110, textAlign: "right" }}>
+                      <span className="text-[12px]" style={{ ...mono, color: C.inkSoft, width: 110, textAlign: "right" }}>
                         {days[d].visit}b · {days[d].assess}bed · {days[d].go || 0}go · {days[d].nogo || 0}no
                       </span>
                     </div>
@@ -1242,6 +1287,7 @@ export default function ImsafeApp() {
         @keyframes imsafeReveal { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes imsafeSlide { from { transform: translateX(18px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes imsafePopIn { from { transform: translateY(-6px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
         @keyframes imsafeHello { 0% { opacity: 0; transform: translateY(16px) scale(0.97); } 14% { opacity: 1; transform: translateY(0) scale(1); } 86% { opacity: 1; } 100% { opacity: 1; } }
         @keyframes imsafeFloat { from { transform: translateY(0) translateX(0); } to { transform: translateY(26px) translateX(-14px); } }
         @media (prefers-reduced-motion: reduce) { * { animation:none!important; transition:none!important; } }
@@ -1262,13 +1308,15 @@ export default function ImsafeApp() {
           <div style={{ position: "absolute", width: 260, height: 260, borderRadius: "50%", background: "rgba(255,255,255,0.05)", bottom: -70, left: -90, animation: "imsafeFloat 11s ease-in-out infinite alternate-reverse" }} />
           <svg width="76" height="76" viewBox="0 0 30 30" style={{ marginBottom: 28, filter: "drop-shadow(0 10px 24px rgba(0,0,0,0.25))", animation: "imsafeHello 0.9s ease-out" }}>
             <rect width="30" height="30" rx="9" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.35)" strokeWidth="0.75" />
-            <path d="M7 16.5 L12 21.5 L22 9.5" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M19.5 8.5 L24 7 L23 11.5" fill="#fff" />
+            <path d="M7.5 16 L12.5 21 L22.5 9" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
+          {!introSplash && (
           <h1 key={helloIdx} className="font-bold" style={{ color: "#fff", fontSize: 40, letterSpacing: "-0.02em", animation: "imsafeHello 2.4s ease-in-out", minHeight: 52, textAlign: "center" }}>
             {["Välkommen", "Welcome", "Willkommen"][helloIdx]}
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, marginTop: 6, textAlign: "center" }}>imsafe.se · {T.onboard.tag}</p>
+          )}
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, marginTop: 6, textAlign: "center" }}>imsafe.se{introSplash ? "" : " · " + T.onboard.tag}</p>
+          {!introSplash && (<>
           <div className="grid grid-cols-3 gap-2" style={{ marginTop: 34, width: "100%", maxWidth: 340 }}>
             {["sv", "en", "de"].map((l) => (
               <button key={l} onClick={() => setLang(l)} className="py-2.5 rounded-xl active:opacity-70"
@@ -1278,17 +1326,18 @@ export default function ImsafeApp() {
               </button>
             ))}
           </div>
-          <button onClick={() => { setSeenIntro(true); if (game.soundOn) SND.step(); }}
+          <button onClick={() => { setSeenIntro(true); setSeenIntroEver(true); if (game.soundOn) SND.step(); }}
             className="active:opacity-70" style={{ marginTop: 14, width: "100%", maxWidth: 340, padding: "14px 0", borderRadius: 16, background: "#fff", color: "#0B5CD6", fontSize: 16, fontWeight: 700, boxShadow: "0 10px 26px rgba(0,0,0,0.25)" }}>
             {T.onboard.start}
           </button>
+          </>)}
         </div>
       )}
 
       {/* ===== Header ===== */}
       <header className="px-5 pt-5 pb-2 max-w-2xl mx-auto">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <button className="flex items-center gap-2 active:opacity-60" onClick={() => { setTab("fly"); goStep(0); }} title="Till start">
             <svg width="30" height="30" viewBox="0 0 30 30" style={{ flexShrink: 0 }}>
               <defs>
                 <linearGradient id="imLogoGrad" x1="0" y1="0" x2="1" y2="1">
@@ -1298,18 +1347,17 @@ export default function ImsafeApp() {
               </defs>
               <rect width="30" height="30" rx="9" fill="url(#imLogoGrad)" />
               {/* Bocken som lyfter: check vars övre streck blir en stigande flygbana */}
-              <path d="M7 16.5 L12 21.5 L22 9.5" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M19.5 8.5 L24 7 L23 11.5" stroke="#fff" strokeWidth="0" fill="#fff" />
+              <path d="M7.5 16 L12.5 21 L22.5 9" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
               <circle cx="9.5" cy="10" r="1.1" fill="rgba(255,255,255,0.5)" />
               <circle cx="13" cy="8" r="0.8" fill="rgba(255,255,255,0.35)" />
             </svg>
-            <span className="text-[16px] font-bold" style={{ letterSpacing: "-0.02em" }}>imsafe<span style={{ color: C.blue }}>.se</span></span>
-          </div>
+            <span className="text-[17px] font-bold" style={{ letterSpacing: "-0.02em", color: C.ink }}>imsafe<span style={{ color: C.blue }}>.se</span></span>
+          </button>
           <div className="flex items-center gap-2">
-            <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: night ? C.gold + "28" : C.fill }}
+            <button className="w-8 h-8 rounded-full text-[15px]" style={{ background: night ? C.gold + "28" : C.fill }}
               title={T.night} onClick={() => { setNight(!night); if (game.soundOn) SND.tick(); }}>{night ? "☀️" : "🌙"}</button>
             <div style={{ position: "relative" }}>
-              <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: langMenuOpen ? C.blue + "22" : C.fill }}
+              <button className="w-8 h-8 rounded-full text-[15px]" style={{ background: langMenuOpen ? C.blue + "22" : C.fill }}
                 title="Language" onClick={() => { setLangMenuOpen(!langMenuOpen); if (game.soundOn) SND.tick(); }}>🌐</button>
               {langMenuOpen && (
                 <>
@@ -1321,7 +1369,7 @@ export default function ImsafeApp() {
                         style={{ background: lang === l ? C.blue + "10" : "transparent", borderTop: l !== "sv" ? `0.5px solid ${C.line}` : "none" }}
                         onClick={() => { setLang(l); setLangMenuOpen(false); if (game.soundOn) SND.tick(); }}>
                         <span className="text-[18px]">{langMeta[l][0]}</span>
-                        <span className="flex-1 text-[14px] font-semibold" style={{ color: lang === l ? C.blue : C.ink }}>{langMeta[l][1]}</span>
+                        <span className="flex-1 text-[15px] font-semibold" style={{ color: lang === l ? C.blue : C.ink }}>{langMeta[l][1]}</span>
                         {lang === l && <span style={{ color: C.blue, fontWeight: 700 }}>✓</span>}
                       </button>
                     ))}
@@ -1329,7 +1377,7 @@ export default function ImsafeApp() {
                 </>
               )}
             </div>
-            <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: C.fill }}
+            <button className="w-8 h-8 rounded-full text-[15px]" style={{ background: C.fill }}
               title="Reset" onClick={() => {
                 const msg = { sv: "Nollställa hela genomgången?", en: "Reset the entire walkthrough?", de: "Gesamten Durchgang zurücksetzen?" }[lang];
                 if (!window.confirm(msg)) return;
@@ -1339,7 +1387,7 @@ export default function ImsafeApp() {
                 showToast("↺", { sv: "Nollställd – ny genomgång", en: "Reset – fresh walkthrough", de: "Zurückgesetzt – neuer Durchgang" }[lang]);
                 if (game.soundOn) SND.tick();
               }}>↺</button>
-            <button className="w-8 h-8 rounded-full text-[14px]" style={{ background: C.fill }}
+            <button className="w-8 h-8 rounded-full text-[15px]" style={{ background: C.fill }}
               onClick={() => setGame((g) => ({ ...g, soundOn: !g.soundOn }))}>{game.soundOn ? "🔊" : "🔇"}</button>
           </div>
         </div>
@@ -1360,24 +1408,9 @@ export default function ImsafeApp() {
                 <div className="p-3.5 flex items-center gap-3">
                   <img src={EDWIN_IMG} alt="" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
                   <p className="flex-1 text-[13px]" style={{ color: C.ink2 }}>
-                    Du har gjort {uses} genomgångar – kul att appen används! Vill du hålla den gratis och reklamfri? <button className="font-bold underline" style={{ color: C.blue }} onClick={() => { setTab("more"); setMoreView("support"); }}>Stöd utvecklingen</button>
+                    {uses} genomgångar gjorda. imsafe byggs och drivs av en pilot – vill du hålla appen gratis och reklamfri? <button className="font-bold underline" style={{ color: C.blue }} onClick={() => { setTab("more"); setMoreView("support"); }}>Stöd utvecklingen</button>
                   </p>
                   <button className="text-[13px] font-bold px-2" style={{ color: C.inkSoft }} onClick={() => setNudgeGone(true)}>✕</button>
-                </div>
-              </Card>
-            )}
-
-            {/* Tangentbordstips på dator */}
-            {!kbdGone && typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: fine)").matches && (
-              <Card style={{ background: `linear-gradient(135deg, ${C.indigo}0E, ${C.blue}06)` }}>
-                <div className="p-3.5 flex items-center gap-3">
-                  <span className="text-[18px]">⌨️</span>
-                  <p className="flex-1 text-[13px]" style={{ color: C.ink2 }}>
-                    {{ sv: "På dator: piltangenterna ← → byter steg, Enter bockar av nästa punkt.",
-                       en: "On desktop: arrow keys ← → switch steps, Enter checks the next item.",
-                       de: "Am Computer: Pfeiltasten ← → wechseln den Schritt, Enter hakt den nächsten Punkt ab." }[lang]}
-                  </p>
-                  <button className="text-[13px] font-bold px-2" style={{ color: C.inkSoft }} onClick={() => setKbdGone(true)}>✕</button>
                 </div>
               </Card>
             )}
@@ -1407,13 +1440,9 @@ export default function ImsafeApp() {
 
             {/* Stegets fråga (animeras vid stegbyte) */}
             <div key={step + lang} style={{ animation: "imsafeSlide .25s ease-out" }}>
-              <Card style={{ background: `linear-gradient(135deg, ${C[S.colorKey]}12, ${C[S.colorKey]}04)`, border: `1px solid ${C[S.colorKey]}30` }}>
-                <div className="p-4 flex items-center gap-3">
-                  <span className="text-[26px]">{S.icon}</span>
-                  <div className="flex-1">
-                    <p className="text-[12px] font-bold uppercase tracking-wide" style={{ color: C[S.colorKey] }}>{T.stepOf(step + 1)} · {ST.name} · {ST.time}</p>
-                    <p className="text-[14px] mt-0.5" style={{ color: C.ink2 }}>{ST.q}</p>
-                  </div>
+              <Card style={{ background: `linear-gradient(135deg, ${C[S.colorKey]}10, transparent)`, borderLeft: `3px solid ${C[S.colorKey]}` }}>
+                <div className="px-4 py-3.5">
+                  <p className="text-[15px] font-semibold">{ST.q}</p>
                 </div>
               </Card>
 
@@ -1421,6 +1450,21 @@ export default function ImsafeApp() {
               {step === 0 && (
                 <Card>
                   <CardHead title={T.imsafe.title} sub={imsafePct === 1 ? T.imsafe.subDone : T.imsafe.subTodo} right={<Ring pct={imsafePct} color={C.purple} />} />
+                  {/* Bokstäverna tänds i takt med att man bockar */}
+                  <div className="flex justify-center gap-1.5 px-4 pb-3">
+                    {IMSAFE_KEYS.map((k, i) => (
+                      <span key={k + (imsafe[k] ? "1" : "0")}
+                        className="flex items-center justify-center font-bold"
+                        style={{ width: 40, height: 44, borderRadius: 12, fontSize: 21,
+                          background: imsafe[k] ? C.purple : C.fill,
+                          color: imsafe[k] ? "#fff" : C.inkSoft,
+                          border: imsafe[k] ? "none" : `1.5px solid ${C.line}`,
+                          animation: imsafe[k] ? "imsafePopIn .25s ease-out" : "none",
+                          transition: "all .2s" }}>
+                        {"IMSAFE"[i]}
+                      </span>
+                    ))}
+                  </div>
                   <Checklist items={imsafeItems} state={imsafe} set={setImsafe} color={C.purple} trail={(i) => i.target} />
                 </Card>
               )}
@@ -1441,15 +1485,15 @@ export default function ImsafeApp() {
                           <span className="w-8 h-8 rounded-lg flex items-center justify-center text-[15px]" style={{ background: col + "16" }}>{b.icon}</span>
                           <span className="flex-1 text-left">
                             <span className="block text-[15px] font-semibold" style={{ color: C.ink }}>{T.barriers[b.id]}</span>
-                            <span className="block text-[12px]" style={{ color: n > 0 ? col : C.inkSoft }}>{n > 0 ? T.riskStep.marked(n) : T.riskStep.none}</span>
+                            <span className="block text-[12px]" style={{ color: n > 0 ? C.red : C.inkSoft }}>{n > 0 ? T.riskStep.marked(n) : T.riskStep.none}</span>
                           </span>
-                          {n > 0 && <span className="w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-bold text-white" style={{ background: col }}>{n}</span>}
+                          {n > 0 && <span className="w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-bold text-white" style={{ background: C.red }}>{n}</span>}
                           <span style={{ color: "rgba(120,128,140,0.4)", transform: open ? "rotate(90deg)" : "none", transition: "transform .2s" }}>›</span>
                         </button>
                         {open && b.factors.map((f) => AUTO_INFO[f.key] ? (
                           /* Statusrad (ej kryssbar): grön bock när IMSAFE är klar, varning annars */
                           <button key={f.key} className="w-full flex items-center gap-3 px-4 active:opacity-60 text-left"
-                            style={{ paddingTop: 15, paddingBottom: 15, borderTop: `0.5px solid ${C.line}`,
+                            style={{ paddingTop: 16, paddingBottom: 16, borderTop: `0.5px solid ${C.line}`,
                               background: effRisks[f.key] ? C.orange + "10" : C.green + "0C" }}
                             onClick={() => goStep(AUTO_INFO[f.key].go)}>
                             <span style={{ width: 29, height: 29, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
@@ -1467,10 +1511,20 @@ export default function ImsafeApp() {
                             <span className="text-[10px] px-1.5 py-0.5 rounded font-bold flex-shrink-0" style={{ background: C.fill, color: C.inkSoft }}>AUTO</span>
                           </button>
                         ) : (
-                          <Row key={f.key} checked={!!risks[f.key]} color={col}
-                            onChange={(e) => { setRisks({ ...risks, [f.key]: e.target.checked }); if (game.soundOn) (e.target.checked ? SND.tick() : SND.untick()); }}>
-                            {T.factors[f.key][0]}
-                          </Row>
+                          <React.Fragment key={f.key}>
+                            <Row checked={!!risks[f.key]} color={col} danger info={T.factors[f.key][1]} infoKey={"risk-" + f.key}
+                              onChange={(e) => { setRisks({ ...risks, [f.key]: e.target.checked }); if (game.soundOn) (e.target.checked ? SND.tick() : SND.untick()); }}>
+                              {T.factors[f.key][0]}
+                            </Row>
+                            {f.key === "dusk" && risks.dusk && (
+                              <div style={{ paddingLeft: 28, background: C.green + "08" }}>
+                                <Row checked={!!risks.nightOk} color={C.green} info={T.factors.nightOk[1]} infoKey="risk-nightOk"
+                                  onChange={(e) => { setRisks({ ...risks, nightOk: e.target.checked }); if (game.soundOn) (e.target.checked ? SND.tick() : SND.untick()); }}>
+                                  {T.factors.nightOk[0]}
+                                </Row>
+                              </div>
+                            )}
+                          </React.Fragment>
                         ))}
                       </div>
                     );
@@ -1482,7 +1536,7 @@ export default function ImsafeApp() {
                     <textarea style={{ ...inputF(), minHeight: 52 }} value={temNotes} onChange={(e) => setTemNotes(e.target.value)}
                       placeholder={{ sv: "T.ex. mycket skoltrafik, ovan passagerare, tidig start…", en: "E.g. busy circuit, unfamiliar passenger, early start…", de: "Z.B. viel Platzverkehr, unerfahrener Passagier, früher Start…" }[lang]} />
                   </div>
-                  <p className="text-[11px] px-4 py-3" style={{ color: C.inkSoft }}>{T.riskStep.foot}</p>
+                  <p className="text-[12px] px-4 py-3" style={{ color: C.inkSoft }}>{T.riskStep.foot}</p>
                 </Card>
               )}
 
@@ -1506,7 +1560,7 @@ export default function ImsafeApp() {
                   <CardHead title={T.walk.title} sub={walkPct === 1 ? T.walk.subDone : T.walk.subTodo} right={<Ring pct={walkPct} color={C.green} />} />
                   {walkPct < 1 && (
                     <div className="px-4 pb-1">
-                      <button className="w-full py-2.5 rounded-xl text-[14px] font-semibold active:opacity-60"
+                      <button className="w-full py-2.5 rounded-xl text-[15px] font-semibold active:opacity-60"
                         style={{ background: C.green + "12", color: C.green, border: `1.5px solid ${C.green}40` }}
                         onClick={() => {
                           const all = {};
@@ -1522,14 +1576,14 @@ export default function ImsafeApp() {
                   {WALK_DEF.map((g) => (
                     <div key={g.id}>
                       <div className="flex items-center gap-2 px-4 py-2" style={{ background: C.fill }}>
-                        <span className="text-[14px]">{g.icon}</span>
+                        <span className="text-[15px]">{g.icon}</span>
                         <span className="text-[13px] font-semibold uppercase tracking-wide flex-1" style={{ color: C[g.colorKey] }}>{T.walk.groups[g.id]}</span>
-                        <span className="text-[11px]" style={{ ...mono, color: C.inkSoft }}>{g.keys.filter((k) => walk[k]).length}/{g.keys.length}</span>
+                        <span className="text-[12px]" style={{ ...mono, color: C.inkSoft }}>{g.keys.filter((k) => walk[k]).length}/{g.keys.length}</span>
                       </div>
-                      <Checklist items={g.keys.map((k) => ({ key: k, label: T.walk.items[k] }))} state={walk} set={setWalk} color={C[g.colorKey]} />
+                      <Checklist items={g.keys.map((k) => ({ key: k, label: T.walk.items[k][0], info: T.walk.items[k][1] }))} state={walk} set={setWalk} color={C[g.colorKey]} />
                     </div>
                   ))}
-                  <p className="text-[11px] px-4 py-3" style={{ color: C.inkSoft }}>{T.walk.poh}</p>
+                  <p className="text-[12px] px-4 py-3" style={{ color: C.inkSoft }}>{T.walk.poh}</p>
                 </Card>
               )}
 
@@ -1548,9 +1602,9 @@ export default function ImsafeApp() {
                       {[[T.decide.cols[0], imsafePct, C.purple], [T.decide.cols[1], null, C.blue], [T.decide.cols[2], briefPct, C.indigo], [T.decide.cols[3], walkPct, C.green]].map(([k, p, col]) => (
                         <div key={k} className="flex flex-col items-center">
                           {p === null
-                            ? <div style={{ width: 44, height: 44, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", border: `5px solid ${model.active.length ? col : "rgba(120,128,140,0.15)"}`, color: model.active.length ? col : C.inkSoft, fontSize: 14, fontWeight: 700, boxSizing: "border-box" }}>{model.active.length}</div>
+                            ? <div style={{ width: 44, height: 44, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", border: `5px solid ${model.active.length ? col : "rgba(120,128,140,0.15)"}`, color: model.active.length ? col : C.inkSoft, fontSize: 15, fontWeight: 700, boxSizing: "border-box" }}>{model.active.length}</div>
                             : <Ring pct={p} color={col} />}
-                          <p className="text-[11px] mt-1 font-semibold" style={{ color: C.inkSoft }}>
+                          <p className="text-[12px] mt-1 font-semibold" style={{ color: C.inkSoft }}>
                             {p === null ? `${k} · ${model.active.length} ${T.decide.threats}` : `${k}${p === 1 ? " ✓" : ""}`}
                           </p>
                         </div>
@@ -1580,9 +1634,9 @@ export default function ImsafeApp() {
                               <p className="text-[15px] font-semibold" style={{ color: C.inkSoft }}>{T.decide.weighing}</p>
                             ) : (
                               <>
-                                <p className="text-[26px] font-bold tracking-tight" style={{ color: model.color }}>{model.verdict}</p>
+                                <p className="text-[26px] font-bold tracking-tight" style={{ color: model.color, animation: "imsafeReveal .45s ease-out backwards" }}>{model.verdict}</p>
                                 <p className="text-[12px] font-semibold uppercase tracking-wide mt-0.5" style={{ color: C.inkSoft }}>{T.decide.riskLabel} {model.level}</p>
-                                <p className="text-[14px] mt-2.5 text-left" style={{ color: C.ink2 }}>{model.advice}</p>
+                                <p className="text-[15px] mt-2.5 text-left" style={{ color: C.ink2, animation: "imsafeReveal .45s ease-out .2s backwards" }}>{model.advice}</p>
                               </>
                             )}
                           </div>
@@ -1590,23 +1644,18 @@ export default function ImsafeApp() {
                       </Card>
 
                       {shownPct === null && (<>
-                        <Card>
-                          <CardHead title={T.decide.barriersNow} />
-                          <div className="px-3 pb-4"><CheeseBoard /></div>
-                        </Card>
-
                         <Card style={{ border: `1.5px solid ${C.blue}40`, background: `linear-gradient(180deg, ${C.blue}08, transparent)` }}>
                           <CardHead title={T.decide.actionsTitle} sub={model.active.length ? T.decide.actionsSub : T.decide.actionsEmpty} />
                           {model.active.length === 0 ? (
-                            <p className="px-4 pb-4 text-[14px]" style={{ color: C.ink2 }}>{T.decide.strongDay}</p>
+                            <p className="px-4 pb-4 text-[15px]" style={{ color: C.ink2 }}>{T.decide.strongDay}</p>
                           ) : (
                             <>
                               {model.active.slice(0, 5).map((f, idx) => (
                                 <div key={f.key} className="px-4 py-3 flex gap-3" style={{ borderTop: `0.5px solid ${C.line}` }}>
                                   <span className="w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-bold flex-shrink-0" style={{ background: f.color + "1A", color: f.color }}>{idx + 1}</span>
                                   <div>
-                                    <p className="text-[14px] font-semibold">{T.factors[f.key][0]}</p>
-                                    <p className="text-[13px] mt-0.5" style={{ color: C.ink2 }}>{T.factors[f.key][1]}</p>
+                                    <p className="text-[15px] font-semibold">{T.factors[f.key][0]}</p>
+                                    <p className="text-[13px] mt-0.5" style={{ color: C.ink2 }}>{f.key === "dusk" && risks.nightOk ? T.factors.nightOk[1] : T.factors[f.key][1]}</p>
                                   </div>
                                 </div>
                               ))}
@@ -1623,12 +1672,12 @@ export default function ImsafeApp() {
                                de: "Die Zahl ist eine Hilfe – du bist verantwortlicher Pilot und die Entscheidung liegt immer bei dir." }[lang]}
                           </p>
                           <div className="grid grid-cols-2 gap-2 mb-4">
-                            <button onClick={() => decide("go")} disabled={model.riskPct > 80}
-                              className="py-3.5 rounded-2xl text-[16px] font-bold text-white active:opacity-70"
-                              style={{ background: C.green, opacity: model.riskPct > 80 ? 0.35 : 1 }}>
+                            <button onClick={() => decide("go")} disabled={model.riskPct > 80 || model.imsafeBlock}
+                              className="py-3.5 rounded-2xl text-[17px] font-bold text-white active:opacity-70"
+                              style={{ background: C.green, opacity: model.riskPct > 80 || model.imsafeBlock ? 0.35 : 1 }}>
                               {T.decide.fly}
                             </button>
-                            <button onClick={() => decide("nogo")} className="py-3.5 rounded-2xl text-[16px] font-bold active:opacity-70" style={{ background: night ? "#39424E" : C.ink, color: night ? "#E9EDF3" : "#fff" }}>
+                            <button onClick={() => decide("nogo")} className="py-3.5 rounded-2xl text-[17px] font-bold active:opacity-70" style={{ background: night ? "#39424E" : C.ink, color: night ? "#E9EDF3" : "#fff" }}>
                               {T.decide.abstain}
                             </button>
                           </div>
@@ -1651,7 +1700,7 @@ export default function ImsafeApp() {
                           {[[T.decide.cols[0], imsafePct, C.purple], [T.decide.cols[2], briefPct, C.indigo], [T.decide.cols[3], walkPct, C.green]].map(([k, p, col]) => (
                             <div key={k} className="flex items-center gap-1.5">
                               <Ring pct={p} color={col} size={32} />
-                              <span className="text-[11px] font-semibold" style={{ color: C.inkSoft }}>{k}</span>
+                              <span className="text-[12px] font-semibold" style={{ color: C.inkSoft }}>{k}</span>
                             </div>
                           ))}
                         </div>
@@ -1674,7 +1723,7 @@ export default function ImsafeApp() {
             {/* Nästa steg */}
             {step < 4 && (
               <button onClick={() => goStep(step + 1)}
-                className="w-full py-3.5 rounded-2xl text-[16px] font-bold text-white active:opacity-70 mb-2"
+                className="w-full py-3.5 rounded-2xl text-[17px] font-bold text-white active:opacity-70 mb-2"
                 style={{ background: stepDone[step] ? C[STEP_DEF[step + 1].colorKey] : C.inkSoft }}>
                 {stepDone[step] ? T.nextStep(STEP_DEF[step + 1].icon, T.steps[step + 1].name) : T.contAnyway(T.steps[step + 1].name)}
               </button>
@@ -1688,7 +1737,7 @@ export default function ImsafeApp() {
               <div className="p-4 flex gap-3">
                 <span className="text-[18px]">💡</span>
                 <div>
-                  <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: C.indigo }}>{T.tipTitle}</p>
+                  <p className="text-[12px] font-bold uppercase tracking-wide" style={{ color: C.indigo }}>{T.tipTitle}</p>
                   <p className="text-[13px] mt-0.5" style={{ color: C.ink2 }}>{tipOfDay}</p>
                 </div>
               </div>
@@ -1703,12 +1752,12 @@ export default function ImsafeApp() {
               <Card>
                 {[
                   ["links", "☁️", ...T.menu.links, C.blue],
-                  ["minima", "📏", { sv: "Skapa mina personliga minima", en: "Create my personal minimums", de: "Meine persönlichen Minima" }[lang], T.menu.minima[1], C.indigo],
-                  ["guide", "📖", { sv: "Så funkar imsafe", en: "How imsafe works", de: "So funktioniert imsafe" }[lang], { sv: "Metoden bakom de fem stegen", en: "The method behind the five steps", de: "Die Methode hinter den fünf Schritten" }[lang], C.gold],
-                  ["stats", "📊", { sv: "Haveristatistik", en: "Accident insights", de: "Unfallstatistik" }[lang], { sv: "Vad statistiken lär oss", en: "What the data teaches us", de: "Was die Daten uns lehren" }[lang], C.red],
+                  ["minima", "📏", { sv: "Skapa mina personliga minima", en: "Create my personal minimums", de: "Meine persönlichen Minima" }[lang], T.menu.minima[1], C.blue],
+                  ["guide", "📖", { sv: "Så funkar imsafe", en: "How imsafe works", de: "So funktioniert imsafe" }[lang], { sv: "Metoden bakom de fem stegen", en: "The method behind the five steps", de: "Die Methode hinter den fünf Schritten" }[lang], C.blue],
+                  ["stats", "📊", { sv: "Haveristatistik", en: "Accident insights", de: "Unfallstatistik" }[lang], { sv: "Vad statistiken lär oss", en: "What the data teaches us", de: "Was die Daten uns lehren" }[lang], C.blue],
                   ...(lang === "sv" && T.support ? [["support", "💙", ...T.menu.support, C.blue]] : []),
-                  ["install", "📲", { sv: "Spara som app", en: "Save as app", de: "Als App speichern" }[lang], { sv: "Lägg imsafe på hemskärmen", en: "Add imsafe to your home screen", de: "imsafe zum Startbildschirm hinzufügen" }[lang], C.teal],
-                  ["lang", "🌐", ...T.menu.lang, C.purple],
+                  ["install", "📲", { sv: "Spara som app", en: "Save as app", de: "Als App speichern" }[lang], { sv: "Lägg imsafe på hemskärmen", en: "Add imsafe to your home screen", de: "imsafe zum Startbildschirm hinzufügen" }[lang], C.blue],
+                  ["lang", "🌐", ...T.menu.lang, C.blue],
                 ].map(([id, icon, mTitle, mSub, col]) => (
                   <button key={id} onClick={() => id === "lang" ? null : setMoreView(id)} className="w-full flex items-center gap-3 px-4 py-3.5 active:opacity-60 text-left"
                     style={{ borderTop: `0.5px solid ${C.line}` }}>
@@ -1797,12 +1846,12 @@ export default function ImsafeApp() {
                   <CardHead title={T.minima.vmcTitle} sub={T.minima.vmcSub} />
                   {T.minima.vmcRows.map((r) => (
                     <div key={r[0]} className="px-4 py-3 flex items-baseline justify-between gap-3" style={{ borderTop: `0.5px solid ${C.line}` }}>
-                      <span className="text-[14px] font-medium flex-1">{r[0]}</span>
-                      <span className="text-[14px]" style={mono}>{r[1]}</span>
-                      <span className="text-[11px] text-right" style={{ color: C.inkSoft, maxWidth: 130 }}>{r[2]}</span>
+                      <span className="text-[15px] font-medium flex-1">{r[0]}</span>
+                      <span className="text-[15px]" style={mono}>{r[1]}</span>
+                      <span className="text-[12px] text-right" style={{ color: C.inkSoft, maxWidth: 130 }}>{r[2]}</span>
                     </div>
                   ))}
-                  <p className="text-[11px] px-4 py-3" style={{ color: C.inkSoft }}>{T.minima.vmcFoot}</p>
+                  <p className="text-[12px] px-4 py-3" style={{ color: C.inkSoft }}>{T.minima.vmcFoot}</p>
                 </Card>
               </>
             )}
@@ -1819,7 +1868,7 @@ export default function ImsafeApp() {
                     </button>
                   )}
                   <div>
-                    <p className="text-[14px] font-bold mb-1.5">🍎 iPhone / iPad (Safari)</p>
+                    <p className="text-[15px] font-bold mb-1.5">🍎 iPhone / iPad (Safari)</p>
                     {({ sv: ["1. Tryck på Dela-knappen (rutan med pil uppåt)", "2. Skrolla ner → ”Lägg till på hemskärmen”", "3. Tryck ”Lägg till” – klart!"],
                        en: ["1. Tap the Share button (square with arrow)", "2. Scroll down → ”Add to Home Screen”", "3. Tap ”Add” – done!"],
                        de: ["1. Tippe auf Teilen (Quadrat mit Pfeil)", "2. Nach unten scrollen → „Zum Home-Bildschirm“", "3. „Hinzufügen“ tippen – fertig!"] }[lang]).map((s) => (
@@ -1827,7 +1876,7 @@ export default function ImsafeApp() {
                     ))}
                   </div>
                   <div>
-                    <p className="text-[14px] font-bold mb-1.5">🤖 Android (Chrome)</p>
+                    <p className="text-[15px] font-bold mb-1.5">🤖 Android (Chrome)</p>
                     {({ sv: ["1. Tryck på menyn ⋮ uppe till höger", "2. Välj ”Lägg till på startskärmen” eller ”Installera app”", "3. Bekräfta – klart!"],
                        en: ["1. Tap the ⋮ menu top right", "2. Choose ”Add to Home screen” or ”Install app”", "3. Confirm – done!"],
                        de: ["1. Tippe auf das ⋮-Menü oben rechts", "2. „Zum Startbildschirm“ oder „App installieren“ wählen", "3. Bestätigen – fertig!"] }[lang]).map((s) => (
@@ -1869,7 +1918,7 @@ export default function ImsafeApp() {
                     ],
                   })[lang].map(([h, t]) => (
                     <div key={h}>
-                      <p className="text-[14px] font-bold">{h}</p>
+                      <p className="text-[15px] font-bold">{h}</p>
                       <p className="text-[13px] mt-0.5" style={{ color: C.ink2 }}>{t}</p>
                     </div>
                   ))}
@@ -1901,7 +1950,7 @@ export default function ImsafeApp() {
                 {blogPosts.filter((p) => blogCat === 0 || p.cat === T.blog.cats[blogCat]).map((p) => (
                   <Card key={p.id}>
                     <div className="p-4">
-                      <div className="flex items-center gap-2 text-[11px] font-semibold" style={{ color: C.blue }}>
+                      <div className="flex items-center gap-2 text-[12px] font-semibold" style={{ color: C.blue }}>
                         <span className="px-2 py-0.5 rounded-full" style={{ background: C.blue + "14" }}>{p.cat}</span>
                         <span style={{ color: C.inkSoft, fontWeight: 400 }}>{p.date} · {p.read}</span>
                       </div>
@@ -1935,10 +1984,10 @@ export default function ImsafeApp() {
                 <CardHead title={{ sv: "Haveristatistik – vad lär den oss?", en: "Accident insights", de: "Unfallstatistik – was lernen wir?" }[lang]} sub={T.stats.sub} />
                 {ACC_DEF.map((d) => (
                   <div key={d.key} className="px-4 py-3" style={{ borderTop: `0.5px solid ${C.line}` }}>
-                    <span className="text-[14px] font-semibold">{T.stats.cats[d.key][0]}</span>
+                    <span className="text-[15px] font-semibold">{T.stats.cats[d.key][0]}</span>
                     <div className="mt-1.5 space-y-1">
-                      <div className="flex items-center gap-2"><div className="h-2.5 rounded-full" style={{ width: `${d.shareFatal * 2.4}%`, minWidth: 8, background: C.blue }} /><span className="text-[11px]" style={{ ...mono, color: C.inkSoft }}>{d.shareFatal} {T.stats.share}</span></div>
-                      <div className="flex items-center gap-2"><div className="h-2.5 rounded-full" style={{ width: `${d.lethality * 0.9}%`, minWidth: 8, background: C.red, opacity: 0.85 }} /><span className="text-[11px]" style={{ ...mono, color: C.inkSoft }}>{d.lethality} {T.stats.lethality}</span></div>
+                      <div className="flex items-center gap-2"><div className="h-2.5 rounded-full" style={{ width: `${d.shareFatal * 2.4}%`, minWidth: 8, background: C.blue }} /><span className="text-[12px]" style={{ ...mono, color: C.inkSoft }}>{d.shareFatal} {T.stats.share}</span></div>
+                      <div className="flex items-center gap-2"><div className="h-2.5 rounded-full" style={{ width: `${d.lethality * 0.9}%`, minWidth: 8, background: C.red, opacity: 0.85 }} /><span className="text-[12px]" style={{ ...mono, color: C.inkSoft }}>{d.lethality} {T.stats.lethality}</span></div>
                     </div>
                     <p className="text-[12px] mt-1" style={{ color: C.inkSoft }}>{T.stats.cats[d.key][1]}</p>
                   </div>
@@ -1962,7 +2011,7 @@ export default function ImsafeApp() {
                   </div>
                   {/* Swish-nummer + kopiera (deep-links stöds inte längre av Swish) */}
                   <div className="rounded-2xl p-4 text-center" style={{ background: C.fill }}>
-                    <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: C.inkSoft }}>Swisha till</p>
+                    <p className="text-[12px] font-bold uppercase tracking-wide" style={{ color: C.inkSoft }}>Swisha till</p>
                     <p className="text-[26px] font-bold mt-1" style={{ ...mono, color: C.ink, letterSpacing: 1 }}>0708&nbsp;86&nbsp;96&nbsp;97</p>
                     <button className="mt-3 px-5 py-2.5 rounded-xl font-semibold text-white active:opacity-70" style={{ background: C.grad }}
                       onClick={async () => {
@@ -1981,7 +2030,7 @@ export default function ImsafeApp() {
           </>
         )}
 
-        <footer className="text-[11px] pb-4 px-2" style={{ color: C.inkSoft }}>{T.footer}</footer>
+        <footer className="text-[12px] pb-4 px-2" style={{ color: C.inkSoft }}>{T.footer}</footer>
       </main>
 
       {/* ===== Bottenflikar ===== */}
@@ -2003,7 +2052,7 @@ export default function ImsafeApp() {
         <h1 style={{ fontSize: 22, fontWeight: 700 }}>{{ sv: "Mina personliga minima", en: "My personal minimums", de: "Meine persönlichen Minima" }[lang]} · imsafe.se</h1>
         <p style={{ fontSize: 12, color: "#555" }}>{new Date().toLocaleDateString(T.locale)}</p>
         <hr style={{ margin: "12px 0" }} />
-        <table style={{ width: "100%", fontSize: 14, borderCollapse: "collapse" }}><tbody>
+        <table style={{ width: "100%", fontSize: 15, borderCollapse: "collapse" }}><tbody>
           {MIN_DEF.map((m) => (
             <tr key={m.key} style={{ borderBottom: "1px solid #ddd" }}>
               <td style={{ padding: "8px 0", fontWeight: 600 }}>{T.minima.labels[m.key][0]}</td>
@@ -2013,7 +2062,7 @@ export default function ImsafeApp() {
           <tr><td style={{ padding: "8px 0", fontWeight: 600 }}>{T.minima.surface}</td>
             <td style={{ textAlign: "right", fontWeight: 700 }}>{surfaceOk === "asfalt" ? T.minima.surfAsphalt : T.minima.surfGrass}</td></tr>
         </tbody></table>
-        <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 16 }}>{T.minima.vmcTitle} · {T.minima.vmcSub}</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginTop: 16 }}>{T.minima.vmcTitle} · {T.minima.vmcSub}</h3>
         <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}><tbody>
           {T.minima.vmcRows.map((r) => (
             <tr key={r[0]} style={{ borderBottom: "1px solid #eee" }}>
@@ -2021,7 +2070,7 @@ export default function ImsafeApp() {
             </tr>
           ))}
         </tbody></table>
-        <p style={{ fontSize: 11, color: "#555", marginTop: 16 }}>{{ sv: "Håll dem heliga – särskilt när du vill flyga som mest.", en: "Keep them sacred – especially when you most want to fly.", de: "Halte sie heilig – besonders wenn du am liebsten fliegen willst." }[lang]}</p>
+        <p style={{ fontSize: 12, color: "#555", marginTop: 16 }}>{{ sv: "Håll dem heliga – särskilt när du vill flyga som mest.", en: "Keep them sacred – especially when you most want to fly.", de: "Halte sie heilig – besonders wenn du am liebsten fliegen willst." }[lang]}</p>
         <p style={{ fontSize: 12, marginTop: 24 }}>{{ sv: "Underskrift", en: "Signature", de: "Unterschrift" }[lang]}: ______________________________</p>
       </div>
 
@@ -2032,7 +2081,7 @@ export default function ImsafeApp() {
         <h2 style={{ fontSize: 16, fontWeight: 700 }}>{T.report.verdict}: {model.verdict} — {T.report.risk} {model.level} ({model.riskPct}/100, {T.report.protection} {Math.round(model.protection * 100)} %)</h2>
         <p style={{ fontSize: 13 }}>{model.advice}</p>
         {decision && <p style={{ fontSize: 13, fontWeight: 700 }}>{T.report.decision}: {decision === "nogo" ? T.report.decNogo : T.report.decGo}</p>}
-        <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>{T.report.barriers}</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginTop: 14 }}>{T.report.barriers}</h3>
         <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}><tbody>
           {model.layers.map((l) => (
             <tr key={l.id} style={{ borderBottom: "1px solid #ddd" }}>
@@ -2040,20 +2089,20 @@ export default function ImsafeApp() {
             </tr>
           ))}
         </tbody></table>
-        <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>{T.report.factors}</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginTop: 14 }}>{T.report.factors}</h3>
         {model.active.length === 0 ? <p style={{ fontSize: 12 }}>{T.report.noneF}</p> : (
           <ul style={{ fontSize: 12, paddingLeft: 18 }}>{model.active.map((f) => <li key={f.key} style={{ marginBottom: 6 }}><b>{T.factors[f.key][0]}</b> ({f.barrier}, +{f.w})<br />{T.report.action}: {T.factors[f.key][1]}</li>)}</ul>
         )}
         {temNotes && (<>
-          <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>TEM</h3>
+          <h3 style={{ fontSize: 15, fontWeight: 700, marginTop: 14 }}>TEM</h3>
           <p style={{ fontSize: 12 }}>{temNotes}</p>
         </>)}
-        <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>{T.report.status}</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginTop: 14 }}>{T.report.status}</h3>
         <p style={{ fontSize: 12 }}>{T.decide.cols[0]} {Math.round(imsafePct * 100)} % · {T.decide.cols[2]} {Math.round(briefPct * 100)} % · {T.decide.cols[3]} {Math.round(walkPct * 100)} %</p>
-        <h3 style={{ fontSize: 14, fontWeight: 700, marginTop: 14 }}>{T.report.minima}</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginTop: 14 }}>{T.report.minima}</h3>
         <p style={{ fontSize: 12 }}>{MIN_DEF.map((m) => `${T.minima.labels[m.key][0]}: ${m.dir === "max" ? T.minima.max : T.minima.min} ${minVals[m.key]} ${m.unit}`).join(" · ")} · {T.minima.surface}: {surfaceOk === "asfalt" ? T.report.surfA : T.report.surfG}</p>
         <hr style={{ margin: "16px 0" }} />
-        <p style={{ fontSize: 11, color: "#555" }}>{T.report.formula}</p>
+        <p style={{ fontSize: 12, color: "#555" }}>{T.report.formula}</p>
         <p style={{ fontSize: 12, marginTop: 24 }}>{T.report.sign}: ______________________________ {T.report.date}: ______________</p>
       </div>
     </div>
