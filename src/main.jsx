@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import "./index.css";
 
 /* Lagringsshim: appen anropar window.storage (get/set/delete/list).
    På webben backas den av localStorage. Byts enkelt mot ett API
