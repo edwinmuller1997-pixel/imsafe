@@ -81,7 +81,7 @@ const PREFLIGHT_KEYS = ["notam", "airspace", "wx", "massbalance", "fuelplan", "f
 const PREFLIGHT_REF = { massbalance: "NCO.POL", fuelplan: "NCO.OP.125", paxbrief: "NCO.OP.130" };
 const WALK_DEF = [
   { id: "fluids", icon: "💧", colorKey: "blue", keys: ["oil", "fuelQty", "drain", "fuelCaps", "leaks"] },
-  { id: "electric", icon: "⚡", colorKey: "purple", keys: ["master", "lights", "pitot", "stall", "flaps"] },
+  { id: "electric", icon: "⚡", colorKey: "purple", keys: ["master", "fuelGauge", "lights", "pitot", "stall", "flaps"] },
   { id: "condition", icon: "🔍", colorKey: "green", keys: ["prop", "cowl", "wings", "tires", "struts", "static", "tiedown"] },
 ];
 const BARRIER_DEF = [
@@ -150,7 +150,7 @@ const I18N = {
       { name: "Beslut", q: "Dags att väga ihop allt.", time: "~30 sek" },
     ],
     stepOf: (n) => `Steg ${n} av 5`,
-    onboard: { hi: "Välkommen 👋", tag: "Fem steg. Fem minuter. Ett tydligt beslut.", tip: "Tips: ställ in dina minima under Mer → Minima.", start: "Sätt igång", langLabel: "Språk / Language / Sprache" },
+    onboard: { hi: "Välkommen 👋", tag: "Din checklista och riskanalys inför varje flygning", tip: "Tips: ställ in dina minima under Mer → Minima.", start: "Sätt igång", langLabel: "Språk / Language / Sprache" },
     imsafe: {
       title: "IMSAFE", subDone: "Du är grön – vidare till riskerna ✓", subTodo: "Bocka av uppifrån och ner – som på papperschecklistan",
       items: { illness: ["Illness", "Nej", "Fri från sjukdom som påverkar flygningen"], medication: ["Medication", "Nej", "Inga mediciner som påverkar omdöme eller vakenhet"], stress: ["Stress", "Nej", "Privat eller jobbrelaterad stress under kontroll"], alcohol: ["Alcohol", "Nej", "Minst 8 h flaska→spak och under laggräns (0,2 ‰)"], fatigue: ["Fatigue", "Ja", "Utvilad – tillräcklig sömn senaste natten"], eating: ["Eating", "Ja", "Ätit och druckit – energi för hela flygningen"] },
@@ -195,7 +195,7 @@ const I18N = {
     walk: {
       title: "Walkaround", subDone: "Planet genomgånget – sista blicken: inget kvarglömt på vingen? ✓", subTodo: "Vätskor → Elektronik → Skick. I din takt.",
       groups: { fluids: "Vätskor", electric: "Elektronik", condition: "Skick" },
-      items: { oil: ["Olja", "Nivå inom gränser, lock åtdraget"], fuelQty: ["Bränslemängd", "Visuellt verifierad i alla tankar"], drain: ["Dränering", "Alla punkter, fritt från vatten och partiklar"], fuelCaps: ["Tanklock", "Stängda och låsta"], leaks: ["Läckage", "Inga droppar eller fläckar under motor och vingar"], master: ["Huvudström", "På – batterispänning OK"], lights: ["Belysning", "Beacon, strobe, nav- och landningsljus"], pitot: ["Pitotvärme", "Känn att den blir varm (kort test)"], stall: ["Stallvarnare", "Testad"], flaps: ["Klaffar", "Ut och in, symmetriskt"], prop: ["Propeller", "Inga hack, sprickor eller glapp"], cowl: ["Motorkåpa", "Fäst, inga lösa föremål"], wings: ["Vingar och roder", "Hela ytor, fria rörelser"], tires: ["Däck", "Tryck och mönster OK"], struts: ["Dämpare", "Inget läckage"], static: ["Statiska portar", "Portar och pitotrör fria"], tiedown: ["Pitotskydd och bogserstång", "Borttagna – även förtöjning och klossar"] },
+      items: { oil: ["Olja", "Nivå inom gränser, lock åtdraget"], fuelQty: ["Bränslemängd", "Visuellt verifierad i alla tankar"], drain: ["Dränering", "Alla punkter, fritt från vatten och partiklar"], fuelCaps: ["Tanklock", "Stängda och låsta"], leaks: ["Läckage", "Inga droppar eller fläckar under motor och vingar"], master: ["Huvudström", "På – batterispänning OK"], fuelGauge: ["Bränslemätare", "Stämmer mot uppmätt mängd i tanken"], lights: ["Belysning", "Beacon, strobe, nav- och landningsljus"], pitot: ["Pitotvärme", "Känn att den blir varm (kort test)"], stall: ["Stallvarnare", "Testad"], flaps: ["Klaffar", "Ut och in, symmetriskt"], prop: ["Propeller", "Inga hack, sprickor eller glapp"], cowl: ["Motorkåpa", "Fäst, inga lösa föremål"], wings: ["Vingar och roder", "Hela ytor, fria rörelser – även gångjärn och sprintar"], tires: ["Däck", "Tryck och mönster OK"], struts: ["Dämpare", "Inget läckage"], static: ["Statiska portar", "Portar och pitotrör fria"], tiedown: ["Pitotskydd och bogserstång", "Borttagna – även förtöjning och klossar"] },
       poh: "Generisk lista – flygplanstypens egen checklista har alltid företräde.",
     },
     decide: { imsafeBlock: "IMSAFE ist nicht grün – heute nicht fliegen.", imsafeBlock: "IMSAFE is not green – don't fly today.", imsafeBlock: "IMSAFE är inte grön – flyg inte idag.",
@@ -334,7 +334,7 @@ const I18N = {
       { name: "Decision", q: "Time to weigh it all up.", time: "~30 sec" },
     ],
     stepOf: (n) => `Step ${n} of 5`,
-    onboard: { hi: "Welcome 👋", tag: "Five steps. Five minutes. One clear decision.", tip: "Tip: set your personal minimums under More → Minimums.", start: "Let's go", langLabel: "Språk / Language / Sprache" },
+    onboard: { hi: "Welcome 👋", tag: "Your checklist and risk analysis before every flight", tip: "Tip: set your personal minimums under More → Minimums.", start: "Let's go", langLabel: "Språk / Language / Sprache" },
     imsafe: {
       title: "IMSAFE", subDone: "You're in the green – on to the risks ✓", subTodo: "Tick top to bottom – like the paper checklist",
       items: { illness: ["Illness", "No", "Free of illness that affects the flight"], medication: ["Medication", "No", "No medication impairing judgement or alertness"], stress: ["Stress", "No", "Personal or work stress under control"], alcohol: ["Alcohol", "No", "At least 8 h bottle-to-throttle and within legal limits"], fatigue: ["Fatigue", "Yes", "Well rested – enough sleep last night"], eating: ["Eating", "Yes", "Fed and hydrated – energy for the whole flight"] },
@@ -379,7 +379,7 @@ const I18N = {
     walk: {
       title: "Walkaround", subDone: "Aircraft checked – one last look: nothing left on the wing? ✓", subTodo: "Fluids → Electrics → Condition. At your pace.",
       groups: { fluids: "Fluids", electric: "Electrics", condition: "Condition" },
-      items: { oil: ["Oil", "Level within limits, cap secure"], fuelQty: ["Fuel quantity", "Visually verified in all tanks"], drain: ["Fuel drains", "All points, free of water and debris"], fuelCaps: ["Fuel caps", "Closed and locked"], leaks: ["Leaks", "No drips or stains under engine or wings"], master: ["Master", "On – battery voltage OK"], lights: ["Lights", "Beacon, strobe, nav and landing"], pitot: ["Pitot heat", "Feel it getting warm (brief test)"], stall: ["Stall warner", "Tested"], flaps: ["Flaps", "Out and in, symmetrical"], prop: ["Propeller", "No nicks, cracks or play"], cowl: ["Cowling", "Secure, no loose objects"], wings: ["Wings and controls", "Surfaces intact, free movement"], tires: ["Tyres", "Pressure and tread OK"], struts: ["Struts", "Correct extension, no leaks"], static: ["Static ports", "Ports and pitot clear"], tiedown: ["Tie-downs", "Tie-downs, chocks and pitot cover REMOVED"] },
+      items: { oil: ["Oil", "Level within limits, cap secure"], fuelQty: ["Fuel quantity", "Visually verified in all tanks"], drain: ["Fuel drains", "All points, free of water and debris"], fuelCaps: ["Fuel caps", "Closed and locked"], leaks: ["Leaks", "No drips or stains under engine or wings"], master: ["Master", "On – battery voltage OK"], fuelGauge: ["Fuel gauges", "Agree with the measured quantity"], lights: ["Lights", "Beacon, strobe, nav and landing"], pitot: ["Pitot heat", "Feel it getting warm (brief test)"], stall: ["Stall warner", "Tested"], flaps: ["Flaps", "Out and in, symmetrical"], prop: ["Propeller", "No nicks, cracks or play"], cowl: ["Cowling", "Secure, no loose objects"], wings: ["Wings and controls", "Surfaces intact, free movement – including hinges and pins"], tires: ["Tyres", "Pressure and tread OK"], struts: ["Struts", "Correct extension, no leaks"], static: ["Static ports", "Ports and pitot clear"], tiedown: ["Tie-downs", "Tie-downs, chocks and pitot cover REMOVED"] },
       poh: "Generic list – your aircraft type's own checklist always takes precedence.",
     },
     decide: {
@@ -513,7 +513,7 @@ const I18N = {
       { name: "Entscheidung", q: "Zeit, alles abzuwägen.", time: "~30 Sek" },
     ],
     stepOf: (n) => `Schritt ${n} von 5`,
-    onboard: { hi: "Willkommen 👋", tag: "Fünf Schritte. Fünf Minuten. Eine klare Entscheidung.", tip: "Tipp: Stelle deine Minima unter Mehr → Minima ein.", start: "Los geht's", langLabel: "Språk / Language / Sprache" },
+    onboard: { hi: "Willkommen 👋", tag: "Deine Checkliste und Risikoanalyse vor jedem Flug", tip: "Tipp: Stelle deine Minima unter Mehr → Minima ein.", start: "Los geht's", langLabel: "Språk / Language / Sprache" },
     imsafe: {
       title: "IMSAFE", subDone: "Du bist im grünen Bereich – weiter zu den Risiken ✓", subTodo: "Von oben nach unten abhaken – wie auf der Papier-Checkliste",
       items: { illness: ["Illness", "Nein", "Frei von Krankheit, die den Flug beeinträchtigt"], medication: ["Medication", "Nein", "Keine Medikamente, die Urteilsvermögen oder Wachheit beeinträchtigen"], stress: ["Stress", "Nein", "Privater oder beruflicher Stress unter Kontrolle"], alcohol: ["Alcohol", "Nein", "Mindestens 8 h bottle to throttle – 0,0 als Richtwert"], fatigue: ["Fatigue", "Ja", "Ausgeruht – genug Schlaf letzte Nacht"], eating: ["Eating", "Ja", "Gegessen und getrunken – Energie für den ganzen Flug"] },
@@ -558,7 +558,7 @@ const I18N = {
     walk: {
       title: "Außencheck", subDone: "Flugzeug geprüft – letzter Blick: nichts auf der Fläche vergessen? ✓", subTodo: "Flüssigkeiten → Elektrik → Zustand. In deinem Tempo.",
       groups: { fluids: "Flüssigkeiten", electric: "Elektrik", condition: "Zustand" },
-      items: { oil: ["Öl", "Stand innerhalb der Grenzen, Deckel fest"], fuelQty: ["Kraftstoffmenge", "In allen Tanks geprüft"], drain: ["Fuel Drain", "Alle Punkte, frei von Wasser und Partikeln"], fuelCaps: ["Tankdeckel", "Geschlossen und verriegelt"], leaks: ["Lecks", "Keine Tropfen oder Flecken unter Motor und Flächen"], master: ["Hauptschalter", "Ein – Batteriespannung OK"], lights: ["Beleuchtung", "Beacon, Strobe, Nav- und Landelicht"], pitot: ["Pitot Heat", "Kurz testen, wird warm"], stall: ["Überziehwarnung", "Getestet"], flaps: ["Klappen", "Fahren symmetrisch ein und aus"], prop: ["Propeller", "Keine Kerben, Risse oder Spiel"], cowl: ["Motorhaube", "Fest, keine losen Gegenstände"], wings: ["Flächen und Rumpf", "Oberflächen intakt, freigängig"], tires: ["Reifen", "Druck und Profil OK"], struts: ["Struts", "Korrekter Ausschub, keine Lecks"], static: ["Statikports", "Ports und Pitotrohr frei"], tiedown: ["Verzurrung", "Verzurrung, Bremsklötze und Pitotabdeckung ENTFERNT"] },
+      items: { oil: ["Öl", "Stand innerhalb der Grenzen, Deckel fest"], fuelQty: ["Kraftstoffmenge", "In allen Tanks geprüft"], drain: ["Fuel Drain", "Alle Punkte, frei von Wasser und Partikeln"], fuelCaps: ["Tankdeckel", "Geschlossen und verriegelt"], leaks: ["Lecks", "Keine Tropfen oder Flecken unter Motor und Flächen"], master: ["Hauptschalter", "Ein – Batteriespannung OK"], fuelGauge: ["Tankanzeige", "Stimmt mit der gepeilten Menge überein"], lights: ["Beleuchtung", "Beacon, Strobe, Nav- und Landelicht"], pitot: ["Pitot Heat", "Kurz testen, wird warm"], stall: ["Überziehwarnung", "Getestet"], flaps: ["Klappen", "Fahren symmetrisch ein und aus"], prop: ["Propeller", "Keine Kerben, Risse oder Spiel"], cowl: ["Motorhaube", "Fest, keine losen Gegenstände"], wings: ["Flächen und Rumpf", "Oberflächen intakt, freigängig – auch Scharniere und Bolzen"], tires: ["Reifen", "Druck und Profil OK"], struts: ["Struts", "Korrekter Ausschub, keine Lecks"], static: ["Statikports", "Ports und Pitotrohr frei"], tiedown: ["Verzurrung", "Verzurrung, Bremsklötze und Pitotabdeckung ENTFERNT"] },
       poh: "Generische Liste – die Checkliste deines Flugzeugmusters hat immer Vorrang.",
     },
     decide: {
@@ -812,9 +812,6 @@ export default function ImsafeApp() {
   const [night, setNight] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [installEvt, setInstallEvt] = useState(null);
-  const isAdmin = typeof window !== "undefined" && window.location.pathname.replace(/\/+$/, "") === "/admin";
-  const [adminPw, setAdminPw] = useState("");
-  const [adminOk, setAdminOk] = useState(false);
   useEffect(() => {
     const h = (e) => { e.preventDefault(); setInstallEvt(e); };
     window.addEventListener("beforeinstallprompt", h);
@@ -1202,81 +1199,6 @@ export default function ImsafeApp() {
   const preItems = PREFLIGHT_KEYS.map((k) => ({ key: k, label: T.brief.pre[k][0], info: T.brief.pre[k][1], ref: PREFLIGHT_REF[k] || "" }));
   const langNames = { sv: "Svenska", en: "English", de: "Deutsch" };
   const langMeta = { sv: ["SV", "Svenska"], en: ["EN", "English"], de: ["DE", "Deutsch"] }; /* textkoder – flaggemojis renderas inte på Windows */
-
-  /* ===== ADMIN (imsafe.se/admin) ===== */
-  if (isAdmin) {
-    const ev = readEvents();
-    const days = {};
-    ev.forEach((x) => { days[x.d] = days[x.d] || { visit: 0, assess: 0, go: 0, nogo: 0 }; days[x.d][x.e] = (days[x.d][x.e] || 0) + 1; });
-    const dates = Object.keys(days).sort().reverse().slice(0, 30);
-    const tot = (e) => ev.filter((x) => x.e === e).length;
-    const maxDay = Math.max(1, ...dates.map((d) => days[d].visit + days[d].assess));
-    return (
-      <div className="min-h-screen" style={{ background: C.bg, color: C.ink, padding: 20, ...SF }}>
-        <div className="max-w-2xl mx-auto pt-6">
-          <div className="flex items-center gap-2 mb-6">
-            <svg width="30" height="30" viewBox="0 0 30 30"><rect width="30" height="30" rx="9" fill="#0B5CD6" /><path d="M7.5 16 L12.5 21 L22.5 9" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" /><circle cx="9.5" cy="10" r="1.1" fill="rgba(255,255,255,0.5)" /><circle cx="13" cy="8" r="0.8" fill="rgba(255,255,255,0.35)" /></svg>
-            <h1 className="text-[24px] font-bold">imsafe · admin</h1>
-          </div>
-          {!adminOk ? (
-            <Card>
-              <div className="p-5">
-                <p className="text-[15px] font-semibold mb-2">Lösenord</p>
-                <input type="password" style={inputF()} value={adminPw} onChange={(e) => setAdminPw(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && adminPw === "455bd6dd52" && setAdminOk(true)} />
-                <button className="w-full mt-2 py-3 rounded-xl font-semibold text-white" style={{ background: C.grad }}
-                  onClick={() => adminPw === "455bd6dd52" && setAdminOk(true)}>Logga in</button>
-                <p className="text-[12px] mt-3" style={{ color: C.inkSoft }}>Obs: enkelt skydd mot nyfikna – känslig data ska aldrig ligga här.</p>
-              </div>
-            </Card>
-          ) : (
-            <>
-              <div className="grid grid-cols-4 gap-2 mb-4">
-                {[["Besök", tot("visit"), C.blue], ["Bedömn.", tot("assess"), C.indigo], ["GO", tot("go"), C.green], ["NO-GO", tot("nogo"), C.purple]].map(([l, v, col]) => (
-                  <Card key={l} style={{ marginBottom: 0 }}>
-                    <div className="p-3 text-center">
-                      <p className="text-[22px] font-bold" style={{ color: col }}>{v}</p>
-                      <p className="text-[12px] font-semibold" style={{ color: C.inkSoft }}>{l}</p>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-              <Card>
-                <CardHead title="Per dag (30 senaste)" sub="Besök + bedömningar" />
-                <div className="px-4 pb-4 space-y-1.5">
-                  {dates.length === 0 && <p className="text-[13px]" style={{ color: C.inkSoft }}>Inga händelser ännu.</p>}
-                  {dates.map((d) => (
-                    <div key={d} className="flex items-center gap-2">
-                      <span className="text-[12px]" style={{ ...mono, color: C.inkSoft, width: 78 }}>{d}</span>
-                      <div className="flex-1 h-4 rounded-md overflow-hidden flex" style={{ background: C.fill }}>
-                        <div style={{ width: `${(days[d].visit / maxDay) * 100}%`, background: C.blue }} />
-                        <div style={{ width: `${(days[d].assess / maxDay) * 100}%`, background: C.indigo }} />
-                      </div>
-                      <span className="text-[12px]" style={{ ...mono, color: C.inkSoft, width: 110, textAlign: "right" }}>
-                        {days[d].visit}b · {days[d].assess}bed · {days[d].go || 0}go · {days[d].nogo || 0}no
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-              <Card>
-                <div className="p-4">
-                  <p className="text-[13px] font-semibold mb-1">ℹ️ Vad visas här?</p>
-                  <p className="text-[12px]" style={{ color: C.ink2 }}>
-                    Statistiken ovan är från DEN HÄR enhetens webbläsare (ingen central databas ännu – appen sparar allt lokalt hos varje användare, per designval).
-                    Global trafik (alla besökare, länder, enheter, per datum) finns i Vercel → ditt projekt → fliken Analytics.
-                    Vill du ha global knapp-statistik här på /admin krävs en liten gratis databas (Supabase) – säg till så bygger vi det som nästa steg.
-                  </p>
-                </div>
-              </Card>
-              <button className="w-full py-3 rounded-xl font-semibold mb-8" style={{ background: C.card, color: C.blue }}
-                onClick={() => (window.location.href = "/")}>← Till appen</button>
-            </>
-          )}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen" style={{ background: C.bg, color: C.ink, paddingBottom: 96, ...SF }}>
