@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ATPL Games · IMSAFE</title>
+<meta name="description" content="Streak-based training games for EASA ATPL theory: Freedoms of the Air, ICAO light signals and declared distances. One wrong answer and you start over.">
+<meta property="og:title" content="ATPL Games · IMSAFE">
+<meta property="og:description" content="Streak-based training games for EASA ATPL theory.">
+<meta name="theme-color" content="#0B0F13">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230B0F13'/%3E%3Cpath d='M56 38v-5L36 21V9a4 4 0 0 0-8 0v12L8 33v5l20-6v11l-5 4v4l9-3 9 3v-4l-5-4V32z' fill='%233CD6F0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --panel:#0B0F13; --bezel:#161C23; --screen:#0E141A; --edge:#26303B; --edge2:#35424F;
+  --ink:#E8EEF3; --dim:#8494A3;
+  --cyan:#3CD6F0; --magenta:#E452D9; --green:#35D07F; --amber:#FFB020; --red:#FF4D4D; --white:#FFFFFF;
+  --sans:"B612",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"B612 Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--panel)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100%;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%,rgba(60,214,240,.08),transparent 70%),
+    repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.012) 3px 4px),
+    var(--panel)}
+.wrap{max-width:820px;margin:0 auto;padding:18px 18px 48px}
+.hide{display:none!important}
+a{color:var(--cyan)}
+button{font-family:inherit}
+
+/* Top strip */
+.strip{display:flex;align-items:stretch;justify-content:space-between;gap:10px;flex-wrap:wrap;border:1px solid var(--edge);border-radius:8px;background:var(--bezel);padding:8px 10px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+.brand svg{width:26px;height:26px;fill:var(--cyan)}
+.brand b{font-size:16px;letter-spacing:.04em}
+.brand span{color:var(--dim);font-size:13px}
+.fields{display:flex;gap:6px;flex-wrap:wrap}
+.field{font-family:var(--mono);font-size:12px;color:var(--dim);border:1px solid var(--edge);border-radius:4px;padding:4px 9px;background:var(--screen);line-height:1.2;min-width:74px}
+.field b{display:block;color:var(--cyan);font-size:17px}
+.field.g b{color:var(--green)}
+
+/* Home */
+.hero{margin:40px 0 26px}
+.hero h1{font-size:44px;line-height:1.05;margin:0;letter-spacing:-.01em}
+.hero p{color:var(--dim);margin:12px 0 0;max-width:58ch}
+.ex{border:1px solid var(--edge);border-radius:10px;background:linear-gradient(180deg,var(--bezel),var(--screen));padding:18px;margin-bottom:14px}
+.ex-top{display:flex;align-items:flex-start;gap:16px}
+.ex-num{flex:0 0 46px;height:46px;border:1px solid var(--edge2);border-radius:6px;display:grid;place-items:center;font-family:var(--mono);font-size:22px;color:var(--cyan);background:var(--panel)}
+.ex h2{margin:0;font-size:22px;line-height:1.2}
+.ex .src{color:var(--dim);font-size:14px}
+.route-mini{font-family:var(--mono);font-size:13px;color:var(--magenta);margin-top:4px}
+.ex-best{margin-left:auto;text-align:right;font-family:var(--mono);font-size:12px;color:var(--dim);white-space:nowrap}
+.ex-best b{display:block;color:var(--green);font-size:22px}
+.ex-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--edge)}
+.goal-lbl{font-size:13px;color:var(--dim);margin-right:8px}
+.seg{display:inline-flex;border:1px solid var(--edge2);border-radius:6px;overflow:hidden}
+.seg button{background:transparent;border:0;border-right:1px solid var(--edge2);color:var(--dim);font-family:var(--mono);font-size:14px;padding:7px 12px;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--cyan);color:#062028;font-weight:700}
+.seg button:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
+.btn{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--cyan);background:rgba(60,214,240,.12);color:var(--ink);border-radius:6px;padding:9px 16px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn:hover{background:rgba(60,214,240,.22)}
+.btn:focus-visible{outline:2px solid var(--white);outline-offset:2px}
+.btn:disabled{opacity:.35;cursor:default}
+.btn kbd,.kbd{font-family:var(--mono);font-size:11px;color:var(--dim);border:1px solid var(--edge2);border-radius:3px;padding:1px 5px;font-weight:400}
+.btn.quiet{border-color:var(--edge2);background:transparent}
+.foot{color:var(--dim);font-size:13px;margin-top:22px}
+
+/* Route / progress */
+.route{margin:18px 0 0;border:1px solid var(--edge);border-radius:10px;background:var(--screen);padding:14px 16px 12px}
+.route-row{display:flex;align-items:center;gap:12px}
+.apt{font-family:var(--mono);font-size:14px;font-weight:700;border:1px solid var(--edge2);border-radius:4px;padding:4px 8px;color:var(--ink);background:var(--panel)}
+.apt.arr{border-color:var(--magenta);color:var(--magenta)}
+.track{position:relative;flex:1;height:30px}
+.track::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed var(--edge2)}
+.leg{position:absolute;left:0;top:50%;height:3px;margin-top:-1px;background:var(--magenta);box-shadow:0 0 8px rgba(228,82,217,.6);transition:width .45s cubic-bezier(.3,.9,.4,1)}
+.wps{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center}
+.wp{width:9px;height:9px;transform:rotate(45deg);border:2px solid var(--edge2);background:var(--screen);transition:all .25s}
+.wp.on{border-color:var(--magenta);background:var(--magenta)}
+.ac{position:absolute;top:50%;width:28px;height:28px;transform:translate(-50%,-50%);transition:left .45s cubic-bezier(.3,.9,.4,1);z-index:2}
+.ac svg{width:100%;height:100%;fill:var(--white);filter:drop-shadow(0 0 4px rgba(0,0,0,.8))}
+.readout{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:8px;flex-wrap:wrap;gap:6px}
+.readout b{color:var(--ink)}
+.route.fail{animation:mc .9s}
+@keyframes mc{0%,40%,80%{border-color:var(--amber);box-shadow:0 0 0 2px rgba(255,176,32,.35)}20%,60%,100%{border-color:var(--edge);box-shadow:none}}
+
+/* Question screen */
+.mfd{margin-top:14px;border:1px solid var(--edge);border-radius:12px;background:var(--bezel);padding:10px}
+.scr{border:1px solid var(--edge);border-radius:8px;background:var(--screen);padding:20px}
+.qtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tag{font-family:var(--mono);font-size:12px;border:1px solid var(--edge2);border-radius:3px;padding:2px 7px;color:var(--dim)}
+.tag.c{color:var(--cyan);border-color:rgba(60,214,240,.5)}
+.tag.rev{color:var(--panel);background:var(--cyan);border-color:var(--cyan)}
+.qbody{display:flex;gap:18px;align-items:flex-start}
+.q{font-size:20px;font-weight:700;line-height:1.4;margin:0 0 18px;max-width:64ch}
+.opts{display:grid;gap:9px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--panel);color:var(--ink);border:1px solid var(--edge2);border-radius:6px;padding:12px 14px;font-size:16px;cursor:pointer;transition:border-color .12s,background .12s}
+.opt:hover:not(:disabled){border-color:var(--cyan)}
+.opt:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.opt:disabled{cursor:default}
+.k{flex:0 0 28px;height:28px;display:grid;place-items:center;border:1px solid var(--edge2);border-radius:4px;font-family:var(--mono);font-size:14px;color:var(--cyan)}
+.opt.right{border-color:var(--green);background:rgba(53,208,127,.12)}
+.opt.right .k{color:var(--green);border-color:var(--green)}
+.opt.wrong{border-color:var(--amber);background:rgba(255,176,32,.12)}
+.opt.wrong .k{color:var(--amber);border-color:var(--amber)}
+.opt.fade{opacity:.5}
+.ann{margin-top:14px;border:1px solid var(--green);border-radius:6px;padding:12px 14px;background:rgba(53,208,127,.07)}
+.ann.bad{border-color:var(--amber);background:rgba(255,176,32,.07)}
+.ann h3{margin:0 0 4px;font-family:var(--mono);font-size:14px;letter-spacing:.06em;color:var(--green)}
+.ann.bad h3{color:var(--amber)}
+.ann p{margin:0;max-width:66ch}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;padding:4px 2px 0;flex-wrap:wrap}
+.pos{font-family:var(--mono);font-size:13px;color:var(--dim)}
+.keys{font-size:12px;color:var(--dim);margin-top:12px;display:flex;gap:14px;flex-wrap:wrap}
+
+/* Lamp */
+.lamp{flex:0 0 58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2a323b,#11161b);border:3px solid #2c3540;position:relative;margin-top:2px}
+.lamp::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--lc);box-shadow:0 0 16px var(--lc),0 0 36px var(--lc)}
+.lamp.green{--lc:#35D07F}.lamp.red{--lc:#FF3B3B}.lamp.white{--lc:#FFFFFF}
+.lamp.flash::after{animation:fl .7s steps(1) infinite}
+@keyframes fl{50%{opacity:.06;box-shadow:none}}
+.lamp.pyro::after{inset:14px;animation:py 1.2s ease-out infinite}
+@keyframes py{0%{transform:translateY(16px) scale(.4);opacity:0}30%{opacity:1}100%{transform:translateY(-10px) scale(1.3);opacity:0}}
+
+.fig{border:1px solid var(--edge);border-radius:6px;background:#0A0F14;padding:10px 8px 4px;margin-bottom:16px}
+.fig svg{display:block;width:100%;height:auto}
+
+/* Memory aid */
+.aid{margin-top:18px;border:1px solid var(--edge);border-radius:10px;background:var(--bezel);padding:12px 16px}
+.aid summary{cursor:pointer;font-weight:700;font-size:16px;color:var(--cyan)}
+.aid .lead{margin:12px 0 8px;font-size:15px}
+.story{display:grid;gap:7px}
+.st{display:flex;gap:12px;align-items:flex-start;background:var(--screen);border:1px solid var(--edge);border-radius:6px;padding:10px 12px;font-size:14.5px;line-height:1.45}
+.st span{color:var(--dim)}
+.lt{flex:0 0 36px;height:36px;display:grid;place-items:center;border:1px solid var(--magenta);color:var(--magenta);border-radius:4px;font-family:var(--mono);font-weight:700;font-size:20px}
+.st .lamp{flex:0 0 36px;height:36px;border-width:2px;margin:0}
+.st .lamp::after{inset:6px}
+.rule{border-left:3px solid var(--magenta);background:rgba(228,82,217,.06);border-radius:4px;padding:10px 14px;font-size:14.5px;display:grid;gap:6px}
+
+/* Landed */
+.win{position:fixed;inset:0;display:none;place-items:center;background:rgba(5,8,11,.86);z-index:10;padding:20px}
+.win.show{display:grid}
+.win .box{background:var(--bezel);border:1px solid var(--green);border-radius:12px;padding:28px 26px;text-align:center;max-width:440px;box-shadow:0 0 40px rgba(53,208,127,.15)}
+.win .code{font-family:var(--mono);color:var(--green);font-size:14px;letter-spacing:.08em}
+.win h2{font-size:34px;margin:6px 0 4px}
+.win p{color:var(--dim);margin:0 0 18px}
+.win .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+@media (max-width:560px){
+  .hero h1{font-size:34px}.q{font-size:18px}.scr{padding:16px}
+  .ex-best{display:none}.lamp{flex-basis:46px;height:46px}
+  .field{min-width:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="strip">
+    <a class="brand" href="#"><svg viewBox="0 0 64 64"><path d="M56 38v-5L36 21V9a4 4 0 0 0-8 0v12L8 33v5l20-6v11l-5 4v4l9-3 9 3v-4l-5-4V32z"/></svg><div><b>ATPL Games</b><br><span>by IMSAFE</span></div></a>
+    <div class="fields hide" id="fields">
+      <div class="field g">STREAK<b id="fStreak">0/20</b></div>
+      <div class="field">BEST<b id="fBest">0</b></div>
+      <div class="field">Q NO<b id="fQ">1</b></div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <main id="home">
+    <div class="hero">
+      <h1>Train until it sticks.</h1>
+      <p>Answer a set number of questions in a row. One wrong answer and the streak resets to zero. Pick an exercise and a target below.</p>
+    </div>
+    <div id="exList"></div>
+    <div class="foot">Keyboard: <span class="kbd">1</span>–<span class="kbd">4</span> answer · <span class="kbd">Enter</span> next · <span class="kbd">←</span> <span class="kbd">→</span> browse questions · <span class="kbd">Esc</span> menu</div>
+  </main>
+
+  <!-- PLAY -->
+  <main id="play" class="hide">
+    <div class="route" id="route">
+      <div class="route-row">
+        <span class="apt" id="dep">DEP</span>
+        <div class="track">
+          <div class="leg" id="leg"></div>
+          <div class="wps" id="wps"></div>
+          <div class="ac" id="ac"><svg viewBox="0 0 64 64"><path d="M56 38v-5L36 21V9a4 4 0 0 0-8 0v12L8 33v5l20-6v11l-5 4v4l9-3 9 3v-4l-5-4V32z" transform="rotate(90 32 32)"/></svg></div>
+        </div>
+        <span class="apt arr" id="arr">ARR</span>
+      </div>
+      <div class="readout"><span id="exName"></span><span>Streak <b id="rStreak">0</b> / <b id="rGoal">20</b> · one wrong = back to 0</span></div>
+    </div>
+
+    <div class="mfd">
+      <div class="scr">
+        <div class="qtop" id="qtop"></div>
+        <div class="fig" id="figure"></div>
+        <div class="qbody">
+          <div id="visual"></div>
+          <div style="flex:1;min-width:0">
+            <p class="q" id="q"></p>
+            <div class="opts" id="opts"></div>
+          </div>
+        </div>
+        <div class="ann hide" id="ann" role="status" aria-live="polite"><h3 id="annT"></h3><p id="annP"></p></div>
+      </div>
+      <div class="nav">
+        <button class="btn quiet" id="prev"><kbd>←</kbd> Previous</button>
+        <span class="pos" id="pos"></span>
+        <button class="btn" id="next">Next <kbd>Enter</kbd></button>
+      </div>
+    </div>
+
+    <details class="aid" id="aid"></details>
+  </main>
+</div>
+
+<div class="win" id="win">
+  <div class="box">
+    <div class="code" id="winCode">ARRIVED</div>
+    <h2>Landed.</h2>
+    <p id="winTxt"></p>
+    <div class="row">
+      <button class="btn" id="again">Fly again <kbd>Enter</kbd></button>
+      <a class="btn quiet" href="#">Menu <kbd>Esc</kbd></a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= Freedoms of the Air ================= */
+const OS="OSDOW: 1 Overfly, 2 Stop, 3 put Down, 4 take On, 5 on the Way.";
+const FOTA=[
+ {q:"The right to fly across the territory of another State WITHOUT landing is the:",a:"First Freedom",d:["Second Freedom","Third Freedom","Fifth Freedom"],e:"O = Overfly = 1st. Also called 'peaceful transit'."},
+ {q:"The right to land in another State for non-traffic purposes (e.g. refuelling or repair) is the:",a:"Second Freedom",d:["First Freedom","Fourth Freedom","Third Freedom"],e:"S = Stop = 2nd. Technical stop: fuel, fix, refuge. Nobody gets on or off."},
+ {q:"The right to put down, in the territory of another State, traffic coming from the carrier's home State is the:",a:"Third Freedom",d:["Fourth Freedom","Fifth Freedom","Second Freedom"],e:"D = put Down = 3rd. From home → drop them off abroad."},
+ {q:"The right to take on, in the territory of another State, traffic destined for the carrier's home State is the:",a:"Fourth Freedom",d:["Third Freedom","Fifth Freedom","Sixth Freedom"],e:"O = take On = 4th. Pick up abroad → fly them home."},
+ {q:"The right to put down and take on, in another State, traffic coming from or destined to a THIRD State is the:",a:"Fifth Freedom",d:["Fourth Freedom","Seventh Freedom","Third Freedom"],e:"W = on the Way = 5th. Traffic to/from a third State, picked up along the route."},
+ {q:"A scheduled flight from Singapore to Thailand has the right to fly over Malaysia WITHOUT landing, and to land in Malaysia for non-traffic purposes. These rights are granted by the ___ Freedoms of the Air.",a:"First and Second",d:["First and Third","Second and Fifth","Third and Fourth"],e:"Overfly = O (1st), technical landing = S (2nd)."},
+ {q:"Which Freedoms of the Air are the 'technical' freedoms?",a:"First and Second",d:["Third and Fourth","First, Second and Third","Fourth and Fifth"],e:"O and S: no traffic is exchanged. "+OS},
+ {q:"Which Freedoms of the Air are the 'commercial' (traffic) freedoms among the basic five in ICAO Doc 9626?",a:"Third, Fourth and Fifth",d:["First and Second","Second, Third and Fourth","First to Fifth"],e:"D, O, W: people get on and off, so it's commercial."},
+ {q:"An SAS scheduled flight Stockholm–London disembarks passengers in London who boarded in Stockholm. Which freedom?",a:"Third Freedom",d:["Fourth Freedom","Fifth Freedom","First Freedom"],e:"From the home State (Sweden) → put Down in the UK = D = 3rd."},
+ {q:"An SAS scheduled flight London–Stockholm takes on passengers in London bound for Stockholm. Which freedom?",a:"Fourth Freedom",d:["Third Freedom","Fifth Freedom","Second Freedom"],e:"Take On in the UK, destination the home State = O = 4th."},
+ {q:"An SAS flight Stockholm–Paris–Madrid carries passengers who board in Paris and leave in Madrid. Which freedom?",a:"Fifth Freedom",d:["Third Freedom","Fourth Freedom","Seventh Freedom"],e:"Paris → Madrid: neither from nor to Sweden, picked up on the way = W = 5th."},
+ {q:"A transatlantic flight lands at Gander only to refuel. No passengers or cargo are loaded or offloaded. Which freedom?",a:"Second Freedom",d:["First Freedom","Third Freedom","Fifth Freedom"],e:"Stop to refuel = S = 2nd."},
+ {q:"In the mnemonic OSDOW, what does 'D' stand for?",a:"put Down (Third Freedom)",d:["Depart (First Freedom)","Divert (Second Freedom)","Destination (Fourth Freedom)"],e:OS},
+ {q:"In the mnemonic OSDOW, what does 'W' stand for?",a:"on the Way (Fifth Freedom)",d:["Weather stop (Second Freedom)","Worldwide (Seventh Freedom)","Wet lease (Fourth Freedom)"],e:OS},
+ {q:"In the mnemonic OSDOW, the second 'O' stands for:",a:"take On (Fourth Freedom)",d:["Overfly (First Freedom)","Onward (Fifth Freedom)","Operate (Third Freedom)"],e:"First O = Overfly (1), second O = take On (4). "+OS},
+ {q:"An Argentinian airline flies Buenos Aires–São Paulo and disembarks its Buenos Aires passengers in Brazil. Which freedom?",a:"Third Freedom",d:["Fourth Freedom","Fifth Freedom","Second Freedom"],e:"Home State Argentina → put Down in Brazil = D = 3rd."},
+ {q:"The same Argentinian airline boards passengers in São Paulo destined for Buenos Aires. Which freedom?",a:"Fourth Freedom",d:["Third Freedom","Fifth Freedom","Eighth Freedom"],e:"Take On in Brazil, flying home to Argentina = O = 4th."},
+ {q:"A Finnair flight Helsinki–Tokyo crosses Russian airspace without landing. Which freedom is used over Russia?",a:"First Freedom",d:["Second Freedom","Fifth Freedom","Third Freedom"],e:"Overfly = O = 1st."},
+ {q:"The First Freedom of the Air is also described as:",a:"Peaceful transit",d:["Technical stop","Cabotage","Beyond rights"],e:"1st = flying across peacefully, without landing."},
+ {q:"Which activity is NOT permitted during a Second Freedom stop?",a:"Boarding revenue passengers",d:["Refuelling","Repairs","Seeking refuge"],e:"2nd = non-traffic. Fuel, repairs, refuge, but no traffic on or off."},
+ {q:"An Emirates flight Dubai–Milan–New York carries passengers who board in Milan and fly to New York. Which freedom?",a:"Fifth Freedom",d:["Sixth Freedom","Seventh Freedom","Fourth Freedom"],e:"Milan → New York: neither from nor to the home State, on the way = W = 5th."},
+ {q:"In which ICAO document are the Freedoms of the Air defined?",a:"Doc 9626 (Manual on the Regulation of International Air Transport)",d:["Doc 4444 (PANS-ATM)","Doc 8168 (PANS-OPS)","Doc 7030 (Regional Supplementary Procedures)"],e:"'Nine-six-two-six, the freedoms are fixed.' Doc 9626 starts with 9, and there are 9 freedoms."},
+ {q:"The International Air Services Transit Agreement (the 'Two Freedoms Agreement') grants:",a:"First and Second Freedoms",d:["Third and Fourth Freedoms","First to Fifth Freedoms","Fifth Freedom only"],e:"Transit = passing through = O and S."},
+ {q:"The International Air Transport Agreement (the 'Five Freedoms Agreement') grants:",a:"First to Fifth Freedoms",d:["First and Second Freedoms","Third and Fourth Freedoms","Eighth and Ninth Freedoms"],e:"Transport = all five: OSDOW."},
+ {q:"Which pair of freedoms is normally exchanged together to allow a simple return service between the home State and another State?",a:"Third and Fourth",d:["First and Second","Fourth and Fifth","Second and Third"],e:"D out + O home = a normal round-trip route."},
+ {q:"An Air France flight Paris–Singapore–Jakarta carries passengers from Singapore to Jakarta. Which freedom?",a:"Fifth Freedom",d:["Third Freedom","Seventh Freedom","Ninth Freedom"],e:"Singapore → Jakarta: neither from nor to France, on the way = 5th."},
+ {q:"The so-called Sixth Freedom means carrying traffic between two foreign States VIA the carrier's home State, e.g. London–Dubai–Sydney on Emirates. Which freedom is this?",a:"Sixth Freedom",d:["Fifth Freedom","Seventh Freedom","Eighth Freedom"],e:"6 = via home. Compare 5th, where the intermediate stop is OUTSIDE the home State."},
+ {q:"The so-called Seventh Freedom allows a carrier to transport traffic between two foreign States:",a:"On a service entirely outside its home State",d:["Via its home State","Within one foreign State","Only on technical stops"],e:"7 = never touches the home State."},
+ {q:"Carrying traffic between two points WITHIN a foreign State is known as:",a:"Cabotage (Eighth/Ninth Freedom)",d:["Fifth Freedom","Sixth Freedom","Second Freedom"],e:"Cabotage = domestic flying in another country. 8th = as part of a service from home, 9th = stand-alone."},
+ {q:"A flight lands in Malaysia purely for fuel on its way from Singapore to Thailand. Which freedom?",a:"Second Freedom",d:["First Freedom","Fifth Freedom","Third Freedom"],e:"Technical landing = S = 2nd."},
+ {q:"Which freedom would a Singapore carrier need to carry passengers from Kuala Lumpur to Bangkok on a Singapore–Kuala Lumpur–Bangkok service?",a:"Fifth Freedom",d:["Second Freedom","Fourth Freedom","First Freedom"],e:"KUL → BKK: neither from nor to Singapore, on the way = W = 5th."},
+ {q:"The First and Second Freedoms are called 'technical' because:",a:"No traffic is loaded or unloaded",d:["They apply only to cargo","They require a technical log entry","They only apply to non-scheduled flights"],e:"O and S: no traffic is exchanged."}
+];
+
+/* ================= Light signals ================= */
+const AIR="In flight", GND="On the ground";
+const R={
+ gs:"Steady green = GO. In flight: land. On the ground: take off.",
+ gf:"Green flashes = GET READY. In flight: come back to land. On the ground: taxi.",
+ rs:"Steady red = HOLD. In flight: give way, keep circling. On the ground: stop.",
+ rf:"Red flashes = GET AWAY. In flight: aerodrome unsafe. On the ground: taxi clear of the runway.",
+ wf:"White flashes = GO HOME. In flight: land and go to the apron. On the ground: return to where you started.",
+ rp:"Red pyrotechnic = STOP, no matter what you were told before. Do not land for the time being."
+};
+const LIGHT=[
+ {w:AIR,s:"green",m:"steady",q:"Steady green light.",a:"Cleared to land",d:["Cleared for take-off","Return for landing","Give way to other aircraft and continue circling"],e:R.gs},
+ {w:AIR,s:"red",m:"steady",q:"Steady red light.",a:"Give way to other aircraft and continue circling",d:["Aerodrome unsafe, do not land","Stop","Do not land for the time being"],e:R.rs},
+ {w:AIR,s:"green",m:"flash",q:"Series of green flashes.",a:"Return for landing",d:["Cleared to land","Cleared to taxi","Land at this aerodrome and proceed to apron"],e:R.gf},
+ {w:AIR,s:"red",m:"flash",q:"Series of red flashes.",a:"Aerodrome unsafe, do not land",d:["Give way to other aircraft and continue circling","Taxi clear of landing area in use","Notwithstanding any previous instructions, do not land for the time being"],e:R.rf},
+ {w:AIR,s:"white",m:"flash",q:"Series of white flashes.",a:"Land at this aerodrome and proceed to apron",d:["Return to starting point on the aerodrome","Return for landing","Cleared to land"],e:R.wf},
+ {w:AIR,s:"red",m:"pyro",q:"Red pyrotechnic light.",a:"Notwithstanding any previous instructions, do not land for the time being",d:["Aerodrome unsafe, do not land","Give way to other aircraft and continue circling","Emergency at the aerodrome, land immediately"],e:R.rp},
+ {w:GND,s:"green",m:"steady",q:"Steady green light.",a:"Cleared for take-off",d:["Cleared to land","Cleared to taxi","Return to starting point on the aerodrome"],e:R.gs},
+ {w:GND,s:"red",m:"steady",q:"Steady red light.",a:"Stop",d:["Taxi clear of landing area in use","Give way to other aircraft and continue circling","Return to starting point on the aerodrome"],e:R.rs},
+ {w:GND,s:"green",m:"flash",q:"Series of green flashes.",a:"Cleared to taxi",d:["Cleared for take-off","Return for landing","Stop"],e:R.gf},
+ {w:GND,s:"red",m:"flash",q:"Series of red flashes.",a:"Taxi clear of landing area in use",d:["Stop","Aerodrome unsafe","Return to starting point on the aerodrome"],e:R.rf},
+ {w:GND,s:"white",m:"flash",q:"Series of white flashes.",a:"Return to starting point on the aerodrome",d:["Taxi clear of landing area in use","Cleared to taxi","Stop immediately"],e:R.wf},
+ {w:"Which signal?",q:"Which signal means the aerodrome is unsafe and you must not land?",a:"Series of red flashes",d:["Steady red light","Red pyrotechnic light","Series of white flashes"],e:R.rf},
+ {w:"Which signal?",q:"You are airborne. Which signal tells you to land here and proceed to the apron?",a:"Series of white flashes",d:["Series of green flashes","Steady green light","Steady red light"],e:R.wf},
+ {w:"The detail",q:"In Annex 2, green flashes and white flashes (to aircraft in flight) are marked with an asterisk. What does it mean?",a:"Clearances to land and to taxi will be given in due course",d:["The signal is valid by day only","The signal may only be given by Aerodrome Control","The signal must be acknowledged by rocking the wings"],e:"Flashes mean 'get ready'. The actual clearance comes later."},
+ {w:AIR,s:"red",m:"steady",q:"You are on final and the tower shows a steady red light. What do you do?",a:"Give way to other aircraft and continue circling",d:["Divert to the alternate aerodrome","Land but taxi straight to the apron","Land and stop on the runway"],e:R.rs}
+];
+
+const FOTA_AID=`<summary>Memory aid: OSDOW</summary>
+<p class="lead">You're the captain of a <b>Swedish</b> SAS aircraft. Sweden is your <b>home State</b>. Follow the trip step by step:</p>
+<div class="story">
+ <div class="st"><div class="lt">O</div><div><b>1 · Overfly</b><br>You fly over Denmark. You don't land.</div></div>
+ <div class="st"><div class="lt">S</div><div><b>2 · Stop</b><br>You land in Germany just to refuel. Nobody gets on or off.</div></div>
+ <div class="st"><div class="lt">D</div><div><b>3 · put Down</b><br>You land in London. The Swedes get off.<br><span>From home → drop off.</span></div></div>
+ <div class="st"><div class="lt">O</div><div><b>4 · take On</b><br>In London, people board who are going to Sweden.<br><span>Pick up → to home.</span></div></div>
+ <div class="st"><div class="lt">W</div><div><b>5 · on the Way</b><br>You continue London → New York with British passengers.<br><span>People neither from nor going to Sweden.</span></div></div>
+</div>
+<p class="lead"><b>Exam quick test</b>: ask two questions.</p>
+<div class="rule">
+ <div><b>Does traffic change?</b> No → <b>1</b> (overfly) or <b>2</b> (land).</div>
+ <div><b>Yes?</b> Look at the home State. Traffic coming <b>from</b> home → <b>3</b>. Going <b>to</b> home → <b>4</b>. <b>Neither</b> → <b>5</b>.</div>
+</div>`;
+
+const LIGHT_AID=`<summary>Memory aid: the colour tells you what, your position tells you how</summary>
+<p class="lead">Learn <b>five words</b>. Then just ask: am I in flight or on the ground?</p>
+<div class="story">
+ <div class="st"><div class="lamp green"></div><div><b>Steady green = GO</b><br>In flight: land. On the ground: take off.</div></div>
+ <div class="st"><div class="lamp green flash"></div><div><b>Green flashes = GET READY</b><br>In flight: come back to land. On the ground: taxi.</div></div>
+ <div class="st"><div class="lamp red"></div><div><b>Steady red = HOLD</b><br>In flight: give way, keep circling. On the ground: stop.</div></div>
+ <div class="st"><div class="lamp red flash"></div><div><b>Red flashes = GET AWAY</b><br>In flight: aerodrome unsafe. On the ground: taxi clear of the runway.</div></div>
+ <div class="st"><div class="lamp white flash"></div><div><b>White flashes = GO HOME</b><br>In flight: land, go to the apron. On the ground: back to where you started.</div></div>
+</div>
+<p class="lead"><b>Rhyme:</b></p>
+<div class="rule">
+ <div>Green goes, red holds.<br>Red flashes: get away. White flashes: go home.</div>
+ <div><b>Red flare</b> beats everything: do not land, whatever you were told before.</div>
+</div>`;
+
+/* ================= Declared distances ================= */
+function fig(o){
+  const x0=20,xe=420,xd=o.dt?110:x0,xs=o.swy?500:xe,xc=o.cwy?560:xe;
+  let s=`<svg viewBox="0 0 600 ${o.lbl?140:130}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Runway diagram"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${o.lbl?'#8494A3':'#E452D9'}"/></marker></defs>`;
+  if(o.cwy)s+=`<rect x="420" y="16" width="140" height="68" fill="rgba(60,214,240,.07)" stroke="#3CD6F0" stroke-dasharray="6 4"/><text x="${o.swy?530:490}" y="55" fill="#3CD6F0" font-family="B612 Mono,monospace" font-size="14" text-anchor="middle">CWY</text>`;
+  if(o.swy){s+=`<rect x="420" y="30" width="80" height="40" fill="#20252b" stroke="#FFB020"/>`;for(let x=428;x<495;x+=16)s+=`<path d="M${x} 38l8 12l-8 12" fill="none" stroke="rgba(255,176,32,.45)" stroke-width="2"/>`;s+=`<text x="460" y="55" fill="#FFB020" font-family="B612 Mono,monospace" font-size="13" text-anchor="middle" paint-order="stroke" stroke="#20252b" stroke-width="4">SWY</text>`}
+  s+=`<rect x="20" y="30" width="400" height="40" fill="#2b3138" stroke="#cfd6dc"/>`;
+  for(let x=xd+34;x<405;x+=34)s+=`<line x1="${x}" y1="50" x2="${x+18}" y2="50" stroke="#fff" stroke-width="2"/>`;
+  for(let i=0;i<4;i++){s+=`<line x1="${xd+6}" y1="${35+i*3}" x2="${xd+22}" y2="${35+i*3}" stroke="#fff" stroke-width="1.5"/><line x1="${xd+6}" y1="${56+i*3}" x2="${xd+22}" y2="${56+i*3}" stroke="#fff" stroke-width="1.5"/>`}
+  if(o.dt){s+=`<line x1="${xd}" y1="30" x2="${xd}" y2="70" stroke="#fff" stroke-width="3"/>`;[32,66].forEach(x=>s+=`<path d="M${x} 50h22m-7 -6l7 6l-7 6" fill="none" stroke="#fff" stroke-width="2.5"/>`)}
+  const dim=(a,b,y,t,c)=>`<line x1="${a}" y1="72" x2="${a}" y2="${y+6}" stroke="#56636f" stroke-dasharray="3 3"/><line x1="${b}" y1="72" x2="${b}" y2="${y+6}" stroke="#56636f" stroke-dasharray="3 3"/><line x1="${a+2}" y1="${y}" x2="${b-2}" y2="${y}" stroke="${c}" stroke-width="2" marker-start="url(#ah)" marker-end="url(#ah)"/><text x="${(a+b)/2}" y="${y+5}" fill="${c==='#E452D9'?'#3CD6F0':'#E8EEF3'}" font-family="B612 Mono,monospace" font-size="${c==='#E452D9'?18:13}" font-weight="700" text-anchor="middle" paint-order="stroke" stroke="#0E141A" stroke-width="8">${t}</text>`;
+  if(o.lbl){const L=o.lbl;s+=dim(20,420,100,L.rwy,"#8494A3");if(L.dt)s+=dim(20,110,125,L.dt,"#8494A3");if(L.swy)s+=dim(420,500,100,L.swy,"#8494A3");if(L.cwy)s+=dim(420,560,125,L.cwy,"#8494A3")}
+  if(o.arrow){const r={TORA:[x0,xe],TODA:[x0,xc],ASDA:[x0,xs],LDA:[xd,xe]}[o.arrow];s+=dim(r[0],r[1],105,"?","#E452D9")}
+  return s+"</svg>";
+}
+const DDS=["TORA","TODA","ASDA","LDA"];
+const others=a=>DDS.filter(x=>x!==a);
+const FULL={dt:1,swy:1,cwy:1};
+const DE={
+ TORA:"TORA = the runway only. No stopway, no clearway. A displaced threshold does not shorten it.",
+ TODA:"TODA = TORA + clearway. ClearWay = Climbing: it's air you climb over.",
+ ASDA:"ASDA = TORA + stopway. StopWay = Stopping: you brake on it after an abandoned take-off.",
+ LDA:"LDA starts at the (displaced) threshold. The displaced part may be used for take-off, but not for touchdown."
+};
+const DD=[
+ {fig:{...FULL,arrow:"LDA"},q:"Refer to the figure. Which declared distance is marked '?'",a:"LDA",d:others("LDA"),e:"The arrow starts at the displaced threshold. "+DE.LDA},
+ {fig:{...FULL,arrow:"TODA"},q:"Refer to the figure. Which declared distance is marked '?'",a:"TODA",d:others("TODA"),e:"The arrow ends at the end of the clearway. "+DE.TODA},
+ {fig:{...FULL,arrow:"ASDA"},q:"Refer to the figure. Which declared distance is marked '?'",a:"ASDA",d:others("ASDA"),e:"The arrow ends at the end of the stopway. "+DE.ASDA},
+ {fig:{...FULL,arrow:"TORA"},q:"Refer to the figure. Which declared distance is marked '?'",a:"TORA",d:others("TORA"),e:"The arrow covers the whole runway, from the very start, and nothing more. "+DE.TORA},
+ {fig:{cwy:1,arrow:"TODA"},q:"Refer to the figure. Which declared distance is marked '?'",a:"TODA",d:others("TODA"),e:"Only a clearway beyond the runway, and the arrow includes it. "+DE.TODA},
+ {fig:{swy:1,arrow:"ASDA"},q:"Refer to the figure. Which declared distance is marked '?'",a:"ASDA",d:others("ASDA"),e:"Only a stopway beyond the runway, and the arrow includes it. "+DE.ASDA},
+ {fig:{dt:1,arrow:"LDA"},q:"Refer to the figure. Which declared distance is marked '?'",a:"LDA",d:others("LDA"),e:DE.LDA},
+ {fig:{},q:"Refer to the figure. The runway has no stopway, no clearway and no displaced threshold. Which statement is correct?",a:"TORA, TODA, ASDA and LDA are all equal",d:["TODA is longer than TORA","ASDA is longer than TORA","LDA is shorter than TORA"],e:"Nothing is added (no CWY or SWY) and nothing is taken away (no displaced threshold), so all four are the runway length."},
+ {fig:{cwy:1},q:"Refer to the figure. The runway has only a clearway. Which declared distance is longer than the others?",a:"TODA",d:others("TODA"),e:DE.TODA},
+ {fig:{swy:1},q:"Refer to the figure. The runway has only a stopway. Which declared distance is longer than the others?",a:"ASDA",d:others("ASDA"),e:DE.ASDA},
+ {fig:{dt:1},q:"Refer to the figure. The runway has only a displaced threshold. Which declared distance is shorter than the others?",a:"LDA",d:others("LDA"),e:"A displaced threshold only affects the LDA."},
+ {q:"TODA (take-off distance available) is:",a:"TORA + clearway",d:["TORA + stopway","TORA + stopway + clearway","ASDA + clearway"],e:DE.TODA},
+ {q:"ASDA (accelerate-stop distance available) is:",a:"TORA + stopway",d:["TORA + clearway","TODA + stopway","LDA + stopway"],e:DE.ASDA},
+ {q:"A displaced threshold affects:",a:"LDA only",d:["TORA and LDA","All declared distances","TORA, ASDA and LDA"],e:DE.LDA},
+ {q:"'The length of runway declared available and suitable for the ground run of an aeroplane taking off' is the definition of:",a:"TORA",d:others("TORA"),e:"Take-Off RUN = ground run on the runway. "+DE.TORA},
+ {q:"'The length of runway declared available and suitable for the ground run of an aeroplane landing' is the definition of:",a:"LDA",d:others("LDA"),e:DE.LDA},
+ {q:"A stopway is included in:",a:"ASDA only",d:["TODA only","TODA and ASDA","TORA and ASDA"],e:DE.ASDA},
+ {q:"A clearway is included in:",a:"TODA only",d:["ASDA only","TODA and ASDA","TORA and TODA"],e:DE.TODA},
+ {q:"Why does a displaced threshold reduce the LDA but not the TORA?",a:"The displaced part may be used for the take-off run, but not for touchdown",d:["The displaced part is a stopway","The displaced part is a clearway","The displaced part may only be used for taxiing"],e:DE.LDA},
+ {q:"Declared distances are defined in:",a:"ICAO Annex 14 (Aerodromes)",d:["ICAO Annex 6 (Operation of Aircraft)","ICAO Annex 2 (Rules of the Air)","ICAO Annex 11 (Air Traffic Services)"],e:"Aerodrome design and runway data = Annex 14."},
+ {fig:{cwy:1,lbl:{rwy:"2500 m",cwy:"CWY 400 m"}},q:"Refer to the figure. Runway 2500 m, clearway 400 m. What is the TODA?",a:"2900 m",d:["2500 m","2100 m","3300 m"],e:"TODA = TORA + CWY = 2500 + 400 = 2900 m."},
+ {fig:{swy:1,lbl:{rwy:"2500 m",swy:"200 m"}},q:"Refer to the figure. Runway 2500 m, stopway 200 m. What is the ASDA?",a:"2700 m",d:["2500 m","2300 m","2900 m"],e:"ASDA = TORA + SWY = 2500 + 200 = 2700 m."},
+ {fig:{swy:1,cwy:1,lbl:{rwy:"3000 m",swy:"150 m",cwy:"CWY 300 m"}},q:"Refer to the figure. Runway 3000 m, stopway 150 m, clearway 300 m. What is the TODA?",a:"3300 m",d:["3150 m","3450 m","3000 m"],e:"TODA uses the clearway only: 3000 + 300 = 3300 m. The stopway doesn't count."},
+ {fig:{swy:1,cwy:1,lbl:{rwy:"3000 m",swy:"150 m",cwy:"CWY 300 m"}},q:"Refer to the figure. Runway 3000 m, stopway 150 m, clearway 300 m. What is the ASDA?",a:"3150 m",d:["3300 m","3450 m","3000 m"],e:"ASDA uses the stopway only: 3000 + 150 = 3150 m. The clearway doesn't count."},
+ {fig:{dt:1,lbl:{rwy:"2800 m",dt:"DT 300 m"}},q:"Refer to the figure. Runway 2800 m with the threshold displaced 300 m. What is the LDA?",a:"2500 m",d:["2800 m","3100 m","2200 m"],e:"LDA = runway − displaced part = 2800 − 300 = 2500 m."},
+ {fig:{dt:1,lbl:{rwy:"2800 m",dt:"DT 300 m"}},q:"Refer to the figure. Runway 2800 m with the threshold displaced 300 m. What is the TORA?",a:"2800 m",d:["2500 m","3100 m","2200 m"],e:"The displaced part can be used for the take-off run, so TORA = full runway = 2800 m."}
+];
+
+const DD_AID=`<summary>Memory aid: Climb, Stop, Land</summary>
+<p class="lead">Start with the runway (TORA). Every other distance either <b>adds</b> something or <b>removes</b> something.</p>
+<div class="story">
+ <div class="st"><div class="lt">R</div><div><b>TORA = the Runway</b><br>Take-Off <b>Run</b> = you roll on the runway. Nothing added.</div></div>
+ <div class="st"><div class="lt">C</div><div><b>TODA = TORA + ClearWay</b><br>Clearway = <b>Climbing</b>. It's air, not tarmac. You climb over it.</div></div>
+ <div class="st"><div class="lt">S</div><div><b>ASDA = TORA + StopWay</b><br>Stopway = <b>Stopping</b>. You brake on it after a rejected take-off. "Stop" is even in the name: Accelerate-<b>Stop</b>.</div></div>
+ <div class="st"><div class="lt">L</div><div><b>LDA = from the threshold</b><br>A displaced threshold only shortens the <b>LDA</b>. You may roll on that part, but you may not land on it.</div></div>
+</div>
+<p class="lead"><b>Rhyme:</b></p>
+<div class="rule">
+ <div>Climb over the Clearway, Stop on the Stopway, Land after the threshold.</div>
+ <div><b>Figure test:</b> arrow ends at CWY → <b>TODA</b>. Ends at SWY → <b>ASDA</b>. Starts at the displaced threshold → <b>LDA</b>. Runway only → <b>TORA</b>.</div>
+</div>`;
+
+const GAMES={
+ fota:{id:"fota",title:"Freedoms of the Air",src:"ICAO Doc 9626",dep:"ESSA",arr:"WSSS",bank:FOTA,def:20,aid:FOTA_AID},
+ light:{id:"light",title:"Light Signals",src:"ICAO Annex 2",dep:"ESSL",arr:"ESMX",bank:LIGHT,def:15,aid:LIGHT_AID},
+ dd:{id:"dd",title:"Declared Distances",src:"ICAO Annex 14",dep:"ESGG",arr:"ESSA",bank:DD,def:15,aid:DD_AID}
+};
+const ORDER=["fota","light","dd"];
+
+/* ================= Storage ================= */
+const store={
+ get(k,d){try{const v=localStorage.getItem("imsafe-games:"+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+ set(k,v){try{localStorage.setItem("imsafe-games:"+k,JSON.stringify(v))}catch(e){}}
+};
+function goalOptions(g){const n=g.bank.length;const o=[5,10,15,20].filter(x=>x<n);o.push(n);return o}
+function getGoal(g){const o=goalOptions(g);const v=store.get("goal:"+g.id,Math.min(g.def,g.bank.length));return o.includes(v)?v:o[o.length-1]}
+
+/* ================= Engine ================= */
+const $=id=>document.getElementById(id);
+let G=null,goal=20,pool=[],hist=[],view=0,streak=0,best=0,won=false;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function refill(){pool=shuffle([...G.bank.keys()])}
+
+function renderHome(){
+  const list=$("exList");list.innerHTML="";
+  ORDER.forEach((k,i)=>{
+    const g=GAMES[k],cur=getGoal(g),b=store.get("best:"+g.id,0);
+    const el=document.createElement("section");el.className="ex";
+    el.innerHTML=`<div class="ex-top"><div class="ex-num">${i+1}</div><div><h2></h2><div class="src"></div><div class="route-mini">${g.dep} ─ ─ ─ ✈ ─ ─ ─ ${g.arr}</div></div><div class="ex-best"><b>${b}</b>BEST STREAK</div></div>
+    <div class="ex-bottom"><div><span class="goal-lbl">Target in a row</span><span class="seg" role="group" aria-label="Target in a row"></span></div><a class="btn" href="#${k}">Start <kbd>${i+1}</kbd></a></div>`;
+    el.querySelector("h2").textContent=g.title;
+    el.querySelector(".src").textContent=`${g.src} · ${g.bank.length} questions`;
+    const seg=el.querySelector(".seg");
+    goalOptions(g).forEach(v=>{
+      const bt=document.createElement("button");
+      bt.textContent=v===g.bank.length?`All ${v}`:v;
+      bt.setAttribute("aria-pressed",v===cur);
+      bt.onclick=()=>{store.set("goal:"+g.id,v);renderHome()};
+      seg.appendChild(bt);
+    });
+    list.appendChild(el);
+  });
+}
+
+function buildRoute(){
+  $("dep").textContent=G.dep;$("arr").textContent=G.arr;
+  const w=$("wps");w.innerHTML="";
+  for(let i=0;i<=goal;i++){const d=document.createElement("div");d.className="wp";w.appendChild(d)}
+  $("rGoal").textContent=goal;$("exName").textContent=`${G.title} · ${G.src}`;
+}
+function renderProgress(){
+  const p=streak/goal*100;
+  $("leg").style.width=p+"%";$("ac").style.left=p+"%";
+  [...$("wps").children].forEach((d,i)=>d.classList.toggle("on",i<=streak));
+  $("rStreak").textContent=streak;
+  $("fStreak").textContent=`${streak}/${goal}`;$("fBest").textContent=best;
+}
+
+function startGame(k){
+  G=GAMES[k];goal=getGoal(G);best=store.get("best:"+G.id,0);
+  streak=0;hist=[];won=false;refill();
+  $("aid").innerHTML=G.aid;$("aid").open=true;
+  document.title=`${G.title} · ATPL Games`;
+  $("home").classList.add("hide");$("play").classList.remove("hide");$("fields").classList.remove("hide");$("win").classList.remove("show");
+  buildRoute();newQuestion();
+}
+
+function newQuestion(){
+  if(!pool.length)refill();
+  const qi=pool.pop(),item=G.bank[qi];
+  const opts=shuffle([item.a,...item.d]);
+  hist.push({qi,opts,correct:opts.indexOf(item.a),picked:null,before:streak});
+  view=hist.length-1;render();
+}
+
+function render(){
+  const h=hist[view],item=G.bank[h.qi],review=view<hist.length-1,done=h.picked!==null;
+  const top=$("qtop");top.innerHTML="";
+  const tag=(t,c)=>{const s=document.createElement("span");s.className="tag"+(c?" "+c:"");s.textContent=t;top.appendChild(s)};
+  if(review)tag("REVIEW","rev");
+  tag(`Q ${view+1}`,"c");
+  if(item.w)tag(item.w.toUpperCase());
+  $("q").textContent=item.q;
+  const v=$("visual");v.innerHTML="";
+  if(item.s){const l=document.createElement("div");l.className="lamp "+item.s+(item.m==="flash"?" flash":item.m==="pyro"?" pyro":"");l.setAttribute("aria-hidden","true");v.appendChild(l)}
+  const f=$("figure");f.innerHTML=item.fig?fig(item.fig):"";f.classList.toggle("hide",!item.fig);
+  const box=$("opts");box.innerHTML="";
+  h.opts.forEach((t,i)=>{
+    const b=document.createElement("button");b.className="opt";
+    b.innerHTML=`<span class="k">${i+1}</span><span></span>`;b.lastChild.textContent=t;
+    if(done){b.disabled=true;if(i===h.correct)b.classList.add("right");else if(i===h.picked)b.classList.add("wrong");else b.classList.add("fade")}
+    else if(review)b.disabled=true;
+    b.onclick=()=>answer(i);box.appendChild(b);
+  });
+  const ann=$("ann");
+  if(done){
+    const ok=h.picked===h.correct;
+    ann.className="ann"+(ok?"":" bad");
+    $("annT").textContent=ok?(h.before+1===goal?`CORRECT · ${goal}/${goal}`:`CORRECT · STREAK ${h.before+1}`):`CAUTION · STREAK RESET (WAS ${h.before})`;
+    $("annP").textContent=item.e;
+  }else ann.className="ann hide";
+  $("fQ").textContent=view+1;
+  $("pos").textContent=`${view+1} / ${hist.length}`;
+  $("prev").disabled=view===0;
+  const nx=$("next");
+  if(review){nx.disabled=false;nx.innerHTML='Next <kbd>→</kbd>'}
+  else if(!done){nx.disabled=true;nx.innerHTML='Next <kbd>Enter</kbd>'}
+  else{nx.disabled=false;nx.innerHTML=(won?'Land':'Next question')+' <kbd>Enter</kbd>'}
+  renderProgress();
+}
+
+function answer(i){
+  const h=hist[view];
+  if(view<hist.length-1||h.picked!==null)return;
+  h.picked=i;
+  if(i===h.correct){
+    streak++;
+    if(streak>best){best=streak;store.set("best:"+G.id,best)}
+    if(streak>=goal)won=true;
+  }else{
+    streak=0;refill();
+    const r=$("route");r.classList.remove("fail");void r.offsetWidth;r.classList.add("fail");
+  }
+  render();$("next").focus({preventScroll:true});
+}
+
+function forward(){
+  if(view<hist.length-1){view++;render();return}
+  const h=hist[view];if(h.picked===null)return;
+  if(won){$("winCode").textContent=`${G.dep} → ${G.arr} · ARRIVED`;$("winTxt").textContent=`${goal} correct in a row on ${G.title}.`;$("win").classList.add("show");$("again").focus();return}
+  newQuestion();
+}
+function back(){if(view>0){view--;render()}}
+
+function route(){
+  const k=location.hash.slice(1);
+  if(GAMES[k])startGame(k);
+  else{G=null;$("play").classList.add("hide");$("fields").classList.add("hide");$("home").classList.remove("hide");$("win").classList.remove("show");document.title="ATPL Games · IMSAFE";renderHome()}
+}
+
+$("next").onclick=forward;$("prev").onclick=back;
+$("again").onclick=()=>startGame(G.id);
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==="Escape"){if(location.hash)location.hash="";return}
+  if(!G){const n=+e.key;if(n>=1&&n<=ORDER.length)location.hash=ORDER[n-1];return}
+  if($("win").classList.contains("show")){if(e.key==="Enter"||e.key===" "){e.preventDefault();startGame(G.id)}return}
+  if(/^[1-4]$/.test(e.key)){e.preventDefault();answer(+e.key-1);return}
+  if(e.key==="ArrowLeft"){e.preventDefault();back();return}
+  if(e.key==="ArrowRight"){e.preventDefault();if(view<hist.length-1||hist[view].picked!==null)forward();return}
+  if(e.key==="Enter"||e.key===" "){if(document.activeElement&&document.activeElement.tagName==="SUMMARY")return;e.preventDefault();forward()}
+});
+window.addEventListener("hashchange",route);
+route();
+</script>
+</body>
+</html>
